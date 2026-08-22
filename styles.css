@@ -207,7 +207,7 @@ body {
 }
 
 /* =========================================================
-   THIẾT KẾ ĐIỂM NHẤN CHO DANH SÁCH (STYLE "BÀI VIẾT CHỌN LỌC") 
+   THIẾT KẾ ĐIỂM NHẤN CHO DANH SÁCH (ĐỔI MÀU CHỮ/ICON)
    ========================================================= */
 .container {
     padding: 15px 30px 60px 30px;
@@ -220,26 +220,14 @@ body {
     clear: both;
 }
 
-/* Header của Card - Có màu nền nhạt giống Wikipedia */
+/* Header của Card - Giữ nền trắng */
 .wiki-entry-header {
     padding: 8px 12px;
     border-bottom: 1px solid var(--wiki-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-/* Các Theme màu sắc chuẩn Wikipedia */
-.theme-yellow {
-    background-color: #fceb92; /* Màu vàng nhạt giống "Bài viết chọn lọc" */
-}
-
-.theme-blue {
-    background-color: #cedff2; /* Màu xanh lơ giống "Bạn có biết" */
-}
-
-.theme-green {
-    background-color: #d5fdf4; /* Màu xanh mint */
+    background-color: #ffffff;
 }
 
 .wiki-entry-header h2 {
@@ -252,26 +240,24 @@ body {
     align-items: center;
 }
 
-/* Icon box chữ nhật đặc trưng */
+/* Đổi màu chữ Tiêu đề Tiếng Anh tương ứng theo Theme */
+/* Sử dụng các tone màu sậm để đảm bảo độ tương phản trên nền trắng */
+.theme-yellow .en-title { color: #d47500; } /* Vàng cam sậm */
+.theme-blue .en-title { color: #1a5bc4; }   /* Xanh dương đậm */
+.theme-green .en-title { color: #1e7045; }  /* Xanh lá đậm */
+
+/* Cập nhật Icon box: Bỏ nền vuông, chỉ tô màu icon */
 .wiki-icon-box {
     display: inline-block;
-    width: 22px;
-    height: 22px;
     text-align: center;
-    line-height: 22px;
-    margin-right: 10px;
-    color: white;
-    font-size: 13px;
-    border-radius: 2px;
+    margin-right: 8px;
+    font-size: 16px;
+    background-color: transparent !important;
 }
 
-.wiki-icon-box.yellow { background-color: #e5a400; }
-.wiki-icon-box.blue { background-color: #3366cc; }
-.wiki-icon-box.green { background-color: #2b8055; }
-
-.en-title {
-    color: var(--wiki-link);
-}
+.wiki-icon-box.yellow { color: #d47500; }
+.wiki-icon-box.blue { color: #1a5bc4; }
+.wiki-icon-box.green { color: #1e7045; }
 
 .vi-title {
     font-family: sans-serif;
