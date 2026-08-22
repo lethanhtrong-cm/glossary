@@ -110,6 +110,8 @@ body {
     gap: 15px;
     padding-bottom: 15px;
     border-bottom: 2px solid var(--border-color);
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .tab-btn {
@@ -198,6 +200,7 @@ body {
 
 .badge-seq { background-color: #2a9d8f; } /* Xanh teal chuyên nghiệp */
 .badge-param { background-color: #f4a261; } /* Cam nhạt */
+.badge-phys { background-color: #9b59b6; } /* Tím cho nguyên lý vật lý */
 
 .content-row {
     margin-bottom: 10px;
