@@ -1,12 +1,58 @@
 :root {
+    /* --- BẢNG MÀU MẶC ĐỊNH (LIGHT MODE) --- */
     --wiki-bg: #ffffff;
+    --wiki-card-bg: #ffffff;
     --wiki-sidebar-bg: #f6f6f6;
     --wiki-border: #a2a9b1;
     --wiki-link: #0645ad;
     --wiki-link-hover: #0b0080;
     --wiki-text: #202122;
     --wiki-text-muted: #54595d;
+    --wiki-input-bg: #ffffff;
+    --wiki-badge-bg: #eaecf0;
+    
+    /* Màu tiêu đề đặc trưng */
+    --theme-yellow-text: #d47500;
+    --theme-blue-text: #1a5bc4;
+    --theme-green-text: #1e7045;
+
     --sidebar-width: 176px;
+}
+
+/* --- BẢNG MÀU DARK MODE --- */
+body.dark-mode {
+    --wiki-bg: #121212;
+    --wiki-card-bg: #1e1e1e;
+    --wiki-sidebar-bg: #181818;
+    --wiki-border: #333333;
+    --wiki-link: #6699ff;
+    --wiki-link-hover: #99bbff;
+    --wiki-text: #e0e0e0;
+    --wiki-text-muted: #999999;
+    --wiki-input-bg: #2a2a2a;
+    --wiki-badge-bg: #2d2d2d;
+    
+    --theme-yellow-text: #f0a030;
+    --theme-blue-text: #5b96f7;
+    --theme-green-text: #4caf75;
+}
+
+/* --- BẢNG MÀU SAPPHIRE MODE --- */
+body.sapphire-mode {
+    --wiki-bg: #0d1726;
+    --wiki-card-bg: #142238;
+    --wiki-sidebar-bg: #0b1320;
+    --wiki-border: #213554;
+    --wiki-link: #6db1ff;
+    --wiki-link-hover: #9bd0ff;
+    --wiki-text: #c2d1e0;
+    --wiki-text-muted: #7b93ab;
+    --wiki-input-bg: #1a2a42;
+    --wiki-badge-bg: #1d304a;
+    
+    --theme-yellow-text: #f5b958;
+    --theme-blue-text: #7ab0ff;
+    --theme-green-text: #6ed198;
 }
 
 body {
@@ -16,7 +62,8 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    font-size: 14px;
+    font-size: 14px; 
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* --- TỔNG QUAN LAYOUT --- */
@@ -37,29 +84,34 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 2000;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .sidebar-header {
     padding: 20px 10px;
     text-align: center;
     border-bottom: 1px solid var(--wiki-border);
-    background: #fff;
+    background: var(--wiki-card-bg);
+    transition: background-color 0.3s;
 }
 
 .wiki-logo {
     font-size: 40px;
-    color: #222;
+    color: var(--wiki-text);
     margin-bottom: 5px;
 }
 
 .sidebar-brand h2 {
     margin: 0;
-    font-size: 18px;
-    font-family: 'Linux Libertine', Georgia, Times, serif;
+    font-size: 17px;
+    /* FIX FONT CHỮ 'Ề': Sử dụng Times New Roman mặc định của mọi máy tính */
+    font-family: 'Times New Roman', Times, serif;
+    color: var(--wiki-text);
+    line-height: 1.3;
 }
 
 .sidebar-brand p {
-    margin: 0;
+    margin: 4px 0 0 0;
     font-size: 11px;
     color: var(--wiki-text-muted);
 }
@@ -68,7 +120,7 @@ body {
     font-size: 12px;
     color: var(--wiki-text-muted);
     padding: 15px 15px 5px 15px;
-    border-top: 1px solid #c8ccd1;
+    border-top: 1px solid var(--wiki-border);
     margin-top: 10px;
 }
 
@@ -101,12 +153,13 @@ body {
     width: calc(100% - var(--sidebar-width));
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: var(--wiki-bg);
 }
 
-/* --- TOP HEADER (TABS & SEARCH) --- */
+/* --- TOP HEADER (TABS, TOOLS & SEARCH) --- */
 .wiki-top-header {
     padding: 15px 30px 0 30px;
+    background-color: var(--wiki-bg);
 }
 
 .wiki-top-bar {
@@ -114,6 +167,7 @@ body {
     justify-content: space-between;
     align-items: flex-end;
     border-bottom: 1px solid var(--wiki-border);
+    flex-wrap: wrap;
 }
 
 .tabs {
@@ -136,17 +190,44 @@ body {
 }
 
 .tab-btn.active {
-    background: #fff;
+    background: var(--wiki-bg);
     border: 1px solid var(--wiki-border);
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid var(--wiki-bg);
     color: var(--wiki-text);
     font-weight: bold;
 }
 
-/* --- SEARCH BOX --- */
+/* --- VIEW CONTROLS & SEARCH --- */
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 4px;
+}
+
+.view-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.view-btn {
+    background: var(--wiki-card-bg);
+    border: 1px solid var(--wiki-border);
+    color: var(--wiki-text-muted);
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+    background: var(--wiki-border);
+    color: var(--wiki-text);
+}
+
 .search-box {
     position: relative;
-    margin-bottom: 5px;
 }
 
 .search-icon {
@@ -164,6 +245,8 @@ body {
     border: 1px solid var(--wiki-border);
     border-radius: 2px;
     width: 250px;
+    background-color: var(--wiki-input-bg);
+    color: var(--wiki-text);
 }
 
 /* --- PAGE TITLE --- */
@@ -173,11 +256,12 @@ body {
 }
 
 .firstHeading {
-    font-family: 'Linux Libertine', Georgia, Times, serif;
+    font-family: 'Times New Roman', Times, serif;
     font-size: 1.8em;
     font-weight: normal;
     margin: 0 0 10px 0;
     border-bottom: none;
+    color: var(--wiki-text);
 }
 
 /* --- ALPHABET FILTER --- */
@@ -188,8 +272,8 @@ body {
 }
 
 .alpha-btn {
-    background: #f8f9fa;
-    border: 1px solid #c8ccd1;
+    background: var(--wiki-sidebar-bg);
+    border: 1px solid var(--wiki-border);
     color: var(--wiki-link);
     padding: 2px 6px;
     cursor: pointer;
@@ -197,7 +281,8 @@ body {
 }
 
 .alpha-btn:hover {
-    background: #eaf3ff;
+    background: var(--wiki-border);
+    color: var(--wiki-text);
 }
 
 .alpha-btn.active {
@@ -207,7 +292,7 @@ body {
 }
 
 /* =========================================================
-   THIẾT KẾ ĐIỂM NHẤN CHO DANH SÁCH (ĐỔI MÀU CHỮ/ICON)
+   THIẾT KẾ ĐIỂM NHẤN CHO DANH SÁCH
    ========================================================= */
 .container {
     padding: 15px 30px 60px 30px;
@@ -216,37 +301,33 @@ body {
 .wiki-entry {
     border: 1px solid var(--wiki-border);
     margin-bottom: 24px;
-    background-color: #ffffff;
+    background-color: var(--wiki-card-bg);
     clear: both;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Header của Card - Giữ nền trắng */
 .wiki-entry-header {
     padding: 8px 12px;
     border-bottom: 1px solid var(--wiki-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
+    background-color: var(--wiki-card-bg);
 }
 
 .wiki-entry-header h2 {
-    font-family: 'Linux Libertine', Georgia, Times, serif;
+    font-family: 'Times New Roman', Times, serif;
     font-size: 1.25em;
     font-weight: bold;
     margin: 0;
-    color: #000;
     display: flex;
     align-items: center;
 }
 
-/* Đổi màu chữ Tiêu đề Tiếng Anh tương ứng theo Theme */
-/* Sử dụng các tone màu sậm để đảm bảo độ tương phản trên nền trắng */
-.theme-yellow .en-title { color: #d47500; } /* Vàng cam sậm */
-.theme-blue .en-title { color: #1a5bc4; }   /* Xanh dương đậm */
-.theme-green .en-title { color: #1e7045; }  /* Xanh lá đậm */
+.theme-yellow .en-title { color: var(--theme-yellow-text); }
+.theme-blue .en-title { color: var(--theme-blue-text); }
+.theme-green .en-title { color: var(--theme-green-text); }
 
-/* Cập nhật Icon box: Bỏ nền vuông, chỉ tô màu icon */
 .wiki-icon-box {
     display: inline-block;
     text-align: center;
@@ -255,9 +336,9 @@ body {
     background-color: transparent !important;
 }
 
-.wiki-icon-box.yellow { color: #d47500; }
-.wiki-icon-box.blue { color: #1a5bc4; }
-.wiki-icon-box.green { color: #1e7045; }
+.wiki-icon-box.yellow { color: var(--theme-yellow-text); }
+.wiki-icon-box.blue { color: var(--theme-blue-text); }
+.wiki-icon-box.green { color: var(--theme-green-text); }
 
 .vi-title {
     font-family: sans-serif;
@@ -287,8 +368,8 @@ body {
 .wiki-badge {
     display: inline-block;
     padding: 2px 6px;
-    background: #eaecf0;
-    border: 1px solid #c8ccd1;
+    background: var(--wiki-badge-bg);
+    border: 1px solid var(--wiki-border);
     font-size: 11px;
     margin-bottom: 10px;
     color: var(--wiki-text);
@@ -299,7 +380,7 @@ body {
 }
 
 .wiki-content-row strong {
-    color: #000;
+    color: var(--wiki-text);
 }
 
 /* --- COMING SOON --- */
@@ -316,18 +397,18 @@ body {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     z-index: 3000;
     align-items: center;
     justify-content: center;
 }
 
 .modal-content {
-    background: #fff;
+    background: var(--wiki-card-bg);
     width: 500px;
     max-width: 90%;
     border: 1px solid var(--wiki-border);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
 .modal-header {
@@ -336,11 +417,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f6f6f6;
+    background: var(--wiki-sidebar-bg);
 }
 
 .modal-header h2 {
-    margin: 0; font-family: 'Linux Libertine', Georgia, Times, serif; font-size: 1.4em;
+    margin: 0; font-family: 'Times New Roman', Times, serif; font-size: 1.4em;
+    color: var(--wiki-text);
 }
 
 .modal-close {
@@ -354,11 +436,12 @@ body {
 }
 
 .modal-notice {
-    background: #eaf3ff;
-    border: 1px solid #36c;
+    background: var(--wiki-sidebar-bg);
+    border: 1px solid var(--wiki-link);
     padding: 10px;
     font-size: 12px;
     margin-bottom: 15px;
+    color: var(--wiki-text);
 }
 
 .form-group {
@@ -366,7 +449,7 @@ body {
 }
 
 .form-group label {
-    display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px;
+    display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: var(--wiki-text);
 }
 
 .form-group input, .form-group textarea, .form-group select {
@@ -376,6 +459,8 @@ body {
     border: 1px solid var(--wiki-border);
     font-family: sans-serif;
     font-size: 13px;
+    background: var(--wiki-input-bg);
+    color: var(--wiki-text);
 }
 
 .form-actions {
@@ -387,14 +472,16 @@ body {
 
 .btn-cancel {
     padding: 6px 12px;
-    background: #f8f9fa; border: 1px solid var(--wiki-border); cursor: pointer;
+    background: var(--wiki-sidebar-bg); 
+    border: 1px solid var(--wiki-border); 
+    cursor: pointer;
+    color: var(--wiki-text);
 }
 
 .btn-submit {
     padding: 6px 12px;
     background: #36c; color: #fff; border: 1px solid #36c; cursor: pointer; font-weight: bold;
 }
-.btn-submit:hover { background: #447ff5; }
 
 /* --- FOOTER --- */
 .wiki-footer {
@@ -403,11 +490,13 @@ body {
     font-size: 12px;
     color: var(--wiki-text-muted);
     margin-top: auto;
+    background: var(--wiki-bg);
 }
 
 .back-to-top {
     position: fixed; bottom: 30px; right: 30px;
     width: 40px; height: 40px;
-    background: #fff; border: 1px solid var(--wiki-border);
+    background: var(--wiki-card-bg); border: 1px solid var(--wiki-border);
     cursor: pointer; display: none; align-items: center; justify-content: center;
+    color: var(--wiki-text);
 }
