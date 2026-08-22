@@ -1,267 +1,106 @@
 // Dữ liệu thuộc nhóm Chuỗi Xung (Sequence)
 export const sequenceData = [
-    {
-        id: 1,
-        en: "Spin Echo (SE)",
-        vi: "Chuỗi xung Spin Echo (Xung dội spin)",
-        type: "Sequence",
-        description: "Sử dụng một xung kích thích 90 độ, theo sau là xung tái hội tụ 180 độ để tạo ra tín hiệu dội (echo). Giúp triệt tiêu sự mất đồng pha do từ trường không đồng nhất (T2* effect), mang lại hình ảnh có độ phân giải giải phẫu cao nhất.",
-        parameters: "T1W: TR ngắn (400-600ms), TE ngắn (10-20ms). T2W: TR dài (>2000ms), TE dài (>80ms)."
-    },
-    {
-        id: 4,
-        en: "Diffusion Weighted Imaging (DWI)",
-        vi: "Chuỗi xung khuếch tán",
-        type: "Sequence",
-        description: "Dựa trên chuyển động Brown của các phân tử nước trong mô. Đo lường sự hạn chế khuếch tán, cực kỳ nhạy trong phát hiện nhồi máu não cấp (đột quỵ) hoặc đánh giá mật độ tế bào khối u.",
-        parameters: "Giá trị b (b-value): Thường dùng b=0 và b=1000 s/mm2 (hoặc cao hơn ở tiền liệt tuyến). Bản đồ ADC được hệ thống tính toán tự động."
-    },
-    {
-        id: 6,
-        en: "Gradient Echo (GRE)",
-        vi: "Chuỗi xung Gradient Echo",
-        type: "Sequence",
-        description: "Sử dụng góc lật (Flip Angle) nhỏ hơn 90 độ và dùng từ trường chênh từ (Gradient) để tạo tín hiệu dội thay vì xung 180 độ. Tốc độ chụp nhanh nhưng nhạy với độ không đồng nhất từ trường (T2*).",
-        parameters: "Rất nhạy trong việc phát hiện xuất huyết vi thể (Microbleeds) hoặc vôi hóa. Thường cài đặt góc lật (FA) từ 5-30 độ tùy mục đích T1 hay T2*."
-    },
-    {
-        id: 7,
-        en: "Fluid Attenuated Inversion Recovery (FLAIR)",
-        vi: "Chuỗi xung xóa dịch não tủy",
-        type: "Sequence",
-        description: "Là một biến thể của chuỗi xung Inversion Recovery (IR). Sử dụng thời gian đảo ngược (TI) dài để triệt tiêu hoàn toàn tín hiệu của dịch tự do (dịch não tủy), giúp làm nổi bật các tổn thương nằm cạnh não thất hoặc rãnh cuộn não.",
-        parameters: "Cài đặt TI dài (khoảng 2000-2500ms ở 1.5T và 3T). TR dài (6000-10000ms), TE dài (90-140ms)."
-    },
-    {
-        id: 8,
-        en: "Short Tau Inversion Recovery (STIR)",
-        vi: "Chuỗi xung xóa mỡ STIR",
-        type: "Sequence",
-        description: "Chuỗi xung Inversion Recovery với thời gian TI ngắn, nhằm mục đích đồng bộ với thời gian phục hồi T1 của mỡ đi qua điểm null. Giúp xóa triệt để tín hiệu mỡ, rất hữu ích trong chẩn đoán phù tủy xương hoặc tổn thương phần mềm.",
-        parameters: "TI ngắn (150-170ms ở 1.5T). Lưu ý: STIR không thể dùng sau khi tiêm thuốc đối quang từ (Gadolinium)."
-    },
-    {
-        id: 11,
-        en: "Time of Flight (TOF)",
-        vi: "Chuỗi xung mạch máu thời gian bay",
-        type: "Sequence",
-        description: "Kỹ thuật chụp mạch máu không tiêm thuốc, dựa trên hiện tượng dòng chảy liên quan (Flow-related enhancement). Máu chảy vào lát cắt sẽ có tín hiệu cao.",
-        parameters: "TOF 2D nhạy dòng chảy chậm (tĩnh mạch). TOF 3D độ phân giải cao cho động mạch sọ não."
-    },
-    {
-        id: 15,
-        en: "Susceptibility Weighted Imaging (SWI)",
-        vi: "Chuỗi xung nhạy từ",
-        type: "Sequence",
-        description: "Chuỗi xung 3D GRE sử dụng thông tin biên độ và pha. Rất nhạy với các chất có tính từ (máu, canxi, sắt).",
-        parameters: "Dùng để phát hiện xuất huyết vi thể, phân biệt vôi hóa (qua Phase map)."
-    },
-    {
-        id: 16,
-        en: "Turbo Spin Echo (TSE) / Fast Spin Echo (FSE)",
-        vi: "Chuỗi xung Spin Echo nhanh",
-        type: "Sequence",
-        description: "Biến thể của Spin Echo giúp giảm đáng kể thời gian chụp bằng cách thu nhận nhiều tín hiệu (echo) trong cùng một khoảng thời gian TR nhờ một chuỗi các xung 180 độ.",
-        parameters: "Tốc độ nhanh phụ thuộc vào chỉ số Echo Train Length (ETL). Gây hiệu ứng làm mờ ảnh (blurring) nếu ETL quá cao."
-    },
-    {
-        id: 28,
-        en: "Spectral Presaturation with Inversion Recovery (SPIR)",
-        vi: "Xóa mỡ SPIR",
-        type: "Sequence",
-        description: "Lai tạo giữa FatSat và STIR. Sử dụng một xung đảo ngược chọn lọc phổ (chỉ tác động lên mỡ) để xóa mỡ linh hoạt.",
-        parameters: "Ít nhạy với sự không đồng nhất từ trường hơn FatSat truyền thống, có thể dùng chung với thuốc cản từ (Khác với STIR)."
-    },
-    {
-        id: 29,
-        en: "Spectral Adiabatic Inversion Recovery (SPAIR)",
-        vi: "Xóa mỡ SPAIR",
-        type: "Sequence",
-        description: "Bản nâng cấp của SPIR sử dụng xung Adiabatic. Xóa mỡ cực kỳ đồng đều, kể cả trên những vùng cơ thể giải phẫu không bằng phẳng.",
-        parameters: "Cho hình ảnh T2 SPAIR hoặc T1 SPAIR rất mịn, đặc biệt ưu tiên ở MSK (Cơ xương khớp) và vú."
-    },
-    {
-        id: 30,
-        en: "Dixon Method",
-        vi: "Kỹ thuật xóa mỡ Dixon",
-        type: "Sequence",
-        description: "Dựa trên sự lệch pha hóa học giữa nước và mỡ. Bằng cách thu nhận tín hiệu ở các thời điểm In-phase và Out-of-phase, máy tính sẽ phân tách tạo ra 4 loại ảnh: In-phase, Out-of-phase, Water-only (Xóa mỡ), Fat-only.",
-        parameters: "Cực kỳ đáng tin cậy ở những vùng từ trường kém đồng nhất. Không bị ảnh hưởng nhiều bởi kim loại."
-    },
-    {
-        id: 31,
-        en: "Balanced Steady-State Free Precession (bSSFP / TrueFISP / FIESTA)",
-        vi: "Chuỗi xung bSSFP",
-        type: "Sequence",
-        description: "Chuỗi xung Gradient Echo duy trì trạng thái ổn định (steady-state). Tạo ra độ tương phản dựa trên tỷ lệ T2/T1. Dịch (như máu, dịch não tủy) sẽ cực kỳ sáng.",
-        parameters: "Tốc độ cực nhanh. Thường dùng trong chụp tim (Cine Cardiac MRI), hình thái thai nhi, hoặc mạch máu ngoại vi không tiêm thuốc."
-    },
-    {
-        id: 32,
-        en: "Half-Fourier Single-Shot TSE (HASTE / SS-FSE)",
-        vi: "Chuỗi xung TSE đơn phát",
-        type: "Sequence",
-        description: "Thu nhận hơn một nửa k-space chỉ bằng một lần phát xung kích thích (Single-shot) và dùng thuật toán Half-Fourier nội suy phần còn lại.",
-        parameters: "Chụp 1 lát cắt chỉ dưới 1 giây. Chống xảo ảnh chuyển động cực tốt, dùng nhiều trong MRI bụng, thai nhi (Fetal MRI)."
-    },
-    {
-        id: 33,
-        en: "Magnetization Prepared Rapid Gradient Echo (MPRAGE / 3D T1 TFE)",
-        vi: "Chuỗi xung 3D T1 MPRAGE",
-        type: "Sequence",
-        description: "Sử dụng một xung chuẩn bị từ hóa (IR) theo sau là chuỗi Gradient Echo 3D thu thập nhanh. Tạo ảnh T1 3D độ phân giải cao.",
-        parameters: "Tiêu chuẩn vàng trong tái tạo 3D sọ não, khảo sát vỏ não, đo thể tích não bộ (Volumetry) và thần kinh học."
-    },
-    {
-        id: 34,
-        en: "Volumetric Interpolated Breath-hold Examination (VIBE / LAVA / THRIVE)",
-        vi: "Chuỗi xung 3D T1 VIBE",
-        type: "Sequence",
-        description: "Chuỗi xung 3D Gradient Echo T1 phá hủy tín hiệu dư (spoiled GRE) tích hợp xóa mỡ. Cho phép chụp toàn bộ ổ bụng trong 1 lần nín thở.",
-        parameters: "Là xung bắt buộc trong khảo sát động học gan (Dynamic Liver MRI), tụy, thận sau tiêm Gadolinium."
-    },
-    {
-        id: 35,
-        en: "Constructive Interference in Steady State (CISS / FIESTA-C)",
-        vi: "Chuỗi xung CISS 3D",
-        type: "Sequence",
-        description: "Chuỗi xung bSSFP 3D có độ phân giải siêu cao. Giúp quan sát các cấu trúc thần kinh rất nhỏ bao quanh bởi dịch não tủy.",
-        parameters: "Chỉ định chính: Khảo sát các dây thần kinh sọ (V, VII, VIII), ống tai trong, và rò dịch não tủy."
-    },
-    {
-        id: 36,
-        en: "Arterial Spin Labeling (ASL)",
-        vi: "Tưới máu không tiêm thuốc ASL",
-        type: "Sequence",
-        description: "Đánh dấu từ tính các proton trong dòng máu động mạch ở cổ, sau đó đo lường tín hiệu khi lượng máu này chảy lên tưới máu não.",
-        parameters: "Đánh giá bản đồ tưới máu não (CBF) hoàn toàn không cần tiêm thuốc cản từ, an toàn cho bệnh nhân suy thận, trẻ em."
-    },
-    {
-        id: 37,
-        en: "Diffusion Tensor Imaging (DTI)",
-        vi: "Hình ảnh sức căng khuếch tán",
-        type: "Sequence",
-        description: "Đo lường sự khuếch tán của nước theo nhiều hướng khác nhau (thường > 6 hướng) để dựng lại đường đi của các bó sợi thần kinh (Tractography).",
-        parameters: "Ứng dụng trong lên kế hoạch phẫu thuật u não, đánh giá chấn thương sợi trục lan tỏa (DAI)."
-    },
-    {
-        id: 38,
-        en: "Magnetic Resonance Spectroscopy (MRS)",
-        vi: "Cộng hưởng từ phổ (Quang phổ)",
-        type: "Sequence",
-        description: "Không tạo ra hình ảnh giải phẫu mà phân tích thành phần chuyển hóa sinh hóa của một vùng mô (Voxel) dựa trên sự chênh lệch tần số Larmor của các chất.",
-        parameters: "Phân biệt u não ác tính (tăng Choline, giảm NAA) với viêm, áp xe, hay hoại tử sau xạ trị."
-    },
-    {
-        id: 39,
-        en: "Phase Contrast Angiography (PC-MRA)",
-        vi: "Chụp mạch máu đối pha",
-        type: "Sequence",
-        description: "Chụp mạch không tiêm thuốc, tạo tương phản dựa trên sự dịch pha của các proton chuyển động. Có thể định lượng vận tốc dòng chảy.",
-        parameters: "Yêu cầu cài đặt thông số VENC (Velocity Encoding) phù hợp với tốc độ dòng chảy dự kiến (VD: Tĩnh mạch chậm 20cm/s, động mạch nhanh 60-80cm/s)."
-    },
-    {
-        id: 40,
-        en: "Contrast-Enhanced Magnetic Resonance Angiography (CE-MRA)",
-        vi: "Chụp mạch máu có tiêm thuốc (CE-MRA)",
-        type: "Sequence",
-        description: "Sử dụng chuỗi xung 3D T1 cực nhanh kết hợp tiêm Bolus Gadolinium tĩnh mạch để làm sáng toàn bộ lòng mạch máu.",
-        parameters: "Không phụ thuộc vào chiều hay tốc độ dòng chảy như TOF/PC. Rất chính xác cho phình động mạch chủ, mạch máu chi dưới."
-    },
-    {
-        id: 41,
-        en: "Magnetic Resonance Cholangiopancreatography (MRCP)",
-        vi: "Chụp mật tụy (MRCP)",
-        type: "Sequence",
-        description: "Sử dụng xung T2W với TE cực kỳ dài (Heavy T2W). Mô đặc sẽ mất hoàn toàn tín hiệu (đen), chỉ còn dịch lỏng tĩnh (mật, tụy) sáng rực lên.",
-        parameters: "Dựng hình 3D cây đường mật hoàn toàn không xâm lấn, thay thế ERCP trong chẩn đoán sỏi mật, u đường mật."
-    },
-    {
-        id: 42,
-        en: "Functional MRI (fMRI)",
-        vi: "Cộng hưởng từ chức năng",
-        type: "Sequence",
-        description: "Kỹ thuật lập bản đồ các vùng hoạt động của não dựa trên sự thay đổi lưu lượng máu và mức độ oxy hóa khi bệnh nhân thực hiện một nhiệm vụ (VD: nhấp ngón tay, nói).",
-        parameters: "Dựa vào hiệu ứng BOLD (Blood Oxygenation Level Dependent). Thiết yếu trước phẫu thuật u não vùng chức năng."
-    },
-    {
-        id: 72,
-        en: "Dynamic Contrast Enhancement (DCE)",
-        vi: "Cộng hưởng từ động học tiêm thuốc",
-        type: "Sequence",
-        description: "Chụp liên tục 1 vùng (như vú, gan, tuyến tiền liệt) trước và nhiều pha sau khi tiêm nhanh (bolus) Gadolinium.",
-        parameters: "Sử dụng xung 3D T1 GRE có độ phân giải thời gian cao. Phân tích dựa trên đường cong cường độ-thời gian (TIC) để đánh giá mức độ ác tính."
-    },
-    {
-        id: 73,
-        en: "Dynamic Susceptibility Contrast (DSC)",
-        vi: "Tưới máu nhạy từ (DSC Perfusion)",
-        type: "Sequence",
-        description: "Theo dõi sự rớt tín hiệu (trên ảnh T2*) do tác động nhạy từ của lượng lớn thuốc Gadolinium đi qua vi mạch máu não.",
-        parameters: "Tính toán được các thông số tưới máu não: CBV, CBF, MTT, Tmax. Thiết yếu trong đột quỵ hoặc u não."
-    },
-    {
-        id: 81,
-        en: "T1rho (T1ρ)",
-        vi: "T1 trong hệ tọa độ quay",
-        type: "Sequence",
-        description: "Phương pháp tạo độ tương phản bằng cách khóa các spin bằng một xung RF liên tục, đo lường sự tương tác phân tử ở tần số thấp.",
-        parameters: "Rất nhạy trong việc phát hiện sự thay đổi cấu trúc sụn khớp sớm (hàm lượng proteoglycan) trước khi tổn thương hình thái học xuất hiện."
-    },
-    {
-        id: 82,
-        en: "T2 Mapping",
-        vi: "Bản đồ T2",
-        type: "Sequence",
-        description: "Đo lường định lượng chính xác thời gian T2 (tính bằng milliseconds) của từng pixel sụn hoặc cơ tim, được mã hóa dưới dạng bản đồ màu.",
-        parameters: "Khảo sát hàm lượng nước và sự sắp xếp collagen của sụn khớp hoặc đánh giá viêm cơ tim."
-    },
-    {
-        id: 83,
-        en: "Quantitative Susceptibility Mapping (QSM)",
-        vi: "Bản đồ nhạy từ định lượng",
-        type: "Sequence",
-        description: "Kỹ thuật giải phương trình toán học từ dữ liệu pha của GRE để định lượng trực tiếp nồng độ chất từ tính (sắt, canxi) theo đơn vị ppm.",
-        parameters: "Cung cấp độ chính xác vượt trội hơn SWI trong việc đo lường sắt ở não (Bệnh Parkinson, Alzheimer)."
-    },
-    {
-        id: 84,
-        en: "Ultrashort Echo Time (UTE)",
-        vi: "Xung TE siêu ngắn",
-        type: "Sequence",
-        description: "Kỹ thuật thu thập tín hiệu với TE cực kỳ ngắn (< 0.1 ms), bỏ qua mã hóa pha truyền thống để thu thập K-space theo hình tia (radial).",
-        parameters: "Phát hiện tín hiệu từ các cấu trúc bình thường không thấy được trên MRI do T2 phân rã quá nhanh: Xương vỏ cứng, sụn chêm, gân Achilles."
-    },
-    {
-        id: 85,
-        en: "Zero Echo Time (ZTE)",
-        vi: "Xung TE bằng 0",
-        type: "Sequence",
-        description: "Gradient được bật ngay từ trước khi phát xung RF kích thích, thời gian TE xấp xỉ bằng 0.",
-        parameters: "Thu được tín hiệu xương hoàn hảo, thường được dùng tạo ảnh \"giống CT\" trên máy MRI (Bone MRI)."
-    },
-    {
-        id: 86,
-        en: "Double Inversion Recovery (DIR)",
-        vi: "Chuỗi xung DIR (Đảo ngược kép)",
-        type: "Sequence",
-        description: "Sử dụng 2 xung 180 độ liên tiếp với 2 thời gian TI khác nhau để xóa cùng lúc 2 loại mô (thường là xóa mỡ và xóa dịch não tủy, hoặc xóa chất trắng và xóa dịch).",
-        parameters: "Làm nổi bật cực tốt tổn thương vỏ não, chất xám trong bệnh Đa xơ cứng (Multiple Sclerosis) hoặc động kinh."
-    },
-    {
-        id: 87,
-        en: "SPACE / CUBE / VISTA",
-        vi: "Chuỗi xung TSE 3D tối ưu góc lật",
-        type: "Sequence",
-        description: "Chuỗi xung 3D TSE sử dụng góc lật thay đổi liên tục (Variable Flip Angle) trong chuỗi Echo Train dài.",
-        parameters: "Tránh được mờ ảnh. Tạo được ảnh T2W hoặc FLAIR 3D đẳng hướng toàn sọ (chụp 1 lần cắt MPR mọi mặt phẳng) rất sắc nét."
-    },
-    {
-        id: 88,
-        en: "PROPELLER / BLADE / MultiVane",
-        vi: "Thu thập dữ liệu dạng cánh quạt",
-        type: "Sequence",
-        description: "Điền k-space bằng các dải dữ liệu xoay xung quanh tâm giống cánh quạt. Dữ liệu tâm được lấy trung bình (Oversampled) liên tục.",
-        parameters: "Chống xảo ảnh chuyển động (Motion artifact) bệnh nhân vô cùng hiệu quả, phù hợp chụp trẻ em, bệnh nhân kích thích không cần gây mê."
-    }
+    // --- 33 THUẬT NGỮ CŨ (BẢO TOÀN LOGIC) ---
+    { id: 1, en: "Spin Echo (SE)", vi: "Chuỗi xung Spin Echo (Xung dội spin)", type: "Sequence", description: "Sử dụng một xung kích thích 90 độ, theo sau là xung tái hội tụ 180 độ để tạo ra tín hiệu dội (echo). Giúp triệt tiêu sự mất đồng pha do từ trường không đồng nhất (T2* effect), mang lại hình ảnh có độ phân giải giải phẫu cao nhất.", parameters: "T1W: TR ngắn (400-600ms), TE ngắn (10-20ms). T2W: TR dài (>2000ms), TE dài (>80ms)." },
+    { id: 4, en: "Diffusion Weighted Imaging (DWI)", vi: "Chuỗi xung khuếch tán", type: "Sequence", description: "Dựa trên chuyển động Brown của các phân tử nước trong mô. Đo lường sự hạn chế khuếch tán, cực kỳ nhạy trong phát hiện nhồi máu não cấp (đột quỵ) hoặc đánh giá mật độ tế bào khối u.", parameters: "Giá trị b (b-value): Thường dùng b=0 và b=1000 s/mm2. Bản đồ ADC được tính toán tự động." },
+    { id: 6, en: "Gradient Echo (GRE)", vi: "Chuỗi xung Gradient Echo", type: "Sequence", description: "Sử dụng góc lật nhỏ hơn 90 độ và dùng từ trường chênh từ để tạo tín hiệu dội thay vì xung 180 độ. Tốc độ chụp nhanh nhưng nhạy với độ không đồng nhất từ trường (T2*).", parameters: "Rất nhạy trong việc phát hiện xuất huyết vi thể hoặc vôi hóa. Cài đặt góc lật (FA) từ 5-30 độ." },
+    { id: 7, en: "Fluid Attenuated Inversion Recovery (FLAIR)", vi: "Chuỗi xung xóa dịch não tủy", type: "Sequence", description: "Sử dụng thời gian đảo ngược (TI) dài để triệt tiêu hoàn toàn tín hiệu của dịch tự do (dịch não tủy), giúp làm nổi bật các tổn thương nằm cạnh não thất hoặc rãnh cuộn não.", parameters: "Cài đặt TI dài (khoảng 2000-2500ms). TR dài (6000-10000ms), TE dài (90-140ms)." },
+    { id: 8, en: "Short Tau Inversion Recovery (STIR)", vi: "Chuỗi xung xóa mỡ STIR", type: "Sequence", description: "Chuỗi xung IR với thời gian TI ngắn để đồng bộ với thời gian phục hồi T1 của mỡ đi qua điểm null. Xóa triệt để tín hiệu mỡ.", parameters: "TI ngắn (150-170ms ở 1.5T). Không thể dùng sau khi tiêm thuốc đối quang từ." },
+    { id: 11, en: "Time of Flight (TOF)", vi: "Chuỗi xung mạch máu thời gian bay", type: "Sequence", description: "Kỹ thuật chụp mạch máu không tiêm thuốc, dựa trên hiện tượng dòng chảy liên quan. Máu chảy vào lát cắt sẽ có tín hiệu cao.", parameters: "TOF 2D nhạy dòng chảy chậm. TOF 3D độ phân giải cao cho động mạch sọ não." },
+    { id: 15, en: "Susceptibility Weighted Imaging (SWI)", vi: "Chuỗi xung nhạy từ", type: "Sequence", description: "Chuỗi xung 3D GRE sử dụng thông tin biên độ và pha. Rất nhạy với các chất có tính từ (máu, canxi, sắt).", parameters: "Dùng để phát hiện xuất huyết vi thể, phân biệt vôi hóa (qua Phase map)." },
+    { id: 16, en: "Turbo Spin Echo (TSE) / Fast Spin Echo (FSE)", vi: "Chuỗi xung Spin Echo nhanh", type: "Sequence", description: "Biến thể của Spin Echo giúp giảm đáng kể thời gian chụp bằng cách thu nhận nhiều tín hiệu (echo) trong cùng một khoảng thời gian TR nhờ một chuỗi các xung 180 độ.", parameters: "Tốc độ nhanh phụ thuộc vào chỉ số Echo Train Length (ETL). Gây mờ ảnh nếu ETL quá cao." },
+    { id: 28, en: "Spectral Presaturation with Inversion Recovery (SPIR)", vi: "Xóa mỡ SPIR", type: "Sequence", description: "Lai tạo giữa FatSat và STIR. Sử dụng một xung đảo ngược chọn lọc phổ để xóa mỡ linh hoạt.", parameters: "Có thể dùng chung với thuốc cản từ (Khác với STIR)." },
+    { id: 29, en: "Spectral Adiabatic Inversion Recovery (SPAIR)", vi: "Xóa mỡ SPAIR", type: "Sequence", description: "Bản nâng cấp của SPIR sử dụng xung Adiabatic. Xóa mỡ cực kỳ đồng đều, kể cả trên những vùng cơ thể giải phẫu không bằng phẳng.", parameters: "Cho hình ảnh T2 SPAIR hoặc T1 SPAIR rất mịn, ưu tiên ở MSK và vú." },
+    { id: 30, en: "Dixon Method", vi: "Kỹ thuật xóa mỡ Dixon", type: "Sequence", description: "Dựa trên sự lệch pha hóa học giữa nước và mỡ. Phân tách tạo ra 4 loại ảnh: In-phase, Out-of-phase, Water-only, Fat-only.", parameters: "Cực kỳ đáng tin cậy ở những vùng từ trường kém đồng nhất." },
+    { id: 31, en: "Balanced Steady-State Free Precession (bSSFP / TrueFISP)", vi: "Chuỗi xung bSSFP", type: "Sequence", description: "Chuỗi xung Gradient Echo duy trì trạng thái ổn định. Tạo ra độ tương phản dựa trên tỷ lệ T2/T1. Dịch sẽ cực kỳ sáng.", parameters: "Thường dùng trong chụp tim (Cine), thai nhi, hoặc mạch máu ngoại vi không tiêm thuốc." },
+    { id: 32, en: "Half-Fourier Single-Shot TSE (HASTE)", vi: "Chuỗi xung TSE đơn phát", type: "Sequence", description: "Thu nhận hơn một nửa k-space chỉ bằng một lần phát xung kích thích và dùng thuật toán Half-Fourier nội suy phần còn lại.", parameters: "Chống xảo ảnh chuyển động cực tốt, dùng nhiều trong MRI bụng." },
+    { id: 33, en: "Magnetization Prepared Rapid Gradient Echo (MPRAGE)", vi: "Chuỗi xung 3D T1 MPRAGE", type: "Sequence", description: "Sử dụng một xung chuẩn bị từ hóa (IR) theo sau là chuỗi Gradient Echo 3D thu thập nhanh.", parameters: "Tiêu chuẩn vàng trong tái tạo 3D sọ não, đo thể tích não bộ." },
+    { id: 34, en: "Volumetric Interpolated Breath-hold Examination (VIBE)", vi: "Chuỗi xung 3D T1 VIBE", type: "Sequence", description: "Chuỗi xung 3D GRE T1 phá hủy tín hiệu dư tích hợp xóa mỡ. Cho phép chụp toàn bộ ổ bụng trong 1 lần nín thở.", parameters: "Xung bắt buộc trong khảo sát động học gan, tụy, thận sau tiêm." },
+    { id: 35, en: "Constructive Interference in Steady State (CISS / FIESTA-C)", vi: "Chuỗi xung CISS 3D", type: "Sequence", description: "Chuỗi xung bSSFP 3D có độ phân giải siêu cao. Giúp quan sát cấu trúc thần kinh nhỏ trong dịch não tủy.", parameters: "Khảo sát các dây thần kinh sọ, ống tai trong, và rò dịch não tủy." },
+    { id: 36, en: "Arterial Spin Labeling (ASL)", vi: "Tưới máu không tiêm thuốc ASL", type: "Sequence", description: "Đánh dấu từ tính các proton trong máu động mạch cổ, đo lường tín hiệu khi máu chảy lên tưới máu não.", parameters: "Đánh giá bản đồ tưới máu não (CBF) hoàn toàn không cần tiêm thuốc." },
+    { id: 37, en: "Diffusion Tensor Imaging (DTI)", vi: "Hình ảnh sức căng khuếch tán", type: "Sequence", description: "Đo lường sự khuếch tán của nước theo nhiều hướng để dựng lại đường đi của các bó sợi thần kinh.", parameters: "Ứng dụng trong lên kế hoạch phẫu thuật u não." },
+    { id: 38, en: "Magnetic Resonance Spectroscopy (MRS)", vi: "Cộng hưởng từ phổ", type: "Sequence", description: "Phân tích thành phần chuyển hóa sinh hóa của một vùng mô dựa trên sự chênh lệch tần số Larmor của các chất.", parameters: "Phân biệt u não ác tính với viêm, hoại tử sau xạ trị." },
+    { id: 39, en: "Phase Contrast Angiography (PC-MRA)", vi: "Chụp mạch máu đối pha", type: "Sequence", description: "Chụp mạch không tiêm thuốc, tạo tương phản dựa trên sự dịch pha của các proton chuyển động.", parameters: "Yêu cầu cài đặt thông số VENC phù hợp với tốc độ dòng chảy." },
+    { id: 40, en: "Contrast-Enhanced Magnetic Resonance Angiography (CE-MRA)", vi: "Chụp mạch máu có tiêm thuốc", type: "Sequence", description: "Sử dụng chuỗi xung 3D T1 cực nhanh kết hợp tiêm Bolus Gadolinium.", parameters: "Không phụ thuộc vào chiều hay tốc độ dòng chảy, rất chính xác cho phình động mạch chủ." },
+    { id: 41, en: "Magnetic Resonance Cholangiopancreatography (MRCP)", vi: "Chụp mật tụy (MRCP)", type: "Sequence", description: "Sử dụng xung T2W với TE cực kỳ dài. Mô đặc sẽ mất hoàn toàn tín hiệu, dịch tĩnh rực sáng.", parameters: "Dựng hình 3D cây đường mật hoàn toàn không xâm lấn." },
+    { id: 42, en: "Functional MRI (fMRI)", vi: "Cộng hưởng từ chức năng", type: "Sequence", description: "Kỹ thuật lập bản đồ các vùng hoạt động của não dựa trên sự thay đổi lưu lượng máu và oxy.", parameters: "Dựa vào hiệu ứng BOLD. Thiết yếu trước phẫu thuật u não vùng chức năng." },
+    { id: 72, en: "Dynamic Contrast Enhancement (DCE)", vi: "Cộng hưởng từ động học tiêm thuốc", type: "Sequence", description: "Chụp liên tục 1 vùng trước và nhiều pha sau khi tiêm nhanh Gadolinium.", parameters: "Phân tích dựa trên đường cong cường độ-thời gian (TIC)." },
+    { id: 73, en: "Dynamic Susceptibility Contrast (DSC)", vi: "Tưới máu nhạy từ", type: "Sequence", description: "Theo dõi sự rớt tín hiệu do tác động nhạy từ của thuốc Gadolinium đi qua vi mạch máu não.", parameters: "Tính toán CBV, CBF, MTT, Tmax." },
+    { id: 81, en: "T1rho (T1ρ)", vi: "T1 trong hệ tọa độ quay", type: "Sequence", description: "Tạo độ tương phản bằng cách khóa các spin bằng một xung RF liên tục.", parameters: "Nhạy phát hiện sự thay đổi cấu trúc sụn khớp sớm." },
+    { id: 82, en: "T2 Mapping", vi: "Bản đồ T2", type: "Sequence", description: "Đo lường định lượng chính xác thời gian T2 của từng pixel sụn hoặc cơ tim.", parameters: "Khảo sát hàm lượng nước của sụn khớp hoặc viêm cơ tim." },
+    { id: 83, en: "Quantitative Susceptibility Mapping (QSM)", vi: "Bản đồ nhạy từ định lượng", type: "Sequence", description: "Giải phương trình toán học từ dữ liệu pha để định lượng trực tiếp nồng độ chất từ tính (sắt, canxi).", parameters: "Đo lường sắt ở não trong Parkinson, Alzheimer." },
+    { id: 84, en: "Ultrashort Echo Time (UTE)", vi: "Xung TE siêu ngắn", type: "Sequence", description: "Thu thập tín hiệu với TE cực kỳ ngắn (< 0.1 ms), bỏ qua mã hóa pha truyền thống.", parameters: "Phát hiện tín hiệu từ xương vỏ cứng, sụn chêm, gân Achilles." },
+    { id: 85, en: "Zero Echo Time (ZTE)", vi: "Xung TE bằng 0", type: "Sequence", description: "Gradient bật ngay từ trước khi phát xung RF kích thích, TE xấp xỉ bằng 0.", parameters: "Thu được tín hiệu xương hoàn hảo (Bone MRI)." },
+    { id: 86, en: "Double Inversion Recovery (DIR)", vi: "Chuỗi xung DIR", type: "Sequence", description: "Sử dụng 2 xung 180 độ liên tiếp với 2 thời gian TI khác nhau để xóa cùng lúc 2 loại mô.", parameters: "Làm nổi bật tổn thương vỏ não trong bệnh Đa xơ cứng." },
+    { id: 87, en: "SPACE / CUBE / VISTA", vi: "Chuỗi xung TSE 3D tối ưu góc lật", type: "Sequence", description: "Chuỗi xung 3D TSE sử dụng góc lật thay đổi liên tục trong chuỗi Echo Train dài.", parameters: "Tạo ảnh T2W/FLAIR 3D đẳng hướng toàn sọ rất sắc nét." },
+    { id: 88, en: "PROPELLER / BLADE / MultiVane", vi: "Thu thập dữ liệu dạng cánh quạt", type: "Sequence", description: "Điền k-space bằng các dải dữ liệu xoay xung quanh tâm giống cánh quạt.", parameters: "Chống xảo ảnh chuyển động cực kỳ hiệu quả." },
+
+    // --- 67 THUẬT NGỮ CHUỖI XUNG MỚI (ĐẠT 100 ITEM) ---
+    { id: 1001, en: "Echo Planar Imaging (EPI)", vi: "Hình ảnh mặt phẳng dội", type: "Sequence", description: "Thu nhận toàn bộ dữ liệu K-space sau một xung kích thích duy nhất thông qua sự đảo chiều liên tục của gradient.", parameters: "Tốc độ siêu nhanh, là nền tảng bắt buộc cho DWI và fMRI." },
+    { id: 1002, en: "Spin Echo EPI (SE-EPI)", vi: "Chuỗi xung EPI dội spin", type: "Sequence", description: "Kết hợp xung 180 độ của Spin Echo trước khi thu nhận EPI để giảm bớt xảo ảnh nhạy từ so với EPI thuần.", parameters: "Chuyên dùng trong DWI não để tránh méo hình nặng ở vùng nền sọ." },
+    { id: 1003, en: "Gradient Echo EPI (GRE-EPI)", vi: "Chuỗi xung EPI Gradient Echo", type: "Sequence", description: "Sử dụng GRE để bắt đầu thu nhận EPI, tốc độ nhanh nhất nhưng nhạy từ tính nhất.", parameters: "Ứng dụng tuyệt đối trong fMRI và perfusion DSC." },
+    { id: 1004, en: "RESOLVE / RS-EPI", vi: "EPI thu nhận đa phân đoạn (Readout-Segmented EPI)", type: "Sequence", description: "Thu thập K-space thành nhiều dải nhỏ thay vì một lần quét dài, giúp giảm méo hình và mờ ảnh.", parameters: "Cung cấp hình ảnh DWI độ phân giải cao cho thần kinh và tuyến tiền liệt." },
+    { id: 1005, en: "MUSE / Multi-Shot EPI", vi: "EPI đa phát", type: "Sequence", description: "Tương tự RESOLVE, nhưng kết hợp thuật toán tính toán pha để triệt tiêu xảo ảnh chuyển động.", parameters: "Cải thiện SNR và độ phân giải không gian cho Diffusion." },
+    { id: 1006, en: "ZOOMit / FOCUS", vi: "DWI trường nhìn nhỏ", type: "Sequence", description: "Sử dụng xung kích thích RF đặc biệt để chỉ kích thích một vùng FOV nhỏ, không thu tín hiệu các vùng xung quanh.", parameters: "DWI cột sống và tiền liệt tuyến sắc nét, không bị nhiễu cuộn." },
+    { id: 1007, en: "Diffusion Kurtosis Imaging (DKI)", vi: "Hình ảnh độ nhọn khuếch tán", type: "Sequence", description: "Kỹ thuật cao cấp của DWI, đo lường sự khuếch tán nước không tuân theo phân phối Gauss trong vi cấu trúc mô phức tạp.", parameters: "Cần chụp nhiều b-value cao (b=2000) để đánh giá cấp độ khối u." },
+    { id: 1008, en: "Intravoxel Incoherent Motion (IVIM)", vi: "Chuyển động không đồng pha nội Voxel", type: "Sequence", description: "Phân tách tín hiệu khuếch tán thực sự và tín hiệu tưới máu vi mạch thông qua nhiều mức b-value thấp và cao.", parameters: "Đánh giá tưới máu không cần tiêm thuốc cản từ." },
+    { id: 1009, en: "NODDI", vi: "Khuếch tán định hướng nơ-ron", type: "Sequence", description: "Mô hình khuếch tán đa vỏ (multi-shell) giúp ước tính mật độ và sự phân tán của sợi trục thần kinh.", parameters: "Ứng dụng trong nghiên cứu vi cấu trúc não sâu." },
+    { id: 1010, en: "Pseudo-Continuous ASL (pCASL)", vi: "Tưới máu ASL bán liên tục", type: "Sequence", description: "Kết hợp ưu điểm của xung ASL liên tục và ASL ngắt quãng, dùng một chuỗi các xung RF ngắn để đánh dấu dòng máu.", parameters: "Là tiêu chuẩn lâm sàng hiện tại cho Perfusion không tiêm thuốc." },
+    { id: 1011, en: "Pulsed ASL (PASL)", vi: "Tưới máu ASL xung", type: "Sequence", description: "Sử dụng một xung RF đảo ngược duy nhất diện rộng để đánh dấu một khối máu lớn trước khi nó chảy vào não.", parameters: "Nhanh hơn nhưng SNR thấp hơn so với pCASL." },
+    { id: 1012, en: "FAIR", vi: "Kỹ thuật đảo ngược xen kẽ (ASL)", type: "Sequence", description: "Một loại PASL dùng xung đảo ngược không chọn lọc và chọn lọc lát cắt để tạo hai bộ dữ liệu trừ nhau.", parameters: "Dùng để khảo sát tưới máu vỏ não." },
+    { id: 1013, en: "Resting-State fMRI", vi: "Cộng hưởng từ chức năng trạng thái nghỉ", type: "Sequence", description: "Đo lường hoạt động mạng lưới thần kinh tự nhiên khi bệnh nhân nằm yên không thực hiện nhiệm vụ gì.", parameters: "Ứng dụng nghiên cứu Alzheimer, tự kỷ, trầm cảm." },
+    { id: 1014, en: "Task-based fMRI", vi: "Cộng hưởng từ chức năng theo nhiệm vụ", type: "Sequence", description: "Ghi nhận tín hiệu BOLD trong khi bệnh nhân đang đọc, nghe, hoặc cử động tay chân.", parameters: "Lập bản đồ vùng vận động/ngôn ngữ trước mổ não." },
+    { id: 1015, en: "PROSET / Water Excitation", vi: "Xung kích thích chọn lọc nước", type: "Sequence", description: "Xung RF đặc biệt lợi dụng sự lệch pha hóa học để chỉ kích thích proton của nước, bỏ qua mỡ hoàn toàn.", parameters: "Xóa mỡ cực tốt ở sụn khớp mà không bị lỗi vùng viền." },
+    { id: 1016, en: "eTHRIVE", vi: "Xung T1 3D độ phân giải cao có nín thở", type: "Sequence", description: "Tên gọi của Philips cho xung 3D GRE T1 FatSat cực nhanh dùng chụp động học bụng.", parameters: "Tương đương với VIBE (Siemens) và LAVA (GE)." },
+    { id: 1017, en: "LAVA-Flex / VIBE-Dixon", vi: "Xung 3D T1 kết hợp Dixon", type: "Sequence", description: "Chụp ổ bụng động học nhưng sử dụng thuật toán Dixon để tạo ảnh Xóa mỡ hoàn hảo ở mọi góc cạnh.", parameters: "Tiêu chuẩn vàng mới trong chụp MRI gan và vú." },
+    { id: 1018, en: "CAIPIRINHA", vi: "Kỹ thuật chụp song song CAIPIRINHA", type: "Sequence", description: "Dịch chuyển pha của k-space để tối ưu hóa hình học cuộn dây, cho phép tăng tốc độ chụp (PI) lên rất cao mà không bị nhiễu aliasing nội tại.", parameters: "Ứng dụng đột phá trong chụp bụng nín thở siêu tốc." },
+    { id: 1019, en: "TWIST / TRICKS", vi: "Chụp mạch máu động học (4D MRA)", type: "Sequence", description: "Chia k-space thành các vùng trung tâm và ngoại vi, cập nhật liên tục vùng trung tâm để đạt tốc độ <2 giây/khối 3D.", parameters: "Dùng để xem dòng chảy từ động mạch sang tĩnh mạch (dị dạng AVM)." },
+    { id: 1020, en: "4D-TRAK", vi: "4D MRA của Philips", type: "Sequence", description: "Xung T1 3D siêu tốc quay liên tục để bắt các pha của thuốc cản từ trôi qua mạch máu.", parameters: "Tạo video 4D dòng chảy mạch máu chi hoặc não." },
+    { id: 1021, en: "DISCO", vi: "Chụp động học đa pha siêu nhanh", type: "Sequence", description: "Xung VIBE/LAVA kết hợp thu thập view-sharing, chụp tuyến tiền liệt hoặc vú với tốc độ 3-5 giây/pha.", parameters: "Xác định chính xác thời điểm Wash-in của u." },
+    { id: 1022, en: "KWIC / Radial K-space", vi: "Thu thập K-space hình tia (Radial)", type: "Sequence", description: "Thay vì thu nhận k-space theo đường thẳng, kỹ thuật này thu theo các đường chéo đi qua tâm liên tục.", parameters: "Miễn nhiễm với xảo ảnh chuyển động hô hấp, không cần nín thở." },
+    { id: 1023, en: "Golden Angle Radial", vi: "Góc vàng trong thu thập tia", type: "Sequence", description: "Các tia k-space được xoay theo một góc lệch chuẩn ~111.25 độ, cho phép phân chia dữ liệu động học (DCE) bất cứ lúc nào sau khi chụp.", parameters: "Rất mạnh cho MRI bụng trẻ em." },
+    { id: 1024, en: "GRASP", vi: "Tái tạo GRASP", type: "Sequence", description: "Kết hợp thu nhận Golden Angle Radial và Compressed Sensing, tạo ra ảnh MRI động học hô hấp tự do.", parameters: "Giải pháp cho bệnh nhân hôn mê không thể nín thở." },
+    { id: 1025, en: "StarVIBE", vi: "VIBE thu nhận dạng sao", type: "Sequence", description: "Tên gọi Siemens cho kỹ thuật Radial 3D T1, cho phép quét MRI tĩnh mạch hoặc đầu mặt cổ chống nhiễu nuốt bọt/chuyển động.", parameters: "Tương phản T1 rõ nét mà không sợ rung." },
+    { id: 1026, en: "RADAR / BLADE", vi: "Xung chống chuyển động RADAR", type: "Sequence", description: "Biến thể của PROPELLER (Hitachi/Siemens) quay các dải k-space để sửa lỗi cử động bệnh nhân.", parameters: "Hoạt động tốt ở các chuỗi xung T2W, FLAIR sọ não." },
+    { id: 1027, en: "MEDIC / MERGE", vi: "Xung đa tín hiệu dội (Multi-Echo GRE)", type: "Sequence", description: "Phát nhiều xung Gradient trong một TR và cộng dồn các Echo lại để tăng SNR cho mô sụn, rễ thần kinh cổ.", parameters: "Hiển thị rễ thần kinh cực đẹp trên nền dịch tủy sáng." },
+    { id: 1028, en: "COSMIC", vi: "Xung bSSFP của GE", type: "Sequence", description: "Xung Gradient trạng thái ổn định tối ưu hóa cho cột sống và khớp cổ chân.", parameters: "Cho ảnh sụn, dịch, tủy xương tương phản xuất sắc." },
+    { id: 1029, en: "DESS / Dual Echo Steady State", vi: "Xung trạng thái ổn định dội kép", type: "Sequence", description: "Thu nhận cả tín hiệu FID và Echo trong một TR duy nhất, tạo ảnh 3D cực mỏng.", parameters: "Chuẩn vàng cho tái tạo sụn khớp gối (Knee Cartilage)." },
+    { id: 1030, en: "T2* MAP", vi: "Bản đồ T2 sao", type: "Sequence", description: "Thu nhận đa dội (Multi-echo GRE) ở các khoảng TE khác nhau để vẽ đường cong phân rã T2*.", parameters: "Dùng tính nồng độ sắt tích tụ trong gan và cơ tim." },
+    { id: 1031, en: "T1 MAP / MOLLI", vi: "Bản đồ T1 tim (MOLLI)", type: "Sequence", description: "Xung Modified Look-Locker Inversion recovery thu thập nhiều hình ảnh ở các mức hồi phục T1 khác nhau.", parameters: "Định lượng xơ hóa cơ tim hoặc thâm nhiễm Amyloid." },
+    { id: 1032, en: "ShMOLLI", vi: "MOLLI chu kỳ ngắn", type: "Sequence", description: "Rút ngắn số nhịp tim cần thiết để thu thập bản đồ T1 tim.", parameters: "Phù hợp bệnh nhân khó nín thở dài." },
+    { id: 1033, en: "SASHA", vi: "Xung bản đồ T1 bão hòa", type: "Sequence", description: "Dùng xung bão hòa (Saturation Recovery) thay vì đảo ngược (IR) để vẽ T1 map tim.", parameters: "Ít bị ảnh hưởng bởi nhịp tim hơn MOLLI." },
+    { id: 1034, en: "Cardiac Cine (SSFP)", vi: "MRI Tim động học", type: "Sequence", description: "Sử dụng bSSFP siêu nhanh được đồng bộ ECG để thu thập 25-30 frame trên một chu kỳ tim.", parameters: "Đánh giá chức năng bơm máu (EF), vận động vùng thành tim." },
+    { id: 1035, en: "CSPAMM / Tagging", vi: "Kỹ thuật dán nhãn cơ tim", type: "Sequence", description: "Dùng các dải xung RF bão hòa kẻ thành hình sọc caro trên cơ tim trước khi chụp Cine.", parameters: "Theo dõi biến dạng lưới caro để phân tích sức căng cơ tim (Strain)." },
+    { id: 1036, en: "SENC (Strain Encoded)", vi: "Hình ảnh mã hóa sức căng", type: "Sequence", description: "Phân tích trực tiếp biến dạng cơ tim qua chiều dọc (Z-axis) mã hóa pha.", parameters: "Nhạy hơn Tagging thông thường." },
+    { id: 1037, en: "4D Flow", vi: "MRI mạch máu 4D", type: "Sequence", description: "Kỹ thuật Phase Contrast mở rộng mã hóa vận tốc (VENC) ở cả 3 trục x,y,z kết hợp với chu kỳ tim.", parameters: "Dựng vector dòng chảy không gian 3 chiều của van tim, động mạch chủ." },
+    { id: 1038, en: "QFLOW / 2D Phase Contrast", vi: "Khảo sát dòng chảy định lượng", type: "Sequence", description: "Đo lưu lượng (ml/s) hoặc vận tốc (cm/s) đi qua van tim hoặc cống não.", parameters: "Chẩn đoán hẹp van tim, trào ngược, áp lực dịch não tủy." },
+    { id: 1039, en: "Non-Contrast MRA (NATIVE / FBI)", vi: "MRA không tiêm thuốc gating tim", type: "Sequence", description: "Chụp 2 bộ dữ liệu: một lúc tâm thu (tín hiệu máu bị mất), một lúc tâm trương (máu sáng), rồi trừ đi nhau.", parameters: "Dùng chụp động mạch chi dưới cho bệnh nhân suy thận." },
+    { id: 1040, en: "TRANCE", vi: "MRA kích hoạt nhịp tim của Philips", type: "Sequence", description: "Sử dụng xung TSE 3D gating theo nhịp tim để thu nhận tĩnh mạch sọ mặt không tiêm thuốc.", parameters: "Thay thế TOF rất hiệu quả." },
+    { id: 1041, en: "QISS", vi: "MRA không tiêm dựa trên bSSFP", type: "Sequence", description: "Sử dụng lát cắt bSSFP cực nhanh kích hoạt ECG kết hợp xung bão hòa mô tĩnh.", parameters: "Được coi là kỹ thuật không tiêm thuốc chi dưới tốt nhất hiện nay." },
+    { id: 1042, en: "REACT", vi: "Xung bSSFP tái tạo không đồng bộ", type: "Sequence", description: "Kỹ thuật mới tạo ảnh mạch máu không cần tiêm thuốc và không cần đo ECG rườm rà.", parameters: "Nhanh chóng trong cấp cứu." },
+    { id: 1043, en: "SNAP (Simultaneous Non-contrast Angiography and Plaque)", vi: "Hình ảnh mảng xơ vữa SNAP", type: "Sequence", description: "Chuỗi xung đặc biệt tạo ra hình ảnh lồng mạch và mảng xơ vữa (chảy máu mảng bám) đồng thời.", parameters: "Đánh giá nguy cơ đột quỵ từ hẹp mạch cảnh." },
+    { id: 1044, en: "MDE / LGE (Late Gadolinium Enhancement)", vi: "Ngấm thuốc muộn cơ tim", type: "Sequence", description: "Chụp 10-15 phút sau khi tiêm thuốc. Dùng xung IR đảo ngược để \"xóa\" hoàn toàn cơ tim bình thường thành màu đen.", parameters: "Dấu hiệu sẹo nhồi máu hoặc xơ hóa cơ tim sẽ bắt thuốc sáng rực." },
+    { id: 1045, en: "PSIR (Phase Sensitive Inversion Recovery)", vi: "IR nhạy pha", type: "Sequence", description: "Cải tiến của LGE, sử dụng thuật toán giữ lại thông tin pha (âm/dương) của tín hiệu phục hồi T1.", parameters: "Không cần căn thời gian TI hoàn hảo mà cơ tim vẫn đen nhánh." },
+    { id: 1046, en: "REAL IR", vi: "Tái tạo IR thực", type: "Sequence", description: "Hiển thị giá trị tín hiệu thực (-Mz đến +Mz) thay vì giá trị tuyệt đối trong xung Inversion.", parameters: "Tăng độ tương phản ranh giới mô." },
+    { id: 1047, en: "MP2RAGE", vi: "3D T1 MPRAGE hai xung", type: "Sequence", description: "Thu thập hai hình ảnh MPRAGE tại hai thời điểm TI khác nhau rồi kết hợp tính toán.", parameters: "Xóa bỏ hoàn toàn nhiễu từ trường (B1 bias), tạo ảnh vỏ não siêu mịn cho AI phân tích." },
+    { id: 1048, en: "T1-FLAIR / T1-Dark Fluid", vi: "Xóa dịch T1", type: "Sequence", description: "Sử dụng TI ngắn (~800ms) để xóa tín hiệu dịch não tủy trên ảnh T1W, thay vì T2W.", parameters: "Tăng khả năng phát hiện tổn thương viền não thất." },
+    { id: 1049, en: "GRASE (Gradient and Spin Echo)", vi: "Chuỗi xung lai GRASE", type: "Sequence", description: "Kẹp các xung Gradient Echo vào giữa các xung Spin Echo trong một TR.", parameters: "Tốc độ nhanh như EPI nhưng ít xảo ảnh từ tính hơn, hay dùng cho 3D T2W." },
+    { id: 1050, en: "EPIK", vi: "EPI Keyhole", type: "Sequence", description: "Kỹ thuật kết hợp thu thập trung tâm k-space độ phân giải cao và ngoại vi nhanh.", parameters: "Dùng cho fMRI để giảm biến dạng hình học." },
+    { id: 1051, en: "PRESTO", vi: "Xung chuyển dịch pha", type: "Sequence", description: "Kỹ thuật TE dài hơn TR bằng cách dời tín hiệu dội sang chu kỳ kích thích tiếp theo.", parameters: "Rất nhạy trong khảo sát tưới máu não fMRI." },
+    { id: 1052, en: "Keyhole Imaging", vi: "Kỹ thuật lỗ khóa (Keyhole)", type: "Sequence", description: "Chỉ thu thập phần trung tâm k-space trong các pha động học tiêm thuốc, phần ngoại vi mượn từ pha trước tiêm.", parameters: "Tăng cực đại độ phân giải thời gian." },
+    { id: 1053, en: "CENTRA", vi: "Lấy mẫu K-space theo đường xoắn trung tâm", type: "Sequence", description: "Đảm bảo tín hiệu trung tâm k-space được thu đúng lúc đỉnh thuốc đối quang từ đi qua.", parameters: "Tuyệt đối quan trọng trong CE-MRA." },
+    { id: 1054, en: "B-TFE / FIESTA", vi: "Cân bằng TFE", type: "Sequence", description: "Biến thể của bSSFP tập trung vào sự cân bằng từ trường gradient 3 trục.", parameters: "Cho độ sáng tối đa đối với dịch lỏng tĩnh." },
+    { id: 1055, en: "Single-Shot FSE", vi: "FSE đơn phát", type: "Sequence", description: "Khởi tạo một xung 90 độ và hàng trăm xung 180 độ để thu trọn 1 lát cắt trong <1 giây.", parameters: "MRCP, MRU, Myelography không thể thiếu xung này." },
+    { id: 1056, en: "FIESTA-FatSat", vi: "bSSFP xóa mỡ", type: "Sequence", description: "Kết hợp bSSFP với xung xóa mỡ chuyên biệt.", parameters: "Hình ảnh ruột thừa hoặc thần kinh sọ nổi bật hơn." },
+    { id: 1057, en: "DRIVE / RESTORE", vi: "Xung đẩy lùi (Driven Equilibrium)", type: "Sequence", description: "Thêm một xung 90 độ ở cuối Echo train để ép từ hóa dọc (Mz) phục hồi ngay lập tức.", parameters: "Tăng cường độ sáng của dịch trên ảnh T2W TSE với TR ngắn." },
+    { id: 1058, en: "VISTA-SPAIR", vi: "3D T2 xóa mỡ SPAIR", type: "Sequence", description: "Tích hợp SPAIR vào khối 3D độ phân giải cao.", parameters: "Tái tạo hoàn hảo các rễ thần kinh đám rối cánh tay." },
+    { id: 1059, en: "T2-MAP Cartilage", vi: "Bản đồ T2 sụn khớp", type: "Sequence", description: "Chuỗi xung đa dội (multi-echo SE) vẽ bản đồ màu tương quan hàm lượng nước.", parameters: "Phát hiện thoái hóa sụn trước khi mất độ dày sụn." },
+    { id: 1060, en: "T1ρ (T1-rho) Cartilage", vi: "Bản đồ T1-rho sụn", type: "Sequence", description: "Đánh giá lượng Proteoglycan bị mất trong sụn khớp sớm.", parameters: "Công cụ nghiên cứu mạnh mẽ cho viêm khớp xương." },
+    { id: 1061, en: "Synthetic MRI (SyMRI / MAGiC)", vi: "Cộng hưởng từ tổng hợp", type: "Sequence", description: "Một lần chụp 5 phút thu thập dữ liệu gốc, phần mềm tự tạo ra T1W, T2W, FLAIR, STIR, PSIR.", parameters: "Tiết kiệm thời gian chụp não đáng kể, cung cấp luôn định lượng mô." },
+    { id: 1062, en: "Myelin Water Imaging", vi: "Hình ảnh nước Myelin", type: "Sequence", description: "Tách tín hiệu T2 cực ngắn của nước bám trong vỏ myelin thần kinh.", parameters: "Đo lường lượng Myelin bị mất trong bệnh xơ cứng rải rác (MS)." },
+    { id: 1063, en: "APT (Amide Proton Transfer)", vi: "Chuyển giao Proton Amide", type: "Sequence", description: "Dựa trên CEST (Chemical Exchange Saturation Transfer) để đo nồng độ protein tế bào.", parameters: "Phân biệt u não cấp độ cao (nhiều protein) và hoại tử tia xạ." },
+    { id: 1064, en: "CEST Imaging", vi: "Chuyển giao bão hòa trao đổi hóa học", type: "Sequence", description: "Bão hòa một nhóm chất hóa học đặc biệt, đợi chúng trao đổi proton với nước rồi đo sự giảm tín hiệu nước.", parameters: "Được ứng dụng như một chất tương phản nội sinh (Glucose, Glutamate)." },
+    { id: 1065, en: "MR Elastography (MRE)", vi: "Siêu âm đàn hồi cộng hưởng từ", type: "Sequence", description: "Máy tạo rung động sóng cơ học truyền vào gan, xung MRI Phase Contrast đo tốc độ sóng lan truyền.", parameters: "Tiêu chuẩn vàng đánh giá xơ gan định lượng (kPa) không xâm lấn." },
+    { id: 1066, en: "Silent Scan / Quiet Suite", vi: "Chụp MRI chống ồn", type: "Sequence", description: "Sử dụng UTE/ZTE và tối ưu hóa đường dốc gradient (Slew rate mượt mà) để loại bỏ tiếng ồn máy MRI.", parameters: "Tuyệt vời cho trẻ em, giảm ồn từ >100dB xuống sát tiếng ồn môi trường." },
+    { id: 1067, en: "iPAT2 (2D GRAPPA)", vi: "Chụp song song đa chiều", type: "Sequence", description: "Tăng tốc độ thu thập ở cả hướng mã hóa pha và hướng chia lát cắt (trong 3D).", parameters: "Giảm thời gian xung VIBE từ 25s xuống 10s nín thở cực nhẹ." }
 ];
