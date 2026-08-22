@@ -3,74 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Từ Điển MRI - ktv3mien.com</title>
+    <title>Từ Điển Chẩn Đoán Hình Ảnh - Phan Thường</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Font icons hỗ trợ cho UI chuyên nghiệp -->
+    <!-- Font icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Header cố định chứa Branding và Công cụ -->
-    <div class="sticky-header">
-        <div class="header-container">
-            <div class="branding">
-                <!-- Khu vực dành cho Circular Logo -->
-                <div class="logo-wrapper">
-                    <i class="fa-solid fa-magnet"></i>
+    <div class="app-layout">
+        <!-- MENU BÊN TRÁI (SIDEBAR WIKIPEDIA STYLE) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="wiki-logo">
+                    <i class="fa-solid fa-globe"></i>
                 </div>
-                <div class="brand-text">
-                    <h1>ktv3mien Wikiadiology</h1>
-                    <p>Cẩm Nang Nguyên Lý & Cài Đặt Thông Số MRI</p>
+                <div class="sidebar-brand">
+                    <h2>Phan Thường</h2>
+                    <p>Bách khoa toàn thư mở</p>
                 </div>
             </div>
             
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Gõ thuật ngữ (Ví dụ: DWI, mỡ, T1)...">
+            <div class="sidebar-nav-title">Phân hệ</div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-mod="MRI">
+                    <span>Cộng Hưởng Từ (MRI)</span>
+                </li>
+                <li class="menu-item" data-mod="CT">
+                    <span>Cắt Lớp Vi Tính (CT)</span>
+                </li>
+                <li class="menu-item" data-mod="XRAY">
+                    <span>X-Quang</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-nav-title">Tương tác</div>
+            <ul class="sidebar-menu">
+                <li class="menu-item" id="btnContributeNew">
+                    <span>Tạo bài viết mới</span>
+                </li>
+                <li class="menu-item">
+                    <span>Hướng dẫn đóng góp</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- KHU VỰC NỘI DUNG CHÍNH BÊN PHẢI -->
+        <div class="main-content-wrapper">
+            <!-- Header công cụ -->
+            <div class="wiki-top-header" id="mriHeaderTools">
+                <div class="wiki-top-bar">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
+                        <button class="tab-btn" data-tab="Parameter">Thông Số</button>
+                        <button class="tab-btn" data-tab="Physics">Vật Lý</button>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm trang...">
+                    </div>
+                </div>
+                
+                <div class="wiki-page-header">
+                    <h1 id="firstHeading" class="firstHeading">Từ Điển Cộng Hưởng Từ (MRI)</h1>
+                    <div class="alphabet-filter" id="alphabetFilter">
+                        <!-- Nút A-Z render bởi JS -->
+                    </div>
+                </div>
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
-                <button class="tab-btn" data-tab="Parameter">Thông Số Cài Đặt</button>
-                <button class="tab-btn" data-tab="Physics">Nguyên Lý Vật Lý</button>
+            <!-- Danh sách -->
+            <div class="container main-content">
+                <main id="mriList" class="wiki-body-content">
+                    <!-- Dữ liệu render bởi UI Module -->
+                </main>
+
+                <!-- Màn hình chờ -->
+                <div id="comingSoon" class="coming-soon">
+                    <i class="fa-solid fa-person-digging"></i>
+                    <h2>Bài viết chưa tồn tại</h2>
+                    <p>Phân hệ này đang trong quá trình xây dựng. Bạn có thể giúp Phan Thường bằng cách đóng góp mở rộng bài viết.</p>
+                </div>
             </div>
-            
-            <!-- Khối lọc bảng chữ cái Alphabet -->
-            <div class="alphabet-filter" id="alphabetFilter">
-                <!-- Các nút A-Z sẽ được JS render tự động vào đây -->
+
+            <!-- Footer -->
+            <footer class="wiki-footer">
+                <p>Nội dung được phát hành theo Giấy phép Creative Commons Ghi công–Chia sẻ tương tự; có thể áp dụng điều khoản bổ sung.</p>
+                <p>&copy; 2026 Hệ thống từ điển mở Phan Thường Điện Quang.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MODAL ĐÓNG GÓP / CHỈNH SỬA (MỚI) -->
+    <div id="contributeModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Đóng góp bản sửa đổi</h2>
+                <span class="modal-close" id="modalClose">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="modal-notice"><i class="fa-solid fa-circle-info"></i> Lưu ý: Mọi thay đổi của bạn sẽ được Ban Quản Trị kiểm duyệt trước khi hiển thị công khai nhằm đảm bảo tính chính xác y khoa.</p>
+                <form id="contributeForm">
+                    <input type="hidden" id="editId" value="">
+                    <div class="form-group">
+                        <label>Tên thuật ngữ (Tiếng Anh): *</label>
+                        <input type="text" id="editEn" required placeholder="VD: Spin Echo (SE)">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên thuật ngữ (Tiếng Việt):</label>
+                        <input type="text" id="editVi" placeholder="VD: Chuỗi xung Spin Echo">
+                    </div>
+                    <div class="form-group">
+                        <label>Phân loại:</label>
+                        <select id="editType">
+                            <option value="Sequence">Chuỗi xung</option>
+                            <option value="Parameter">Thông số cài đặt</option>
+                            <option value="Physics">Nguyên lý Vật lý</option>
+                            <option value="Artifact">Xảo ảnh</option>
+                            <option value="Hardware">Phần cứng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nguyên lý / Định nghĩa: *</label>
+                        <textarea id="editDesc" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Chi tiết / Ứng dụng:</label>
+                        <textarea id="editParams" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancelEdit">Hủy bỏ</button>
+                        <button type="submit" class="btn-submit">Lưu bản sửa đổi</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Nội dung chính -->
-    <div class="container main-content">
-        <main id="mriList" class="mri-list">
-            <!-- Dữ liệu sẽ được render vào đây bởi UI Module -->
-        </main>
-    </div>
-
-    <!-- Nút cuộn lên đầu trang -->
     <button id="backToTop" class="back-to-top" title="Lên đầu trang">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
-    <footer class="app-footer">
-        <p>&copy; 2026 Bản quyền thuộc về Phan Thường Điện Quang. Ứng dụng tra cứu lưu hành nội bộ.</p>
-    </footer>
+    <script type="module" src="js/main.js"></script>
+    <script>
+        const backToTopBtn = document.getElementById("backToTop");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) backToTopBtn.style.display = "flex";
+            else backToTopBtn.style.display = "none";
+        });
+        backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ Điển Chẩn Đoán Hình Ảnh - Phan Thường</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- MENU BÊN TRÁI (SIDEBAR WIKIPEDIA STYLE) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="wiki-logo">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="sidebar-brand">
+                    <h2>Phan Thường</h2>
+                    <p>Bách khoa toàn thư mở</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-nav-title">Phân hệ</div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-mod="MRI">
+                    <span>Cộng Hưởng Từ (MRI)</span>
+                </li>
+                <li class="menu-item" data-mod="CT">
+                    <span>Cắt Lớp Vi Tính (CT)</span>
+                </li>
+                <li class="menu-item" data-mod="XRAY">
+                    <span>X-Quang</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-nav-title">Tương tác</div>
+            <ul class="sidebar-menu">
+                <li class="menu-item" id="btnContributeNew">
+                    <span>Tạo bài viết mới</span>
+                </li>
+                <li class="menu-item">
+                    <span>Hướng dẫn đóng góp</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- KHU VỰC NỘI DUNG CHÍNH BÊN PHẢI -->
+        <div class="main-content-wrapper">
+            <!-- Header công cụ -->
+            <div class="wiki-top-header" id="mriHeaderTools">
+                <div class="wiki-top-bar">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
+                        <button class="tab-btn" data-tab="Parameter">Thông Số</button>
+                        <button class="tab-btn" data-tab="Physics">Vật Lý</button>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm trang...">
+                    </div>
+                </div>
+                
+                <div class="wiki-page-header">
+                    <h1 id="firstHeading" class="firstHeading">Từ Điển Cộng Hưởng Từ (MRI)</h1>
+                    <div class="alphabet-filter" id="alphabetFilter">
+                        <!-- Nút A-Z render bởi JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danh sách -->
+            <div class="container main-content">
+                <main id="mriList" class="wiki-body-content">
+                    <!-- Dữ liệu render bởi UI Module -->
+                </main>
+
+                <!-- Màn hình chờ -->
+                <div id="comingSoon" class="coming-soon">
+                    <i class="fa-solid fa-person-digging"></i>
+                    <h2>Bài viết chưa tồn tại</h2>
+                    <p>Phân hệ này đang trong quá trình xây dựng. Bạn có thể giúp Phan Thường bằng cách đóng góp mở rộng bài viết.</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="wiki-footer">
+                <p>Nội dung được phát hành theo Giấy phép Creative Commons Ghi công–Chia sẻ tương tự; có thể áp dụng điều khoản bổ sung.</p>
+                <p>&copy; 2026 Hệ thống từ điển mở Phan Thường Điện Quang.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MODAL ĐÓNG GÓP / CHỈNH SỬA (MỚI) -->
+    <div id="contributeModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Đóng góp bản sửa đổi</h2>
+                <span class="modal-close" id="modalClose">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="modal-notice"><i class="fa-solid fa-circle-info"></i> Lưu ý: Mọi thay đổi của bạn sẽ được Ban Quản Trị kiểm duyệt trước khi hiển thị công khai nhằm đảm bảo tính chính xác y khoa.</p>
+                <form id="contributeForm">
+                    <input type="hidden" id="editId" value="">
+                    <div class="form-group">
+                        <label>Tên thuật ngữ (Tiếng Anh): *</label>
+                        <input type="text" id="editEn" required placeholder="VD: Spin Echo (SE)">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên thuật ngữ (Tiếng Việt):</label>
+                        <input type="text" id="editVi" placeholder="VD: Chuỗi xung Spin Echo">
+                    </div>
+                    <div class="form-group">
+                        <label>Phân loại:</label>
+                        <select id="editType">
+                            <option value="Sequence">Chuỗi xung</option>
+                            <option value="Parameter">Thông số cài đặt</option>
+                            <option value="Physics">Nguyên lý Vật lý</option>
+                            <option value="Artifact">Xảo ảnh</option>
+                            <option value="Hardware">Phần cứng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nguyên lý / Định nghĩa: *</label>
+                        <textarea id="editDesc" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Chi tiết / Ứng dụng:</label>
+                        <textarea id="editParams" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancelEdit">Hủy bỏ</button>
+                        <button type="submit" class="btn-submit">Lưu bản sửa đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button id="backToTop" class="back-to-top" title="Lên đầu trang">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <script type="module" src="js/main.js"></script>
     <script>
-        // Xử lý logic nhỏ cho nút Back to Top trực tiếp tại đây để không can thiệp module chính
         const backToTopBtn = document.getElementById("backToTop");
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.style.display = "flex";
-            } else {
-                backToTopBtn.style.display = "none";
-            }
+            if (window.scrollY > 300) backToTopBtn.style.display = "flex";
+            else backToTopBtn.style.display = "none";
         });
-        backToTopBtn.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
+        backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     </script>
 </body>
 </html>
