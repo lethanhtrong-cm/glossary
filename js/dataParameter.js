@@ -1,539 +1,211 @@
 // Dữ liệu thuộc nhóm Thông số cài đặt, Xảo ảnh, Phần cứng
 export const parameterData = [
-    {
-        id: 2,
-        en: "Time of Repetition (TR)",
-        vi: "Thời gian lặp lại",
-        type: "Parameter",
-        description: "Khoảng thời gian từ lúc phát xung kích thích RF ban đầu đến lúc phát xung kích thích tiếp theo cho cùng một lát cắt. Yếu tố này quyết định mức độ phục hồi dọc (T1 relaxation).",
-        parameters: "TR càng ngắn càng tăng trọng số T1. Ảnh hưởng trực tiếp đến tổng thời gian chụp (Scan time)."
-    },
-    {
-        id: 3,
-        en: "Time to Echo (TE)",
-        vi: "Thời gian thu tín hiệu (Thời gian Echo)",
-        type: "Parameter",
-        description: "Thời gian từ lúc phát xung RF kích thích (90 độ) đến đỉnh của tín hiệu dội thu được. Quyết định mức độ phân rã ngang (T2 decay).",
-        parameters: "TE ngắn (10-25ms) tối ưu cho T1W/PDW. TE dài (80-120ms) tối ưu cho T2W."
-    },
-    {
-        id: 5,
-        en: "Inversion Time (TI)",
-        vi: "Thời gian đảo ngược",
-        type: "Parameter",
-        description: "Khoảng thời gian từ xung đảo ngược 180 độ ban đầu đến xung kích thích 90 độ (thường áp dụng trong các chuỗi xung Inversion Recovery như FLAIR, STIR). Dùng để triệt tiêu tín hiệu của một mô nhất định.",
-        parameters: "TI = 150-170ms (ở từ trường 1.5T) để xóa mỡ (STIR). TI ~ 2000-2500ms (ở 1.5T/3T) để xóa nước (FLAIR)."
-    },
-    {
-        id: 9,
-        en: "Field of View (FOV)",
-        vi: "Trường nhìn (Kích thước trường khảo sát)",
-        type: "Parameter",
-        description: "Khu vực không gian được thu nhận dữ liệu để tạo ảnh, tính bằng mm hoặc cm. FOV quyết định kích thước vùng giải phẫu hiển thị trên màn hình.",
-        parameters: "Giảm FOV làm tăng độ phân giải không gian nhưng giảm SNR và tăng nguy cơ nhiễu cuộn (Aliasing/Wrap-around)."
-    },
-    {
-        id: 10,
-        en: "Matrix Size",
-        vi: "Ma trận ảnh",
-        type: "Parameter",
-        description: "Số lượng các điểm ảnh (Pixel/Voxel) trong FOV, biểu diễn bằng lưới các hàng (Phase) và cột (Frequency).",
-        parameters: "Tăng ma trận làm tăng độ phân giải không gian, nhưng giảm kích thước Voxel dẫn đến giảm SNR và tăng thời gian chụp."
-    },
-    {
-        id: 12,
-        en: "Number of Excitations (NEX) / NSA",
-        vi: "Số lần thu tín hiệu trung bình",
-        type: "Parameter",
-        description: "Số lần dữ liệu của mỗi dòng trong không gian k (k-space) được thu nhận lại. Giúp loại bỏ nhiễu ngẫu nhiên.",
-        parameters: "Tăng NEX gấp đôi làm tăng SNR lên khoảng 1.41 lần, nhưng thời gian chụp tăng gấp đôi."
-    },
-    {
-        id: 13,
-        en: "Slice Thickness",
-        vi: "Bề dày lát cắt",
-        type: "Parameter",
-        description: "Độ dày của phần mô được chọn để kích thích. Xác định chiều thứ 3 của Voxel.",
-        parameters: "Lát cắt mỏng tăng độ phân giải, giảm hiệu ứng thể tích bán phần, nhưng làm giảm SNR."
-    },
-    {
-        id: 14,
-        en: "Apparent Diffusion Coefficient (ADC)",
-        vi: "Bản đồ hệ số khuếch tán biểu kiến",
-        type: "Parameter",
-        description: "Bản đồ toán học tạo từ chuỗi xung DWI. Loại bỏ hiệu ứng T2 shine-through để xác định chính xác sự hạn chế khuếch tán.",
-        parameters: "Tổn thương hạn chế khuếch tán thực sự: sáng trên DWI, tối trên ADC."
-    },
-    {
-        id: 17,
-        en: "Flip Angle (FA)",
-        vi: "Góc lật",
-        type: "Parameter",
-        description: "Góc mà vector từ hóa thực bị lệch khỏi trục dọc (B0) sau khi áp dụng xung RF. ",
-        parameters: "FA = 90 độ cho tín hiệu lớn nhất. FA nhỏ (<90) thường dùng trong Gradient Echo để giảm thời gian TR và T1 recovery."
-    },
-    {
-        id: 18,
-        en: "Echo Train Length (ETL) / Turbo Factor",
-        vi: "Số lượng chuỗi tín hiệu dội",
-        type: "Parameter",
-        description: "Số lượng tín hiệu dội (echo) được thu nhận trong mỗi khoảng thời gian TR ở chuỗi xung TSE/FSE.",
-        parameters: "ETL cao giúp giảm mạnh thời gian chụp nhưng có thể làm giảm chất lượng ảnh và tăng mờ (blur) ở mô mềm."
-    },
-    {
-        id: 19,
-        en: "Receiver Bandwidth (rBW)",
-        vi: "Băng thông thu tín hiệu",
-        type: "Parameter",
-        description: "Phạm vi các tần số vô tuyến được hệ thống thu nhận để tạo ảnh. Liên quan trực tiếp đến việc số hóa tín hiệu.",
-        parameters: "BW rộng: giảm SNR, giảm xảo ảnh hóa học (Chemical shift), thu thập nhanh (giảm TE). BW hẹp: tăng SNR, tăng xảo ảnh."
-    },
-    {
-        id: 20,
-        en: "K-space",
-        vi: "Không gian K",
-        type: "Parameter",
-        description: "Ma trận lưu trữ dữ liệu tần số không gian thô trước khi biến đổi toán học (Fourier Transform) để trở thành hình ảnh lâm sàng.",
-        parameters: "Vùng trung tâm K-space quyết định độ tương phản (Contrast/SNR). Vùng ngoại vi quyết định độ phân giải không gian chi tiết (Resolution)."
-    },
-    {
-        id: 21,
-        en: "Phase Encoding (PE)",
-        vi: "Mã hóa pha",
-        type: "Parameter",
-        description: "Quá trình áp dụng từ trường chênh (gradient) để gán cho mỗi hàng (hoặc cột) của ma trận một pha tín hiệu duy nhất, xác định vị trí theo một trục.",
-        parameters: "Hướng mã hóa pha là hướng dễ xảy ra xảo ảnh chuyển động (Motion artifact) và xảo ảnh cuộn (Aliasing) nhất."
-    },
-    {
-        id: 22,
-        en: "Frequency Encoding (FE)",
-        vi: "Mã hóa tần số",
-        type: "Parameter",
-        description: "Áp dụng gradient trong lúc thu nhận tín hiệu dội (echo) để phân biệt các tín hiệu theo vị trí dựa trên tần số của chúng.",
-        parameters: "Thường thiết lập dọc theo trục dài nhất của giải phẫu để tối ưu hóa hình ảnh. Không gây nhiễu cuộn (Wrap-around)."
-    },
-    {
-        id: 23,
-        en: "Parallel Imaging (PI) / SENSE / GRAPPA",
-        vi: "Kỹ thuật chụp song song",
-        type: "Parameter",
-        description: "Sử dụng độ nhạy không gian của nhiều cuộn dây (Coil) thu tín hiệu để điền khuyết dữ liệu vào K-space, giúp giảm mạnh thời gian chụp.",
-        parameters: "Acceleration factor (R hoặc iPAT) thường cài = 2 hoặc 3. Tăng R làm giảm thời gian tỷ lệ thuận nhưng giảm SNR."
-    },
-    {
-        id: 24,
-        en: "Specific Absorption Rate (SAR)",
-        vi: "Tỷ lệ hấp thụ riêng",
-        type: "Parameter",
-        description: "Mức năng lượng vô tuyến (RF) bị mô cơ thể hấp thụ, sinh ra nhiệt độ. SAR giới hạn bởi quy chuẩn an toàn FDA và IEC.",
-        parameters: "Nếu cảnh báo vượt SAR: Cần tăng TR, giảm Flip Angle, giảm số lát cắt (Slices) hoặc giảm ETL."
-    },
-    {
-        id: 25,
-        en: "Signal-to-Noise Ratio (SNR)",
-        vi: "Tỷ lệ tín hiệu trên nhiễu",
-        type: "Parameter",
-        description: "Thước đo chất lượng hình ảnh, tỷ lệ giữa tín hiệu thực tế của mô (Signal) so với nhiễu nền (Noise).",
-        parameters: "Cách tăng SNR: Tăng FOV, tăng bề dày lát cắt, tăng NEX/NSA, giảm ma trận (Matrix), giảm băng thông (Bandwidth)."
-    },
-    {
-        id: 26,
-        en: "Contrast-to-Noise Ratio (CNR)",
-        vi: "Tỷ lệ tương phản trên nhiễu",
-        type: "Parameter",
-        description: "Sự khác biệt về tỷ lệ tín hiệu trên nhiễu (SNR) giữa hai mô nằm cạnh nhau. Quyết định khả năng phân biệt tổn thương.",
-        parameters: "Sử dụng thuốc tương phản (Gadolinium) hoặc các chuỗi xung T2W/FLAIR là cách để tối ưu hóa CNR."
-    },
-    {
-        id: 27,
-        en: "Fat Saturation (FatSat / FS)",
-        vi: "Xóa mỡ (Bão hòa mỡ)",
-        type: "Parameter",
-        description: "Kỹ thuật phát một xung RF chuyên biệt ở tần số cộng hưởng của mỡ trước xung kích thích chính để triệt tiêu hoàn toàn tín hiệu mô mỡ.",
-        parameters: "Cần độ đồng nhất từ trường (B0) cao. Thường bị lỗi (xóa mỡ không đều) ở vùng cổ, bàn chân hoặc khi có kim loại cấy ghép."
-    },
-    {
-        id: 43,
-        en: "Blood Oxygenation Level Dependent (BOLD)",
-        vi: "Hiệu ứng BOLD",
-        type: "Parameter",
-        description: "Cơ sở vật lý của fMRI. Máu khử oxy (Deoxyhemoglobin) có tính thuận từ làm giảm tín hiệu T2*, máu giàu oxy (Oxyhemoglobin) có tính nghịch từ không làm giảm T2*.",
-        parameters: "Sự thay đổi tín hiệu BOLD rất nhỏ (1-5%), đòi hỏi hệ thống máy >= 1.5T (tốt nhất là 3T) và thu thập liên tục."
-    },
-    {
-        id: 44,
-        en: "Fractional Anisotropy (FA - DTI)",
-        vi: "Hệ số bất đẳng hướng phân đoạn",
-        type: "Parameter",
-        description: "Giá trị định lượng (từ 0 đến 1) trong DTI, thể hiện mức độ hướng của sự khuếch tán. FA = 0: khuếch tán đẳng hướng (như dịch não tủy). FA ~ 1: khuếch tán định hướng mạnh (bó sợi thần kinh).",
-        parameters: "Được dùng để tô màu bản đồ Tractography (Đỏ = trái/phải, Lục = trước/sau, Lam = trên/dưới)."
-    },
-    {
-        id: 45,
-        en: "Velocity Encoding (VENC)",
-        vi: "Mã hóa vận tốc",
-        type: "Parameter",
-        description: "Thông số tối quan trọng trong xung PC-MRA. VENC (cm/s) xác định giới hạn vận tốc tối đa được thu thập trước khi xảy ra hiện tượng cuộn pha (aliasing).",
-        parameters: "Cài VENC quá cao: mất tín hiệu mạch chậm. Cài VENC quá thấp: xảo ảnh aliasing dòng chảy."
-    },
-    {
-        id: 46,
-        en: "Spatial Resolution",
-        vi: "Độ phân giải không gian",
-        type: "Parameter",
-        description: "Khả năng phân biệt hai điểm nằm gần nhau trên hình ảnh thành hai cấu trúc riêng biệt. Phụ thuộc vào kích thước Voxel.",
-        parameters: "Voxel càng nhỏ (FOV nhỏ, ma trận lớn, lát cắt mỏng) -> Độ phân giải không gian càng cao."
-    },
-    {
-        id: 47,
-        en: "Temporal Resolution",
-        vi: "Độ phân giải thời gian",
-        type: "Parameter",
-        description: "Khả năng thu nhận hình ảnh liên tục theo thời gian thực (frames per second). Rất quan trọng trong chụp động học (Dynamic/Cine).",
-        parameters: "Cần hi sinh độ phân giải không gian (hoặc dùng PI, Compressed Sensing) để tối ưu độ phân giải thời gian."
-    },
-    {
-        id: 48,
-        en: "Slice Gap / Spacing",
-        vi: "Khoảng cách giữa các lát cắt",
-        type: "Parameter",
-        description: "Khoảng không gian trống (không thu tín hiệu) giữa hai lát cắt liền kề. Giúp tránh hiện tượng nhiễu xuyên âm (Cross-talk).",
-        parameters: "Thường cài đặt ở mức 10% - 30% bề dày lát cắt. Tránh cài 0% ở xung 2D truyền thống."
-    },
-    {
-        id: 49,
-        en: "Isotropic Voxel",
-        vi: "Voxel đẳng hướng",
-        type: "Parameter",
-        description: "Một khối pixel 3D có kích thước bằng nhau ở cả 3 chiều (x = y = z). Thường đạt được trong các xung 3D (như 3D T1, CISS).",
-        parameters: "Cho phép tái tạo đa mặt phẳng (MPR) theo bất kỳ hướng nào mà hình ảnh không bị mờ hỏng."
-    },
-    {
-        id: 50,
-        en: "Anisotropic Voxel",
-        vi: "Voxel dị hướng",
-        type: "Parameter",
-        description: "Kích thước 3 chiều của voxel không bằng nhau (ví dụ: bề dày lát cắt lớn hơn nhiều so với kích thước in-plane). Thường gặp ở ảnh 2D.",
-        parameters: "Nếu dùng dữ liệu này để tái tạo mặt phẳng khác (MPR), hình ảnh sẽ bị mờ và răng cưa."
-    },
-    {
-        id: 51,
-        en: "Free Induction Decay (FID)",
-        vi: "Phân rã cảm ứng tự do",
-        type: "Parameter",
-        description: "Tín hiệu cộng hưởng từ nguyên bản nhất, sinh ra ngay lập tức sau khi ngắt xung RF 90 độ, tắt dần cực nhanh do mất đồng pha (T2*).",
-        parameters: "FID phân rã quá nhanh nên không thể trực tiếp ghi hình, cần dùng xung 180 (Spin Echo) hoặc gradient để tạo lại tín hiệu (Echo)."
-    },
-    {
-        id: 52,
-        en: "Larmor Frequency",
-        vi: "Tần số tiến động Larmor",
-        type: "Parameter",
-        description: "Tần số dao động đảo (như con quay) của các proton xung quanh trục từ trường chính B0. Được tính bằng pt: f = γ × B0.",
-        parameters: "Tại từ trường 1.5 Tesla, tần số Larmor của Hydrogen là khoảng 63.86 MHz. Ở 3.0T là ~ 127.7 MHz."
-    },
-    {
-        id: 53,
-        en: "Gyromagnetic Ratio",
-        vi: "Hằng số từ hồi chuyển",
-        type: "Parameter",
-        description: "Một hằng số vật lý đặc trưng cho mỗi loại hạt nhân (Ký hiệu γ).",
-        parameters: "Của Hydrogen (1H) là 42.58 MHz/Tesla. Nhờ có γ cao nhất và độ dồi dào lớn trong cơ thể nên 1H được dùng chính trong MRI."
-    },
-    {
-        id: 54,
-        en: "B0 (Main Magnetic Field)",
-        vi: "Từ trường chính",
-        type: "Parameter",
-        description: "Từ trường tĩnh, liên tục, đồng nhất được tạo ra bởi cuộn dây siêu dẫn của máy chụp MRI (tính bằng Tesla).",
-        parameters: "Luôn hoạt động 24/7 kể cả khi không quét bệnh nhân. Quy tắc an toàn B0 là nghiêm ngặt tuyệt đối (Không mang vật kim loại từ tính)."
-    },
-    {
-        id: 55,
-        en: "B1 (Radiofrequency Field)",
-        vi: "Từ trường RF",
-        type: "Parameter",
-        description: "Từ trường dao động thứ cấp vuông góc với B0, được phát ra bởi cuộn dây phát (Transmit coil) dưới dạng xung RF ngắn.",
-        parameters: "Mục đích là kích thích các proton lệch khỏi trục dọc (B0) để tạo ra từ hóa ngang (Transverse magnetization)."
-    },
-    {
-        id: 56,
-        en: "Radiofrequency (RF) Pulse",
-        vi: "Xung vô tuyến RF",
-        type: "Parameter",
-        description: "Dải sóng điện từ ngắn phát ra ở tần số Larmor chính xác để cộng hưởng năng lượng cho hệ thống proton.",
-        parameters: "Các loại chính: Xung 90 độ (Xung kích thích), Xung 180 độ (Xung đảo ngược hoặc tái hội tụ)."
-    },
-    {
-        id: 57,
-        en: "Shimming",
-        vi: "Tinh chỉnh đồng nhất từ trường",
-        type: "Parameter",
-        description: "Quá trình hiệu chỉnh bằng phần cứng (miếng kim loại) hoặc phần mềm (cuộn shim điện từ) để làm cho B0 đồng nhất tuyệt đối tại vùng khảo sát.",
-        parameters: "Bắt buộc trước mỗi chuỗi xung Xóa mỡ (FatSat) hoặc Chụp phổ (MRS) để tránh thất bại."
-    },
-    {
-        id: 58,
-        en: "Aliasing / Wrap-around Artifact",
-        vi: "Xảo ảnh nhiễu cuộn",
-        type: "Artifact",
-        description: "Xảy ra khi các cấu trúc giải phẫu nằm ngoài trường khảo sát (FOV) nhưng vẫn nằm trong vùng kích thích của cuộn dây, bị cuộn ngược đè vào phía đối diện của ảnh.",
-        parameters: "Cách khắc phục: Tăng FOV, dùng băng bão hòa (Sat band) hoặc bật Oversampling (Phase wrap/No phase wrap)."
-    },
-    {
-        id: 59,
-        en: "Chemical Shift Artifact",
-        vi: "Xảo ảnh lệch pha hóa học",
-        type: "Artifact",
-        description: "Dải sáng/tối dọc theo ranh giới giữa mô mỡ và mô chứa nước dọc theo trục mã hóa tần số, do sự chênh lệch nhỏ về tần số cộng hưởng của nước và mỡ.",
-        parameters: "Thường thấy ở thận hoặc thần kinh thị. Cách khắc phục: Tăng băng thông thu tín hiệu (rBW) hoặc dùng FatSat."
-    },
-    {
-        id: 60,
-        en: "Truncation / Gibbs Artifact",
-        vi: "Xảo ảnh cắt cụt Gibbs",
-        type: "Artifact",
-        description: "Các vệt/đường viền giả song song tại những vùng ranh giới có độ tương phản thay đổi đột ngột cao (Ví dụ: giữa tủy sống và dịch não tủy).",
-        parameters: "Do ma trận quá thấp. Cách khắc phục: Tăng ma trận mã hóa pha (từ 128 lên 256) hoặc áp dụng thuật toán lọc filter."
-    },
-    {
-        id: 61,
-        en: "Motion Artifact / Ghosting",
-        vi: "Xảo ảnh chuyển động (Bóng ma)",
-        type: "Artifact",
-        description: "Xảy ra do chuyển động hô hấp, nhịp tim, mạch đập, hoặc cử động của bệnh nhân. Trải dài dọc theo trục mã hóa pha.",
-        parameters: "Khắc phục: Gating/Triggering hô hấp-nhịp tim, nín thở, hoặc dùng chuỗi xung bù trừ chuyển động (PROPELLER/BLADE)."
-    },
-    {
-        id: 62,
-        en: "Magic Angle Effect",
-        vi: "Hiệu ứng góc ma thuật",
-        type: "Artifact",
-        description: "Hiện tượng tăng tín hiệu giả trên ảnh T1W, PDW, GRE (TE ngắn) ở các cấu trúc sụn, gân, dây chằng khi chúng hợp với từ trường B0 một góc khoảng 55 độ.",
-        parameters: "Dễ nhầm lẫn với viêm hoặc rách gân. Khắc phục: Xem trên ảnh T2W (TE dài) thì xảo ảnh này biến mất."
-    },
-    {
-        id: 63,
-        en: "Cross-talk / Cross-excitation",
-        vi: "Xảo ảnh nhiễu xuyên âm",
-        type: "Artifact",
-        description: "Sự sụt giảm tín hiệu của các lát cắt kề nhau do xung kích thích RF không vuông vức hoàn hảo, chèn ép sang lát lân cận.",
-        parameters: "Khắc phục: Tăng khoảng cách lát cắt (Gap >= 10-20%) hoặc sử dụng tính năng thu nhận xen kẽ (Interleaved acquisition)."
-    },
-    {
-        id: 64,
-        en: "Magnetic Susceptibility Artifact",
-        vi: "Xảo ảnh nhạy từ tính",
-        type: "Artifact",
-        description: "Biến dạng hình học cực lớn kèm khoảng trống tín hiệu (đóng đen) do kim loại hoặc không khí làm phá vỡ từ trường B0 tại chỗ.",
-        parameters: "Xung GRE nhạy nhất với xảo ảnh này. Xung SE hoặc TSE với TE ngắn ít bị ảnh hưởng (dùng tốt nhất cho bệnh nhân có vít kim loại)."
-    },
-    {
-        id: 65,
-        en: "Saturation Bands (Sat Bands)",
-        vi: "Băng bão hòa",
-        type: "Parameter",
-        description: "Các khối đồ họa cài đặt thêm một xung RF 90 độ vào mô (bên ngoài hoặc bên trong FOV) trước chuỗi xung chính nhằm đóng hoàn toàn tín hiệu của vùng đó.",
-        parameters: "Thường dùng để xóa nhịp đập của mạch máu, chuyển động của tim lên vùng ngực/cột sống, hoặc chống Aliasing."
-    },
-    {
-        id: 66,
-        en: "Trigger Delay",
-        vi: "Độ trễ đồng bộ (ECG)",
-        type: "Parameter",
-        description: "Thời gian máy chờ từ đỉnh sóng R (trên điện tâm đồ) cho đến khi bắt đầu thu tín hiệu MRI.",
-        parameters: "Dùng trong MRI Tim (Cardiac MRI) để chụp đúng vào pha tâm trương (Diastolic) khi tim nghỉ, giảm xảo ảnh rung."
-    },
-    {
-        id: 67,
-        en: "R-R Interval",
-        vi: "Khoảng R-R (Chu kỳ tim)",
-        type: "Parameter",
-        description: "Khoảng thời gian giữa hai đỉnh sóng R liên tiếp trên ECG. Ở MRI tim, R-R đóng vai trò tương đương như TR (Time of Repetition).",
-        parameters: "Ảnh hưởng trực tiếp đến thời gian chụp và trọng số T1. Bệnh nhân rối loạn nhịp rất khó chụp Cardiac MRI."
-    },
-    {
-        id: 68,
-        en: "Respiratory Triggering / Gating",
-        vi: "Đồng bộ hô hấp",
-        type: "Parameter",
-        description: "Sử dụng đai hô hấp hoặc Navigator để máy chỉ phát xung chụp vào khoảng thở ra (Expiration) của bệnh nhân khi cơ hoành tĩnh nhất.",
-        parameters: "Tăng mạnh thời gian chụp (vì máy nghỉ lúc hít vào). Dùng bắt buộc trong MRCP, MRI bụng nếu bệnh nhân không nín thở được."
-    },
-    {
-        id: 69,
-        en: "Navigator Echo",
-        vi: "Xung dội định vị (Navigator)",
-        type: "Parameter",
-        description: "Một xung đánh dấu đặt vắt ngang qua vòm hoành phải, liên tục theo dõi vị trí cơ hoành theo thời gian thực để máy quyết định lúc nào chụp.",
-        parameters: "Chính xác hơn đai hô hấp. Hay dùng trong MRI tim hoặc MRCP 3D."
-    },
-    {
-        id: 70,
-        en: "Breath-hold (BH)",
-        vi: "Kỹ thuật nín thở",
-        type: "Parameter",
-        description: "Yêu cầu bệnh nhân nín thở từ 10 - 20 giây để chụp xong một chuỗi xung tĩnh (Thường là bụng, ngực).",
-        parameters: "Thường ứng dụng với các chuỗi xung cực nhanh như VIBE, HASTE, bSSFP."
-    },
-    {
-        id: 71,
-        en: "Compressed Sensing (CS)",
-        vi: "Cảm biến nén (Thu thập dữ liệu nén)",
-        type: "Parameter",
-        description: "Thuật toán học máy (và toán học tái tạo lặp) cho phép bỏ qua (undersampling) một lượng khổng lồ k-space (lên tới 80%) nhưng vẫn dựng lại ảnh nét hoàn toàn.",
-        parameters: "Đột phá mới giúp giảm thời gian MRI xuống vài phút. Chụp 3D MRCP chỉ mất 15-20s thay vì 3 phút."
-    },
-    {
-        id: 74,
-        en: "Time-Intensity Curve (TIC)",
-        vi: "Đường cong cường độ - thời gian",
-        type: "Parameter",
-        description: "Đồ thị đánh giá sự hấp thu thuốc của tổn thương qua thời gian (trong DCE).",
-        parameters: "Type I (tăng dần): thường lành tính. Type II (cao nguyên/Plateau): nghi ngờ. Type III (Wash-out/thải thuốc nhanh): ác tính cao."
-    },
-    {
-        id: 75,
-        en: "Maximum Intensity Projection (MIP)",
-        vi: "Hình chiếu cường độ tối đa",
-        type: "Parameter",
-        description: "Thuật toán xử lý hậu kỳ 3D. Máy chiếu một tia qua khối dữ liệu và chỉ giữ lại điểm ảnh sáng nhất (tín hiệu cao nhất) trên mỗi tia.",
-        parameters: "Luôn dùng để dựng hình cây mạch máu (MRA, MRV) từ dữ liệu gốc."
-    },
-    {
-        id: 76,
-        en: "Multi-Planar Reconstruction (MPR)",
-        vi: "Tái tạo đa mặt phẳng",
-        type: "Parameter",
-        description: "Kỹ thuật cắt lát dữ liệu 3D ban đầu thành bất kỳ mặt phẳng nào khác (Trán, dọc, ngang, hoặc chéo).",
-        parameters: "Đòi hỏi dữ liệu gốc phải chụp mỏng, tối ưu nhất là voxel đẳng hướng (Isotropic)."
-    },
-    {
-        id: 77,
-        en: "Subtraction",
-        vi: "Xóa nền (Trừ ảnh)",
-        type: "Parameter",
-        description: "Lấy hình ảnh sau tiêm thuốc (Post-contrast) trừ đi từng pixel của hình trước tiêm (Pre-contrast).",
-        parameters: "Những cấu trúc có bắt thuốc sẽ sáng lên, các mô không bắt thuốc bị triệt tiêu hoàn toàn (đen). Rất hay dùng trong MRI vú."
-    },
-    {
-        id: 78,
-        en: "T1 Relaxation Time",
-        vi: "Thời gian phục hồi T1 (Spin-Lattice)",
-        type: "Parameter",
-        description: "Thời gian cần thiết để từ hóa dọc hồi phục được 63% so với trạng thái cân bằng ban đầu sau xung 90 độ.",
-        parameters: "Mỡ có T1 ngắn (sáng trên T1W). Nước/Dịch có T1 dài (tối trên T1W)."
-    },
-    {
-        id: 79,
-        en: "T2 Relaxation Time",
-        vi: "Thời gian phân rã T2 (Spin-Spin)",
-        type: "Parameter",
-        description: "Thời gian cần thiết để từ hóa ngang bị phân rã chỉ còn 37% giá trị ban đầu do tương tác trao đổi năng lượng giữa các spin.",
-        parameters: "Mỡ có T2 ngắn (tối trên T2W). Nước/Dịch có T2 dài (sáng trên T2W)."
-    },
-    {
-        id: 80,
-        en: "T2* (T2 star) Decay",
-        vi: "Phân rã T2 sao",
-        type: "Parameter",
-        description: "Sự mất đồng pha thực tế (luôn diễn ra nhanh hơn T2) bao gồm hiệu ứng T2 thuần túy cộng thêm sự mất đồng pha do từ trường B0 không đồng nhất tại chỗ.",
-        parameters: "Chính là nền tảng của chuỗi xung Gradient Echo và ảnh hưởng BOLD/xuất huyết."
-    },
-    {
-        id: 89,
-        en: "Phased Array Coil",
-        vi: "Cuộn dây Phased Array (Mảng pha)",
-        type: "Hardware",
-        description: "Tập hợp nhiều cuộn dây nhỏ độc lập được ghép lại với nhau. Kết hợp FOV rộng của cuộn lớn với SNR cực cao của cuộn nhỏ.",
-        parameters: "Là nền tảng bắt buộc để chạy được kỹ thuật chụp song song (Parallel Imaging - PI)."
-    },
-    {
-        id: 90,
-        en: "Surface Coil",
-        vi: "Cuộn dây bề mặt",
-        type: "Hardware",
-        description: "Cuộn thu tín hiệu áp sát trực tiếp vào vị trí cần chụp (VD: khớp thái dương hàm, bề mặt da).",
-        parameters: "SNR rất lớn ở bề mặt nhưng giảm cực nhanh theo chiều sâu. Hữu ích chụp tổn thương nông nhỏ."
-    },
-    {
-        id: 91,
-        en: "Volume Coil",
-        vi: "Cuộn dây thể tích",
-        type: "Hardware",
-        description: "Cuộn dây bao quanh toàn bộ vùng giải phẫu (như cuộn Sọ Não lõi tứ - Quadrature head coil).",
-        parameters: "SNR đồng đều ở mọi điểm bên trong thể tích cuộn nhưng SNR tổng thể không cao bằng Phased Array."
-    },
-    {
-        id: 92,
-        en: "Gradient Slew Rate",
-        vi: "Tốc độ dốc chênh từ",
-        type: "Parameter",
-        description: "Tốc độ mà một cuộn gradient có thể đạt tới sức mạnh tối đa từ con số 0 (T/m/s).",
-        parameters: "Slew rate càng cao, máy đo được TE/TR càng ngắn, chụp EPI (DWI/fMRI) càng nhanh và sắc nét. Tạo ra tiếng ồn (Noise) cực lớn."
-    },
-    {
-        id: 93,
-        en: "Gradient Amplitude",
-        vi: "Biên độ Gradient",
-        type: "Parameter",
-        description: "Sức mạnh tối đa (từ trường chênh lệch) mà gradient có thể tạo ra (mT/m).",
-        parameters: "Biên độ lớn cho phép cắt lát cắt siêu mỏng, độ phân giải cao và tạo ảnh DWI với b-value khổng lồ dễ dàng."
-    },
-    {
-        id: 94,
-        en: "Partial Fourier / Half Scan",
-        vi: "Thu thập k-space một phần",
-        type: "Parameter",
-        description: "Thu thập chỉ hơn một nửa số dòng mã hóa pha (> 50%, thường là 62.5% hoặc 75%), sau đó dùng tính đối xứng toán học của k-space để bù đắp phần còn lại.",
-        parameters: "Giảm thời gian chụp đáng kể nhưng hi sinh một phần SNR. Không ảnh hưởng độ phân giải không gian."
-    },
-    {
-        id: 95,
-        en: "Phase Oversampling (No Phase Wrap)",
-        vi: "Thu nhận thừa pha (Chống cuộn pha)",
-        type: "Parameter",
-        description: "Tăng FOV theo hướng mã hóa pha (thường gấp đôi) bằng cách tăng số bước mã hóa, nhưng máy sẽ tự động cắt bỏ phần dư khi hiển thị.",
-        parameters: "Xóa bỏ triệt để xảo ảnh cuộn (Aliasing) nhưng sẽ làm tăng thời gian chụp tỷ lệ thuận nếu không bù trừ bằng kỹ thuật khác."
-    },
-    {
-        id: 96,
-        en: "Concatenations / Acquisitions",
-        vi: "Số khối thu nhận (Chia TR)",
-        type: "Parameter",
-        description: "Chia tổng số lát cắt (Slices) cần chụp của một block thành 2 hoặc nhiều khối nhỏ hơn thu nhận xen kẽ.",
-        parameters: "Cho phép dùng TR nhỏ hơn để bao phủ số lượng lát cắt lớn hoặc giảm hiệu ứng Magnetization Transfer."
-    },
-    {
-        id: 97,
-        en: "Wash-in / Wash-out",
-        vi: "Thải thuốc / Bắt thuốc (DCE)",
-        type: "Parameter",
-        description: "Đánh giá động học bắt thuốc cản từ. U ác tính thường tăng sinh vi mạch lỗi, gây ra bắt thuốc cực kỳ nhanh (Wash-in mạnh) và đào thải cũng nhanh (Wash-out).",
-        parameters: "Là dấu hiệu quan trọng trong phân loại BI-RADS (Vú) và PI-RADS (Tiền liệt tuyến)."
-    },
-    {
-        id: 98,
-        en: "Variable Flip Angle Sweep",
-        vi: "Quét góc lật biến đổi",
-        type: "Parameter",
-        description: "Mỗi tín hiệu dội (echo) trong chuỗi TSE 3D được sử dụng một Flip Angle khác nhau được tính toán kỹ bằng máy tính.",
-        parameters: "Duy trì tín hiệu ổn định suốt Echo train dài, giúp xung 3D TSE (SPACE/VISTA) không bị mờ ảnh."
-    },
-    {
-        id: 99,
-        en: "Baseline",
-        vi: "Pha nền trước tiêm (DCE/DSC)",
-        type: "Parameter",
-        description: "Các ảnh (hoặc khối 3D) đầu tiên được chụp lập lại liên tục trước khi bơm thuốc đối quang từ.",
-        parameters: "Thiết lập đường tham chiếu cơ sở để máy tính so sánh và tính toán độ chênh lệch tín hiệu (Subtraction hoặc Perfusion maps)."
-    },
-    {
-        id: 100,
-        en: "Specific Energy Dose (SED)",
-        vi: "Liều năng lượng riêng",
-        type: "Parameter",
-        description: "Tổng năng lượng RF mà bệnh nhân phải chịu trong suốt toàn bộ quá trình chụp một giao thức (protocol), tính bằng kJ/kg.",
-        parameters: "Khác với SAR (chỉ là mức công suất tức thời). SED quản lý chặt để tránh việc bệnh nhân bị tăng thân nhiệt cốt lõi (Core temp) quá mức trong phiên quét dài."
-    }
+    // --- 67 THUẬT NGỮ CŨ (BẢO TOÀN LOGIC) ---
+    { id: 2, en: "Time of Repetition (TR)", vi: "Thời gian lặp lại", type: "Parameter", description: "Khoảng thời gian từ lúc phát xung kích thích RF ban đầu đến lúc phát xung kích thích tiếp theo cho cùng lát cắt.", parameters: "TR ngắn tăng T1W. TR dài tăng T2W/PD." },
+    { id: 3, en: "Time to Echo (TE)", vi: "Thời gian thu tín hiệu (Thời gian Echo)", type: "Parameter", description: "Thời gian từ lúc phát xung RF kích thích đến đỉnh của tín hiệu dội thu được.", parameters: "TE ngắn tối ưu T1W. TE dài tối ưu T2W." },
+    { id: 5, en: "Inversion Time (TI)", vi: "Thời gian đảo ngược", type: "Parameter", description: "Khoảng thời gian từ xung đảo ngược 180 độ đến xung kích thích 90 độ.", parameters: "TI 150ms xóa mỡ. TI 2500ms xóa dịch (FLAIR)." },
+    { id: 9, en: "Field of View (FOV)", vi: "Trường nhìn (Kích thước trường khảo sát)", type: "Parameter", description: "Khu vực không gian được thu nhận dữ liệu để tạo ảnh.", parameters: "Giảm FOV tăng phân giải nhưng giảm SNR và có thể gây cuộn." },
+    { id: 10, en: "Matrix Size", vi: "Ma trận ảnh", type: "Parameter", description: "Số lượng các điểm ảnh trong FOV, lưới Phase x Frequency.", parameters: "Ma trận cao -> nét, SNR giảm, thời gian chụp tăng." },
+    { id: 12, en: "Number of Excitations (NEX) / NSA", vi: "Số lần thu tín hiệu trung bình", type: "Parameter", description: "Số lần dữ liệu của mỗi dòng k-space được thu nhận lại để khử nhiễu.", parameters: "Tăng NEX giảm nhiễu nhưng tăng thời gian chụp." },
+    { id: 13, en: "Slice Thickness", vi: "Bề dày lát cắt", type: "Parameter", description: "Độ dày phần mô được chọn để kích thích.", parameters: "Mỏng -> nét. Dày -> SNR cao, dễ bỏ sót tổn thương nhỏ." },
+    { id: 14, en: "Apparent Diffusion Coefficient (ADC)", vi: "Bản đồ ADC", type: "Parameter", description: "Bản đồ loại bỏ T2 shine-through từ DWI.", parameters: "Sáng trên DWI, tối trên ADC = Hạn chế khuếch tán thực." },
+    { id: 17, en: "Flip Angle (FA)", vi: "Góc lật", type: "Parameter", description: "Góc vector từ hóa bị lệch khỏi trục B0.", parameters: "FA < 90 dùng trong GRE để chụp nhanh." },
+    { id: 18, en: "Echo Train Length (ETL)", vi: "Số lượng chuỗi tín hiệu dội", type: "Parameter", description: "Số tín hiệu dội thu nhận trong một khoảng TR ở xung TSE.", parameters: "ETL cao -> chụp rất nhanh, nhưng gây mờ ảnh mô mềm." },
+    { id: 19, en: "Receiver Bandwidth (rBW)", vi: "Băng thông thu tín hiệu", type: "Parameter", description: "Phạm vi tần số vô tuyến được hệ thống thu nhận.", parameters: "Băng thông rộng -> giảm xảo ảnh hóa học, nhưng giảm SNR." },
+    { id: 20, en: "K-space", vi: "Không gian K", type: "Parameter", description: "Ma trận lưu dữ liệu thô trước khi biến đổi Fourier.", parameters: "Tâm k-space = Tương phản. Rìa = Độ phân giải." },
+    { id: 21, en: "Phase Encoding (PE)", vi: "Mã hóa pha", type: "Parameter", description: "Gradient gán cho mỗi hàng một pha duy nhất.", parameters: "Trục dễ xảy ra bóng ma (ghosting) và cuộn nhất." },
+    { id: 22, en: "Frequency Encoding (FE)", vi: "Mã hóa tần số", type: "Parameter", description: "Gradient phân biệt tín hiệu dựa trên tần số.", parameters: "Thường đặt dọc theo trục dài của cơ thể bệnh nhân." },
+    { id: 23, en: "Parallel Imaging (PI) / SENSE", vi: "Kỹ thuật chụp song song", type: "Parameter", description: "Dùng độ nhạy nhiều cuộn dây để giảm nửa/phần 3 thời gian chụp.", parameters: "Acceleration factor (R) = 2 hoặc 3. SNR giảm." },
+    { id: 24, en: "Specific Absorption Rate (SAR)", vi: "Tỷ lệ hấp thụ riêng", type: "Parameter", description: "Mức năng lượng RF bị cơ thể hấp thụ sinh nhiệt.", parameters: "SAR cao sẽ bị máy chặn. Cần giảm FA hoặc tăng TR." },
+    { id: 25, en: "Signal-to-Noise Ratio (SNR)", vi: "Tỷ lệ tín hiệu / nhiễu", type: "Parameter", description: "Thước đo độ sạch của ảnh.", parameters: "Tăng SNR: Tăng FOV, Slice, NEX. Giảm Matrix, BW." },
+    { id: 26, en: "Contrast-to-Noise Ratio (CNR)", vi: "Tỷ lệ tương phản / nhiễu", type: "Parameter", description: "Sự khác biệt SNR giữa 2 mô.", parameters: "Dùng thuốc cản từ là cách tăng CNR mạnh nhất." },
+    { id: 27, en: "Fat Saturation (FatSat)", vi: "Xóa mỡ bão hòa", type: "Parameter", description: "Xung RF chuyên biệt tần số mỡ trước khi phát xung chính.", parameters: "Cần từ trường B0 đồng nhất cao để không bị loang lổ." },
+    { id: 43, en: "Blood Oxygenation Level Dependent (BOLD)", vi: "Hiệu ứng BOLD", type: "Parameter", description: "Máu khử oxy làm giảm tín hiệu T2*, máu giàu oxy không giảm.", parameters: "Nền tảng của fMRI, cần từ trường lớn (3T)." },
+    { id: 44, en: "Fractional Anisotropy (FA)", vi: "Bất đẳng hướng phân đoạn", type: "Parameter", description: "Mức độ định hướng của sự khuếch tán (0 đến 1).", parameters: "DTI màu dựa trên hệ số này." },
+    { id: 45, en: "Velocity Encoding (VENC)", vi: "Mã hóa vận tốc", type: "Parameter", description: "Giới hạn vận tốc dòng chảy tối đa trước khi bị nhiễu aliasing.", parameters: "Cài sát tốc độ thực tế của mạch máu." },
+    { id: 46, en: "Spatial Resolution", vi: "Độ phân giải không gian", type: "Parameter", description: "Khả năng phân biệt 2 điểm kề nhau.", parameters: "Phụ thuộc trực tiếp kích thước Voxel." },
+    { id: 47, en: "Temporal Resolution", vi: "Độ phân giải thời gian", type: "Parameter", description: "Tốc độ thu nhận hình (frame/s).", parameters: "Quan trọng cho chụp tim hoặc động học." },
+    { id: 48, en: "Slice Gap / Spacing", vi: "Khoảng cách lát cắt", type: "Parameter", description: "Khoảng trống giữa 2 lát.", parameters: "Chống xảo ảnh xuyên âm (Cross-talk)." },
+    { id: 49, en: "Isotropic Voxel", vi: "Voxel đẳng hướng", type: "Parameter", description: "Pixel 3D khối lập phương (x=y=z).", parameters: "Tái tạo MPR mọi mặt phẳng không bị mờ." },
+    { id: 50, en: "Anisotropic Voxel", vi: "Voxel dị hướng", type: "Parameter", description: "Pixel 3D không đều.", parameters: "Tái tạo MPR bị mờ, răng cưa." },
+    { id: 51, en: "Free Induction Decay (FID)", vi: "Phân rã cảm ứng tự do", type: "Parameter", description: "Tín hiệu thô tắt cực nhanh ngay sau xung 90 độ.", parameters: "Không thể đo trực tiếp cho ảnh y khoa thường." },
+    { id: 52, en: "Larmor Frequency", vi: "Tần số tiến động Larmor", type: "Parameter", description: "f = γ × B0. (63.86 MHz tại 1.5T).", parameters: "Thiết lập tần số trung tâm của máy MRI." },
+    { id: 53, en: "Gyromagnetic Ratio", vi: "Hằng số từ hồi chuyển", type: "Parameter", description: "Của Hydrogen (1H) là 42.58 MHz/Tesla.", parameters: "Lý do Hydrogen được dùng trong MRI." },
+    { id: 54, en: "B0 (Main Magnetic Field)", vi: "Từ trường chính", type: "Parameter", description: "Từ trường tĩnh vĩnh cửu của ống máy (Tesla).", parameters: "An toàn B0 là số 1 (Cấm kim loại từ tính)." },
+    { id: 55, en: "B1 (Radiofrequency Field)", vi: "Từ trường RF", type: "Parameter", description: "Từ trường dao động do cuộn phát tạo ra để kích thích spin.", parameters: "Sinh nhiệt (SAR) nếu lạm dụng." },
+    { id: 56, en: "Radiofrequency (RF) Pulse", vi: "Xung vô tuyến RF", type: "Parameter", description: "Sóng điện từ ngắn bơm năng lượng cộng hưởng.", parameters: "Gồm xung 90 độ, xung 180 độ." },
+    { id: 57, en: "Shimming", vi: "Tinh chỉnh đồng nhất từ trường", type: "Parameter", description: "Làm phẳng B0 tại vùng chụp.", parameters: "Bắt buộc trước khi chạy FatSat hoặc MRS." },
+    { id: 58, en: "Aliasing / Wrap-around", vi: "Xảo ảnh nhiễu cuộn", type: "Artifact", description: "Mô bên ngoài FOV cuộn ngược đè vào trong ảnh.", parameters: "Khắc phục: Bật Oversampling hoặc tăng FOV." },
+    { id: 59, en: "Chemical Shift Artifact", vi: "Xảo ảnh lệch pha hóa học", type: "Artifact", description: "Vệt đen trắng ở ranh giới mỡ-nước dọc trục mã hóa tần số.", parameters: "Khắc phục: Tăng băng thông (BW)." },
+    { id: 60, en: "Truncation / Gibbs Artifact", vi: "Xảo ảnh cắt cụt Gibbs", type: "Artifact", description: "Vệt sóng giả song song vùng ranh giới tương phản cao.", parameters: "Khắc phục: Tăng Matrix." },
+    { id: 61, en: "Motion Artifact / Ghosting", vi: "Bóng ma / Chuyển động", type: "Artifact", description: "Bóng mờ lặp lại dọc trục mã hóa pha do cử động, nhịp thở.", parameters: "Khắc phục: Triggering, nín thở, BLADE." },
+    { id: 62, en: "Magic Angle Effect", vi: "Hiệu ứng góc ma thuật", type: "Artifact", description: "Tín hiệu giả sáng gân/sụn nghiêng 55 độ trên T1/PD.", parameters: "Xem trên T2W để xác nhận (vì không bị)." },
+    { id: 63, en: "Cross-talk", vi: "Xảo ảnh nhiễu xuyên âm", type: "Artifact", description: "Suy giảm tín hiệu lát cắt kề nhau.", parameters: "Tăng khoảng cách Gap >= 10%." },
+    { id: 64, en: "Magnetic Susceptibility Artifact", vi: "Xảo ảnh nhạy từ tính", type: "Artifact", description: "Biến dạng/đen kịt do kim loại, không khí.", parameters: "Dùng TSE thay GRE cho bệnh nhân có vít kim loại." },
+    { id: 65, en: "Saturation Bands (Sat Bands)", vi: "Băng bão hòa", type: "Parameter", description: "Khối đồ họa đặt thêm để đóng đen tín hiệu một vùng (VD: chặn mạch máu cổ).", parameters: "Chống nhiễu bóng ma." },
+    { id: 66, en: "Trigger Delay", vi: "Độ trễ đồng bộ", type: "Parameter", description: "Thời gian chờ từ đỉnh R ECG đến lúc quét.", parameters: "Chụp lúc tim tâm trương (nghỉ)." },
+    { id: 67, en: "R-R Interval", vi: "Khoảng R-R", type: "Parameter", description: "Chu kỳ tim thay thế TR trong MRI Tim.", parameters: "Bệnh nhân rối loạn nhịp rất khó chụp." },
+    { id: 68, en: "Respiratory Triggering", vi: "Đồng bộ hô hấp", type: "Parameter", description: "Máy chỉ chụp vào lúc thở ra bình tĩnh.", parameters: "Bắt buộc cho MRCP, gan (nếu không nín thở)." },
+    { id: 69, en: "Navigator Echo", vi: "Xung định vị hô hấp", type: "Parameter", description: "Theo dõi vòm hoành liên tục để đồng bộ hô hấp.", parameters: "Chính xác hơn đai ngực." },
+    { id: 70, en: "Breath-hold (BH)", vi: "Nín thở", type: "Parameter", description: "Bệnh nhân nín thở 10-20s.", parameters: "Dùng cho VIBE, HASTE." },
+    { id: 71, en: "Compressed Sensing (CS)", vi: "Cảm biến nén", type: "Parameter", description: "Thuật toán học máy bỏ qua tới 80% K-space vẫn tái tạo nét.", parameters: "Giảm thời gian MRCP từ 3p xuống 15s." },
+    { id: 74, en: "Time-Intensity Curve (TIC)", vi: "Đường cong DCE", type: "Parameter", description: "Đồ thị bắt thuốc.", parameters: "Type III (Wash-out) cảnh báo ác tính." },
+    { id: 75, en: "Maximum Intensity Projection (MIP)", vi: "Hình chiếu cường độ tối đa", type: "Parameter", description: "Chỉ giữ lại pixel sáng nhất dựng 3D.", parameters: "Dựng hình mạch máu (MRA)." },
+    { id: 76, en: "Multi-Planar Reconstruction (MPR)", vi: "Tái tạo đa mặt phẳng", type: "Parameter", description: "Cắt dữ liệu 3D thành nhiều hướng khác.", parameters: "Cần voxel đẳng hướng." },
+    { id: 77, en: "Subtraction", vi: "Xóa nền", type: "Parameter", description: "Lấy ảnh sau tiêm trừ ảnh trước tiêm.", parameters: "Xác nhận rõ vùng bắt thuốc (MRI vú)." },
+    { id: 78, en: "T1 Relaxation Time", vi: "Thời gian phục hồi T1", type: "Parameter", description: "Thời gian Mz hồi phục 63%.", parameters: "Mỡ T1 ngắn (sáng T1W). Nước dài (tối)." },
+    { id: 79, en: "T2 Relaxation Time", vi: "Thời gian phân rã T2", type: "Parameter", description: "Thời gian Mxy phân rã còn 37%.", parameters: "Nước T2 dài (sáng T2W)." },
+    { id: 80, en: "T2* (T2 star) Decay", vi: "Phân rã T2 sao", type: "Parameter", description: "T2 thực tế cộng mất đồng pha do máy (B0 không đều).", parameters: "Cơ sở xung GRE/SWI." },
+    { id: 89, en: "Phased Array Coil", vi: "Cuộn mảng pha", type: "Hardware", description: "Ghép nhiều cuộn nhỏ tăng SNR bề mặt rỗng.", parameters: "Bắt buộc cho Parallel Imaging." },
+    { id: 90, en: "Surface Coil", vi: "Cuộn bề mặt", type: "Hardware", description: "Áp sát vùng chụp.", parameters: "Tốt cho da, hàm (SNR cao nhưng nông)." },
+    { id: 91, en: "Volume Coil", vi: "Cuộn thể tích", type: "Hardware", description: "Bao quanh vùng chụp (sọ não).", parameters: "SNR đều toàn thể tích." },
+    { id: 92, en: "Gradient Slew Rate", vi: "Tốc độ dốc chênh từ", type: "Parameter", description: "Tốc độ đạt sức mạnh cực đại Gradient (T/m/s).", parameters: "Cao -> chụp nhanh (EPI). Sinh tiếng ồn lớn." },
+    { id: 93, en: "Gradient Amplitude", vi: "Biên độ Gradient", type: "Parameter", description: "Sức mạnh tối đa (mT/m).", parameters: "Cho phép cắt lát mỏng, b-value siêu cao." },
+    { id: 94, en: "Partial Fourier / Half Scan", vi: "Thu thập k-space 1 phần", type: "Parameter", description: "Quét 60-70% k-space rồi lấy đối xứng toán học.", parameters: "Giảm thời gian, giảm SNR." },
+    { id: 95, en: "Phase Oversampling", vi: "Thừa pha (Chống cuộn)", type: "Parameter", description: "Nhân đôi FOV mã hóa pha rồi cắt bỏ ngầm.", parameters: "Triệt để chặn Aliasing." },
+    { id: 96, en: "Concatenations", vi: "Chia block TR", type: "Parameter", description: "Chia bộ Slices làm nhiều lần quét xen kẽ.", parameters: "Dùng khi TR không đủ bao phủ số lát cắt." },
+    { id: 97, en: "Wash-in / Wash-out", vi: "Thải/Bắt thuốc", type: "Parameter", description: "Động học thuốc cản từ.", parameters: "Chẩn đoán u vú/tiền liệt tuyến." },
+    { id: 98, en: "Variable Flip Angle Sweep", vi: "Quét góc lật biến đổi", type: "Parameter", description: "Góc lật thay đổi liên tục trong TSE 3D.", parameters: "Giữ ảnh không bị mờ (SPACE/VISTA)." },
+    { id: 99, en: "Baseline", vi: "Pha nền DCE", type: "Parameter", description: "Chụp trước bơm thuốc liên tục.", parameters: "Dùng để trừ (Subtraction) chuẩn." },
+    { id: 100, en: "Specific Energy Dose (SED)", vi: "Liều năng lượng riêng", type: "Parameter", description: "Tổng năng lượng RF/kg (kJ/kg).", parameters: "Quản lý thân nhiệt bệnh nhân cho phiên dài." },
+
+    // --- 33 THUẬT NGỮ THÔNG SỐ/XẢO ẢNH/PHẦN CỨNG MỚI (ĐẠT 100 ITEM) ---
+    { id: 2001, en: "Echo Spacing (ESP)", vi: "Khoảng cách giữa các Echo", type: "Parameter", description: "Khoảng thời gian (thường tính bằng mili-giây) giữa các lần thu nhận tín hiệu dội (Echo) trong chuỗi Echo Train (TSE/EPI).", parameters: "ESP càng ngắn, xảo ảnh mờ càng giảm." },
+    { id: 2002, en: "EPI Factor", vi: "Hệ số EPI", type: "Parameter", description: "Tương tự ETL, chỉ số định danh số lượng dòng k-space được thu nhận trong 1 shot của xung EPI.", parameters: "Thường dùng 64, 128. Cao quá sẽ méo hình nặng." },
+    { id: 2003, en: "SENSE Factor / iPAT", vi: "Hệ số tăng tốc (Parallel Imaging)", type: "Parameter", description: "Con số (VD: 2, 3, 4) thể hiện mức độ bỏ qua K-space bằng cách sử dụng nhiều kênh cuộn dây.", parameters: "Giảm thời gian chụp tương ứng, nhưng làm giảm SNR." },
+    { id: 2004, en: "Phase Partial Fourier", vi: "Thu nhận Fourier bán phần chiều pha", type: "Parameter", description: "Bỏ qua việc mã hóa pha một phía (thường thu khoảng 5/8 hoặc 6/8 k-space) để giảm thời gian.", parameters: "Gây giảm SNR nhẹ nhưng bảo toàn độ nét." },
+    { id: 2005, en: "Slice Partial Fourier", vi: "Thu nhận Fourier bán phần chiều Slice (3D)", type: "Parameter", description: "Áp dụng kỹ thuật Partial Fourier cho trục Z (chia lát cắt) trong chụp 3D.", parameters: "Cắt giảm mạnh thời gian quét khối 3D lớn." },
+    { id: 2006, en: "Asymmetric Echo", vi: "Thu nhận tín hiệu dội bất đối xứng", type: "Parameter", description: "Chỉ thu thập phần sau (phần đi xuống) của đỉnh Echo (Partial Echo) để đạt được TE cực ngắn.", parameters: "Hữu ích trong các xung MRCP hoặc mạch máu TE ngắn." },
+    { id: 2007, en: "Receiver Gain", vi: "Độ khuếch đại tín hiệu thu", type: "Parameter", description: "Mức độ máy MRI khuếch đại tín hiệu thô tí hon nhận được từ cuộn dây lên trước khi số hóa.", parameters: "Cài quá cao gây Data Clipping, quá thấp gây ảnh đen xì." },
+    { id: 2008, en: "Transmit Gain (TG)", vi: "Độ khuếch đại phát RF", type: "Parameter", description: "Năng lượng điện (Vôn) máy cần bơm vào cuộn phát để đạt được một góc lật 90 độ chính xác trên bệnh nhân đó.", parameters: "Máy tự dò sóng (Prescan). Bệnh nhân béo phì cần TG rất cao." },
+    { id: 2009, en: "Prescan / Center Frequency Calibration", vi: "Dò tần số trung tâm (Prescan)", type: "Parameter", description: "Máy tự động phát dải sóng nhỏ để tìm chính xác tần số Larmor của nước trong vùng ngực/bụng người bệnh.", parameters: "Thất bại nếu bệnh nhân có kim loại quá lớn." },
+    { id: 2010, en: "Active Shimming", vi: "Chỉnh từ trường chủ động", type: "Hardware", description: "Hệ thống cuộn điện từ thứ cấp (shim coils) chạy dòng điện DC liên tục để nắn lại độ phẳng của B0.", parameters: "Có thể chỉnh lại cho từng bệnh nhân khác nhau." },
+    { id: 2011, en: "Passive Shimming", vi: "Chỉnh từ trường thụ động", type: "Hardware", description: "Những miếng sắt nhỏ xíu được kỹ sư gắn vĩnh viễn bên trong ống máy lúc mới lắp đặt để bù trừ từ trường môi trường.", parameters: "Chỉ thực hiện 1 lần lúc cài đặt máy." },
+    { id: 2012, en: "Dielectric Pad", vi: "Đệm điện môi", type: "Hardware", description: "Túi chứa dung dịch (thường là Barium Titanate) đắp lên cơ thể (vùng bụng, cổ) ở máy 3T để triệt tiêu hiệu ứng cộng hưởng điện môi.", parameters: "Giảm xảo ảnh đốm đen (Dielectric artifact) ở máy 3 Tesla." },
+    { id: 2013, en: "Maxwell Coils / Golay Coils", vi: "Cuộn chênh từ Maxwell/Golay", type: "Hardware", description: "Tên vật lý của cấu trúc vật lý các cuộn dây Gradient (Maxwell cho trục Z, Golay cho trục X, Y).", parameters: "Quyết định hướng không gian của lát cắt." },
+    { id: 2014, en: "Helium Boil-off", vi: "Tỷ lệ bay hơi Heli", type: "Parameter", description: "Lượng khí Helium lỏng siêu lạnh tự hao hụt theo thời gian (0.01%/ngày) do hệ thống bơm lạnh không hồi phục 100%.", parameters: "Các máy \"Zero-boil-off\" đời mới loại bỏ hiện tượng này." },
+    { id: 2015, en: "Gradient Amplifier", vi: "Tủ khuếch đại Gradient", type: "Hardware", description: "Tủ điện công suất cực lớn, bơm dòng tới hàng ngàn Ampe chớp nhoáng vào cuộn gradient.", parameters: "Phát ra nhiệt lớn, cần hệ thống làm mát bằng nước tinh khiết (Chiller)." },
+    { id: 2016, en: "Zipper Artifact", vi: "Xảo ảnh hình kéo khóa (Zipper)", type: "Artifact", description: "Dải nhiễu xuyên ngang ảnh (theo hướng Phase) có hình răng cưa như khóa kéo áo.", parameters: "Do nhiễu sóng RF ngoại lai lọt vào phòng máy (Cửa lồng Faraday bị hở)." },
+    { id: 2017, en: "Herringbone / Corduroy Artifact", vi: "Xảo ảnh vân gỗ / Herringbone", type: "Artifact", description: "Toàn bộ ảnh bị phủ một lớp sọc chéo chằng chịt.", parameters: "Do lỗi phần cứng (đột biến điện trong tủ thu nhận tín hiệu)." },
+    { id: 2018, en: "Moire Fringes", vi: "Xảo ảnh vân sóng Moire", type: "Artifact", description: "Các vòng sóng đen trắng đồng tâm xếp lớp ở rìa FOV trên các ảnh Gradient Echo vùng bụng/chậu.", parameters: "Sự kết hợp giữa Aliasing và từ trường cực kém ở rìa (Inhomogeneity)." },
+    { id: 2019, en: "Dielectric Resonance Artifact", vi: "Xảo ảnh cộng hưởng điện môi", type: "Artifact", description: "Vùng tối đen hoặc sáng bất thường ở trung tâm ổ bụng trên máy 3T do bước sóng RF trùng với kích thước cơ thể người.", parameters: "Dùng Dielectric Pad hoặc công nghệ Multi-Transmit RF để xóa." },
+    { id: 2020, en: "RF Overflow / Clipping Artifact", vi: "Xảo ảnh tràn/cắt xén dữ liệu", type: "Artifact", description: "Nền ảnh xám xịt nhạt nhòa, hoặc nhiễu mờ như bị dính nước.", parameters: "Do Receiver Gain cài quá cao hoặc coil hỏng gây vỡ tín hiệu số hóa." },
+    { id: 2021, en: "Spike Artifact", vi: "Xảo ảnh gai điện (Spike)", type: "Artifact", description: "Nhiễu K-space tạo thành các dải sọc chéo đè lên ảnh với cường độ rất mạnh.", parameters: "Nguyên nhân từ phóng tia lửa điện tĩnh điện (từ thảm, áo len bệnh nhân)." },
+    { id: 2022, en: "Flow Void", vi: "Hiện tượng trống dòng chảy", type: "Artifact", description: "Mạch máu xuất hiện màu đen nhánh hoàn toàn trên chuỗi xung Spin Echo (như T1W/T2W) do máu chảy nhanh đã rời khỏi lát cắt trước khi máy kịp thu Echo.", parameters: "Là dấu hiệu bình thường, giúp xác định mạch máu có thông suốt." },
+    { id: 2023, en: "Entry Slice Phenomenon", vi: "Hiện tượng dòng chảy vào lát cắt", type: "Artifact", description: "Mạch máu sáng rực lên ở lát cắt ĐẦU TIÊN của một bộ ảnh do dòng máu này chứa các proton hoàn toàn chưa bị bão hòa bởi RF.", parameters: "Cơ sở của xung mạch máu TOF (Time of Flight)." },
+    { id: 2024, en: "Intra-voxel Dephasing", vi: "Mất đồng pha nội Voxel", type: "Artifact", description: "Tín hiệu tụt giảm mạnh ở vùng dòng chảy rối (sau chỗ hẹp mạch máu) do các spin hỗn loạn tự triệt tiêu tín hiệu lẫn nhau trong cùng 1 voxel.", parameters: "Làm giả hẹp mạch máu trên ảnh Gradient Echo." },
+    { id: 2025, en: "Metal Artifact Reduction Sequence (MARS)", vi: "Chuỗi xung giảm nhiễu kim loại", type: "Parameter", description: "Tập hợp các kỹ thuật (Tăng rBW cực cao, dùng TSE, Ma trận lớn, View-Angle Tilting) để chụp bệnh nhân có thay khớp nhân tạo.", parameters: "Tên thương mại: O-MAR, SEMAC, MAVRIC." },
+    { id: 2026, en: "View-Angle Tilting (VAT)", vi: "Nghiêng góc nhìn (Chống kim loại)", type: "Parameter", description: "Áp dụng Gradient chọn lát cắt trong quá trình thu thập tín hiệu để đẩy xảo ảnh kim loại ra khỏi mặt phẳng.", parameters: "Giảm mạnh biến dạng hình học quanh khớp giả." },
+    { id: 2027, en: "B1 Inhomogeneity Artifact", vi: "Xảo ảnh không đồng đều B1", type: "Artifact", description: "Một bên bề mặt cơ thể sáng, bên kia tối do sóng RF phát ra từ coil không phủ đều.", parameters: "Sửa bằng bộ lọc chỉnh cường độ bề mặt (SCIC, PURE, CLEAR)." },
+    { id: 2028, en: "Gradient Warp / Distortion", vi: "Biến dạng Gradient (Méo lồi)", type: "Artifact", description: "Cấu trúc cơ thể ở xa trung tâm từ trường (Isocenter) bị phình to hoặc bẻ cong.", parameters: "Luôn bật bộ lọc 2D/3D Distortion Correction của máy để chỉnh." },
+    { id: 2029, en: "Acoustic Noise", vi: "Tiếng ồn âm học", type: "Hardware", description: "Lực Lorentz khổng lồ giật các cuộn gradient, đập vào ống máy tạo ra tiếng gõ búa đinh tai nhức óc (>100 dB).", parameters: "Bắt buộc bệnh nhân phải đeo tai nghe chống ồn bảo vệ thính giác." },
+    { id: 2030, en: "FDA SAR Limit", vi: "Giới hạn SAR an toàn (FDA)", type: "Parameter", description: "Quy định mức tăng nhiệt độ không quá 1°C. SAR Toàn thân giới hạn < 4 W/kg trong 15 phút.", parameters: "Máy sẽ tự động cấm quét nếu thông số Protocol vượt mức này." },
+    { id: 2031, en: "Peripheral Nerve Stimulation (PNS)", vi: "Kích thích thần kinh ngoại vi", type: "Parameter", description: "Từ trường biến thiên quá nhanh (Slew rate cực cao ở EPI/DWI) sinh ra dòng điện cảm ứng trong cơ thể, làm bệnh nhân giật cơ, tê râm ran.", parameters: "Giới hạn luật định là mức dB/dt không gây đau đớn." },
+    { id: 2032, en: "Slew Rate Limit", vi: "Giới hạn dốc chênh từ", type: "Parameter", description: "Con số tối đa của Slew Rate mà máy được phép chạy an toàn (~200 T/m/s).", parameters: "Không phải cứ máy có Slew Rate 200 là chạy liên tục 200 vì vướng PNS." },
+    { id: 2033, en: "Duty Cycle", vi: "Chu kỳ làm việc của Gradient", type: "Parameter", description: "Phần trăm thời gian mà bộ Gradient Amplifier phải làm việc với công suất tối đa trong 1 TR.", parameters: "Nếu 100%, máy sẽ quá nhiệt và tự báo lỗi ngưng quét." }
+];// Dữ liệu thuộc nhóm Thông số cài đặt, Xảo ảnh, Phần cứng
+export const parameterData = [
+    // --- 67 THUẬT NGỮ CŨ (BẢO TOÀN LOGIC) ---
+    { id: 2, en: "Time of Repetition (TR)", vi: "Thời gian lặp lại", type: "Parameter", description: "Khoảng thời gian từ lúc phát xung kích thích RF ban đầu đến lúc phát xung kích thích tiếp theo cho cùng lát cắt.", parameters: "TR ngắn tăng T1W. TR dài tăng T2W/PD." },
+    { id: 3, en: "Time to Echo (TE)", vi: "Thời gian thu tín hiệu (Thời gian Echo)", type: "Parameter", description: "Thời gian từ lúc phát xung RF kích thích đến đỉnh của tín hiệu dội thu được.", parameters: "TE ngắn tối ưu T1W. TE dài tối ưu T2W." },
+    { id: 5, en: "Inversion Time (TI)", vi: "Thời gian đảo ngược", type: "Parameter", description: "Khoảng thời gian từ xung đảo ngược 180 độ đến xung kích thích 90 độ.", parameters: "TI 150ms xóa mỡ. TI 2500ms xóa dịch (FLAIR)." },
+    { id: 9, en: "Field of View (FOV)", vi: "Trường nhìn (Kích thước trường khảo sát)", type: "Parameter", description: "Khu vực không gian được thu nhận dữ liệu để tạo ảnh.", parameters: "Giảm FOV tăng phân giải nhưng giảm SNR và có thể gây cuộn." },
+    { id: 10, en: "Matrix Size", vi: "Ma trận ảnh", type: "Parameter", description: "Số lượng các điểm ảnh trong FOV, lưới Phase x Frequency.", parameters: "Ma trận cao -> nét, SNR giảm, thời gian chụp tăng." },
+    { id: 12, en: "Number of Excitations (NEX) / NSA", vi: "Số lần thu tín hiệu trung bình", type: "Parameter", description: "Số lần dữ liệu của mỗi dòng k-space được thu nhận lại để khử nhiễu.", parameters: "Tăng NEX giảm nhiễu nhưng tăng thời gian chụp." },
+    { id: 13, en: "Slice Thickness", vi: "Bề dày lát cắt", type: "Parameter", description: "Độ dày phần mô được chọn để kích thích.", parameters: "Mỏng -> nét. Dày -> SNR cao, dễ bỏ sót tổn thương nhỏ." },
+    { id: 14, en: "Apparent Diffusion Coefficient (ADC)", vi: "Bản đồ ADC", type: "Parameter", description: "Bản đồ loại bỏ T2 shine-through từ DWI.", parameters: "Sáng trên DWI, tối trên ADC = Hạn chế khuếch tán thực." },
+    { id: 17, en: "Flip Angle (FA)", vi: "Góc lật", type: "Parameter", description: "Góc vector từ hóa bị lệch khỏi trục B0.", parameters: "FA < 90 dùng trong GRE để chụp nhanh." },
+    { id: 18, en: "Echo Train Length (ETL)", vi: "Số lượng chuỗi tín hiệu dội", type: "Parameter", description: "Số tín hiệu dội thu nhận trong một khoảng TR ở xung TSE.", parameters: "ETL cao -> chụp rất nhanh, nhưng gây mờ ảnh mô mềm." },
+    { id: 19, en: "Receiver Bandwidth (rBW)", vi: "Băng thông thu tín hiệu", type: "Parameter", description: "Phạm vi tần số vô tuyến được hệ thống thu nhận.", parameters: "Băng thông rộng -> giảm xảo ảnh hóa học, nhưng giảm SNR." },
+    { id: 20, en: "K-space", vi: "Không gian K", type: "Parameter", description: "Ma trận lưu dữ liệu thô trước khi biến đổi Fourier.", parameters: "Tâm k-space = Tương phản. Rìa = Độ phân giải." },
+    { id: 21, en: "Phase Encoding (PE)", vi: "Mã hóa pha", type: "Parameter", description: "Gradient gán cho mỗi hàng một pha duy nhất.", parameters: "Trục dễ xảy ra bóng ma (ghosting) và cuộn nhất." },
+    { id: 22, en: "Frequency Encoding (FE)", vi: "Mã hóa tần số", type: "Parameter", description: "Gradient phân biệt tín hiệu dựa trên tần số.", parameters: "Thường đặt dọc theo trục dài của cơ thể bệnh nhân." },
+    { id: 23, en: "Parallel Imaging (PI) / SENSE", vi: "Kỹ thuật chụp song song", type: "Parameter", description: "Dùng độ nhạy nhiều cuộn dây để giảm nửa/phần 3 thời gian chụp.", parameters: "Acceleration factor (R) = 2 hoặc 3. SNR giảm." },
+    { id: 24, en: "Specific Absorption Rate (SAR)", vi: "Tỷ lệ hấp thụ riêng", type: "Parameter", description: "Mức năng lượng RF bị cơ thể hấp thụ sinh nhiệt.", parameters: "SAR cao sẽ bị máy chặn. Cần giảm FA hoặc tăng TR." },
+    { id: 25, en: "Signal-to-Noise Ratio (SNR)", vi: "Tỷ lệ tín hiệu / nhiễu", type: "Parameter", description: "Thước đo độ sạch của ảnh.", parameters: "Tăng SNR: Tăng FOV, Slice, NEX. Giảm Matrix, BW." },
+    { id: 26, en: "Contrast-to-Noise Ratio (CNR)", vi: "Tỷ lệ tương phản / nhiễu", type: "Parameter", description: "Sự khác biệt SNR giữa 2 mô.", parameters: "Dùng thuốc cản từ là cách tăng CNR mạnh nhất." },
+    { id: 27, en: "Fat Saturation (FatSat)", vi: "Xóa mỡ bão hòa", type: "Parameter", description: "Xung RF chuyên biệt tần số mỡ trước khi phát xung chính.", parameters: "Cần từ trường B0 đồng nhất cao để không bị loang lổ." },
+    { id: 43, en: "Blood Oxygenation Level Dependent (BOLD)", vi: "Hiệu ứng BOLD", type: "Parameter", description: "Máu khử oxy làm giảm tín hiệu T2*, máu giàu oxy không giảm.", parameters: "Nền tảng của fMRI, cần từ trường lớn (3T)." },
+    { id: 44, en: "Fractional Anisotropy (FA)", vi: "Bất đẳng hướng phân đoạn", type: "Parameter", description: "Mức độ định hướng của sự khuếch tán (0 đến 1).", parameters: "DTI màu dựa trên hệ số này." },
+    { id: 45, en: "Velocity Encoding (VENC)", vi: "Mã hóa vận tốc", type: "Parameter", description: "Giới hạn vận tốc dòng chảy tối đa trước khi bị nhiễu aliasing.", parameters: "Cài sát tốc độ thực tế của mạch máu." },
+    { id: 46, en: "Spatial Resolution", vi: "Độ phân giải không gian", type: "Parameter", description: "Khả năng phân biệt 2 điểm kề nhau.", parameters: "Phụ thuộc trực tiếp kích thước Voxel." },
+    { id: 47, en: "Temporal Resolution", vi: "Độ phân giải thời gian", type: "Parameter", description: "Tốc độ thu nhận hình (frame/s).", parameters: "Quan trọng cho chụp tim hoặc động học." },
+    { id: 48, en: "Slice Gap / Spacing", vi: "Khoảng cách lát cắt", type: "Parameter", description: "Khoảng trống giữa 2 lát.", parameters: "Chống xảo ảnh xuyên âm (Cross-talk)." },
+    { id: 49, en: "Isotropic Voxel", vi: "Voxel đẳng hướng", type: "Parameter", description: "Pixel 3D khối lập phương (x=y=z).", parameters: "Tái tạo MPR mọi mặt phẳng không bị mờ." },
+    { id: 50, en: "Anisotropic Voxel", vi: "Voxel dị hướng", type: "Parameter", description: "Pixel 3D không đều.", parameters: "Tái tạo MPR bị mờ, răng cưa." },
+    { id: 51, en: "Free Induction Decay (FID)", vi: "Phân rã cảm ứng tự do", type: "Parameter", description: "Tín hiệu thô tắt cực nhanh ngay sau xung 90 độ.", parameters: "Không thể đo trực tiếp cho ảnh y khoa thường." },
+    { id: 52, en: "Larmor Frequency", vi: "Tần số tiến động Larmor", type: "Parameter", description: "f = γ × B0. (63.86 MHz tại 1.5T).", parameters: "Thiết lập tần số trung tâm của máy MRI." },
+    { id: 53, en: "Gyromagnetic Ratio", vi: "Hằng số từ hồi chuyển", type: "Parameter", description: "Của Hydrogen (1H) là 42.58 MHz/Tesla.", parameters: "Lý do Hydrogen được dùng trong MRI." },
+    { id: 54, en: "B0 (Main Magnetic Field)", vi: "Từ trường chính", type: "Parameter", description: "Từ trường tĩnh vĩnh cửu của ống máy (Tesla).", parameters: "An toàn B0 là số 1 (Cấm kim loại từ tính)." },
+    { id: 55, en: "B1 (Radiofrequency Field)", vi: "Từ trường RF", type: "Parameter", description: "Từ trường dao động do cuộn phát tạo ra để kích thích spin.", parameters: "Sinh nhiệt (SAR) nếu lạm dụng." },
+    { id: 56, en: "Radiofrequency (RF) Pulse", vi: "Xung vô tuyến RF", type: "Parameter", description: "Sóng điện từ ngắn bơm năng lượng cộng hưởng.", parameters: "Gồm xung 90 độ, xung 180 độ." },
+    { id: 57, en: "Shimming", vi: "Tinh chỉnh đồng nhất từ trường", type: "Parameter", description: "Làm phẳng B0 tại vùng chụp.", parameters: "Bắt buộc trước khi chạy FatSat hoặc MRS." },
+    { id: 58, en: "Aliasing / Wrap-around", vi: "Xảo ảnh nhiễu cuộn", type: "Artifact", description: "Mô bên ngoài FOV cuộn ngược đè vào trong ảnh.", parameters: "Khắc phục: Bật Oversampling hoặc tăng FOV." },
+    { id: 59, en: "Chemical Shift Artifact", vi: "Xảo ảnh lệch pha hóa học", type: "Artifact", description: "Vệt đen trắng ở ranh giới mỡ-nước dọc trục mã hóa tần số.", parameters: "Khắc phục: Tăng băng thông (BW)." },
+    { id: 60, en: "Truncation / Gibbs Artifact", vi: "Xảo ảnh cắt cụt Gibbs", type: "Artifact", description: "Vệt sóng giả song song vùng ranh giới tương phản cao.", parameters: "Khắc phục: Tăng Matrix." },
+    { id: 61, en: "Motion Artifact / Ghosting", vi: "Bóng ma / Chuyển động", type: "Artifact", description: "Bóng mờ lặp lại dọc trục mã hóa pha do cử động, nhịp thở.", parameters: "Khắc phục: Triggering, nín thở, BLADE." },
+    { id: 62, en: "Magic Angle Effect", vi: "Hiệu ứng góc ma thuật", type: "Artifact", description: "Tín hiệu giả sáng gân/sụn nghiêng 55 độ trên T1/PD.", parameters: "Xem trên T2W để xác nhận (vì không bị)." },
+    { id: 63, en: "Cross-talk", vi: "Xảo ảnh nhiễu xuyên âm", type: "Artifact", description: "Suy giảm tín hiệu lát cắt kề nhau.", parameters: "Tăng khoảng cách Gap >= 10%." },
+    { id: 64, en: "Magnetic Susceptibility Artifact", vi: "Xảo ảnh nhạy từ tính", type: "Artifact", description: "Biến dạng/đen kịt do kim loại, không khí.", parameters: "Dùng TSE thay GRE cho bệnh nhân có vít kim loại." },
+    { id: 65, en: "Saturation Bands (Sat Bands)", vi: "Băng bão hòa", type: "Parameter", description: "Khối đồ họa đặt thêm để đóng đen tín hiệu một vùng (VD: chặn mạch máu cổ).", parameters: "Chống nhiễu bóng ma." },
+    { id: 66, en: "Trigger Delay", vi: "Độ trễ đồng bộ", type: "Parameter", description: "Thời gian chờ từ đỉnh R ECG đến lúc quét.", parameters: "Chụp lúc tim tâm trương (nghỉ)." },
+    { id: 67, en: "R-R Interval", vi: "Khoảng R-R", type: "Parameter", description: "Chu kỳ tim thay thế TR trong MRI Tim.", parameters: "Bệnh nhân rối loạn nhịp rất khó chụp." },
+    { id: 68, en: "Respiratory Triggering", vi: "Đồng bộ hô hấp", type: "Parameter", description: "Máy chỉ chụp vào lúc thở ra bình tĩnh.", parameters: "Bắt buộc cho MRCP, gan (nếu không nín thở)." },
+    { id: 69, en: "Navigator Echo", vi: "Xung định vị hô hấp", type: "Parameter", description: "Theo dõi vòm hoành liên tục để đồng bộ hô hấp.", parameters: "Chính xác hơn đai ngực." },
+    { id: 70, en: "Breath-hold (BH)", vi: "Nín thở", type: "Parameter", description: "Bệnh nhân nín thở 10-20s.", parameters: "Dùng cho VIBE, HASTE." },
+    { id: 71, en: "Compressed Sensing (CS)", vi: "Cảm biến nén", type: "Parameter", description: "Thuật toán học máy bỏ qua tới 80% K-space vẫn tái tạo nét.", parameters: "Giảm thời gian MRCP từ 3p xuống 15s." },
+    { id: 74, en: "Time-Intensity Curve (TIC)", vi: "Đường cong DCE", type: "Parameter", description: "Đồ thị bắt thuốc.", parameters: "Type III (Wash-out) cảnh báo ác tính." },
+    { id: 75, en: "Maximum Intensity Projection (MIP)", vi: "Hình chiếu cường độ tối đa", type: "Parameter", description: "Chỉ giữ lại pixel sáng nhất dựng 3D.", parameters: "Dựng hình mạch máu (MRA)." },
+    { id: 76, en: "Multi-Planar Reconstruction (MPR)", vi: "Tái tạo đa mặt phẳng", type: "Parameter", description: "Cắt dữ liệu 3D thành nhiều hướng khác.", parameters: "Cần voxel đẳng hướng." },
+    { id: 77, en: "Subtraction", vi: "Xóa nền", type: "Parameter", description: "Lấy ảnh sau tiêm trừ ảnh trước tiêm.", parameters: "Xác nhận rõ vùng bắt thuốc (MRI vú)." },
+    { id: 78, en: "T1 Relaxation Time", vi: "Thời gian phục hồi T1", type: "Parameter", description: "Thời gian Mz hồi phục 63%.", parameters: "Mỡ T1 ngắn (sáng T1W). Nước dài (tối)." },
+    { id: 79, en: "T2 Relaxation Time", vi: "Thời gian phân rã T2", type: "Parameter", description: "Thời gian Mxy phân rã còn 37%.", parameters: "Nước T2 dài (sáng T2W)." },
+    { id: 80, en: "T2* (T2 star) Decay", vi: "Phân rã T2 sao", type: "Parameter", description: "T2 thực tế cộng mất đồng pha do máy (B0 không đều).", parameters: "Cơ sở xung GRE/SWI." },
+    { id: 89, en: "Phased Array Coil", vi: "Cuộn mảng pha", type: "Hardware", description: "Ghép nhiều cuộn nhỏ tăng SNR bề mặt rỗng.", parameters: "Bắt buộc cho Parallel Imaging." },
+    { id: 90, en: "Surface Coil", vi: "Cuộn bề mặt", type: "Hardware", description: "Áp sát vùng chụp.", parameters: "Tốt cho da, hàm (SNR cao nhưng nông)." },
+    { id: 91, en: "Volume Coil", vi: "Cuộn thể tích", type: "Hardware", description: "Bao quanh vùng chụp (sọ não).", parameters: "SNR đều toàn thể tích." },
+    { id: 92, en: "Gradient Slew Rate", vi: "Tốc độ dốc chênh từ", type: "Parameter", description: "Tốc độ đạt sức mạnh cực đại Gradient (T/m/s).", parameters: "Cao -> chụp nhanh (EPI). Sinh tiếng ồn lớn." },
+    { id: 93, en: "Gradient Amplitude", vi: "Biên độ Gradient", type: "Parameter", description: "Sức mạnh tối đa (mT/m).", parameters: "Cho phép cắt lát mỏng, b-value siêu cao." },
+    { id: 94, en: "Partial Fourier / Half Scan", vi: "Thu thập k-space 1 phần", type: "Parameter", description: "Quét 60-70% k-space rồi lấy đối xứng toán học.", parameters: "Giảm thời gian, giảm SNR." },
+    { id: 95, en: "Phase Oversampling", vi: "Thừa pha (Chống cuộn)", type: "Parameter", description: "Nhân đôi FOV mã hóa pha rồi cắt bỏ ngầm.", parameters: "Triệt để chặn Aliasing." },
+    { id: 96, en: "Concatenations", vi: "Chia block TR", type: "Parameter", description: "Chia bộ Slices làm nhiều lần quét xen kẽ.", parameters: "Dùng khi TR không đủ bao phủ số lát cắt." },
+    { id: 97, en: "Wash-in / Wash-out", vi: "Thải/Bắt thuốc", type: "Parameter", description: "Động học thuốc cản từ.", parameters: "Chẩn đoán u vú/tiền liệt tuyến." },
+    { id: 98, en: "Variable Flip Angle Sweep", vi: "Quét góc lật biến đổi", type: "Parameter", description: "Góc lật thay đổi liên tục trong TSE 3D.", parameters: "Giữ ảnh không bị mờ (SPACE/VISTA)." },
+    { id: 99, en: "Baseline", vi: "Pha nền DCE", type: "Parameter", description: "Chụp trước bơm thuốc liên tục.", parameters: "Dùng để trừ (Subtraction) chuẩn." },
+    { id: 100, en: "Specific Energy Dose (SED)", vi: "Liều năng lượng riêng", type: "Parameter", description: "Tổng năng lượng RF/kg (kJ/kg).", parameters: "Quản lý thân nhiệt bệnh nhân cho phiên dài." },
+
+    // --- 33 THUẬT NGỮ THÔNG SỐ/XẢO ẢNH/PHẦN CỨNG MỚI (ĐẠT 100 ITEM) ---
+    { id: 2001, en: "Echo Spacing (ESP)", vi: "Khoảng cách giữa các Echo", type: "Parameter", description: "Khoảng thời gian (thường tính bằng mili-giây) giữa các lần thu nhận tín hiệu dội (Echo) trong chuỗi Echo Train (TSE/EPI).", parameters: "ESP càng ngắn, xảo ảnh mờ càng giảm." },
+    { id: 2002, en: "EPI Factor", vi: "Hệ số EPI", type: "Parameter", description: "Tương tự ETL, chỉ số định danh số lượng dòng k-space được thu nhận trong 1 shot của xung EPI.", parameters: "Thường dùng 64, 128. Cao quá sẽ méo hình nặng." },
+    { id: 2003, en: "SENSE Factor / iPAT", vi: "Hệ số tăng tốc (Parallel Imaging)", type: "Parameter", description: "Con số (VD: 2, 3, 4) thể hiện mức độ bỏ qua K-space bằng cách sử dụng nhiều kênh cuộn dây.", parameters: "Giảm thời gian chụp tương ứng, nhưng làm giảm SNR." },
+    { id: 2004, en: "Phase Partial Fourier", vi: "Thu nhận Fourier bán phần chiều pha", type: "Parameter", description: "Bỏ qua việc mã hóa pha một phía (thường thu khoảng 5/8 hoặc 6/8 k-space) để giảm thời gian.", parameters: "Gây giảm SNR nhẹ nhưng bảo toàn độ nét." },
+    { id: 2005, en: "Slice Partial Fourier", vi: "Thu nhận Fourier bán phần chiều Slice (3D)", type: "Parameter", description: "Áp dụng kỹ thuật Partial Fourier cho trục Z (chia lát cắt) trong chụp 3D.", parameters: "Cắt giảm mạnh thời gian quét khối 3D lớn." },
+    { id: 2006, en: "Asymmetric Echo", vi: "Thu nhận tín hiệu dội bất đối xứng", type: "Parameter", description: "Chỉ thu thập phần sau (phần đi xuống) của đỉnh Echo (Partial Echo) để đạt được TE cực ngắn.", parameters: "Hữu ích trong các xung MRCP hoặc mạch máu TE ngắn." },
+    { id: 2007, en: "Receiver Gain", vi: "Độ khuếch đại tín hiệu thu", type: "Parameter", description: "Mức độ máy MRI khuếch đại tín hiệu thô tí hon nhận được từ cuộn dây lên trước khi số hóa.", parameters: "Cài quá cao gây Data Clipping, quá thấp gây ảnh đen xì." },
+    { id: 2008, en: "Transmit Gain (TG)", vi: "Độ khuếch đại phát RF", type: "Parameter", description: "Năng lượng điện (Vôn) máy cần bơm vào cuộn phát để đạt được một góc lật 90 độ chính xác trên bệnh nhân đó.", parameters: "Máy tự dò sóng (Prescan). Bệnh nhân béo phì cần TG rất cao." },
+    { id: 2009, en: "Prescan / Center Frequency Calibration", vi: "Dò tần số trung tâm (Prescan)", type: "Parameter", description: "Máy tự động phát dải sóng nhỏ để tìm chính xác tần số Larmor của nước trong vùng ngực/bụng người bệnh.", parameters: "Thất bại nếu bệnh nhân có kim loại quá lớn." },
+    { id: 2010, en: "Active Shimming", vi: "Chỉnh từ trường chủ động", type: "Hardware", description: "Hệ thống cuộn điện từ thứ cấp (shim coils) chạy dòng điện DC liên tục để nắn lại độ phẳng của B0.", parameters: "Có thể chỉnh lại cho từng bệnh nhân khác nhau." },
+    { id: 2011, en: "Passive Shimming", vi: "Chỉnh từ trường thụ động", type: "Hardware", description: "Những miếng sắt nhỏ xíu được kỹ sư gắn vĩnh viễn bên trong ống máy lúc mới lắp đặt để bù trừ từ trường môi trường.", parameters: "Chỉ thực hiện 1 lần lúc cài đặt máy." },
+    { id: 2012, en: "Dielectric Pad", vi: "Đệm điện môi", type: "Hardware", description: "Túi chứa dung dịch (thường là Barium Titanate) đắp lên cơ thể (vùng bụng, cổ) ở máy 3T để triệt tiêu hiệu ứng cộng hưởng điện môi.", parameters: "Giảm xảo ảnh đốm đen (Dielectric artifact) ở máy 3 Tesla." },
+    { id: 2013, en: "Maxwell Coils / Golay Coils", vi: "Cuộn chênh từ Maxwell/Golay", type: "Hardware", description: "Tên vật lý của cấu trúc vật lý các cuộn dây Gradient (Maxwell cho trục Z, Golay cho trục X, Y).", parameters: "Quyết định hướng không gian của lát cắt." },
+    { id: 2014, en: "Helium Boil-off", vi: "Tỷ lệ bay hơi Heli", type: "Parameter", description: "Lượng khí Helium lỏng siêu lạnh tự hao hụt theo thời gian (0.01%/ngày) do hệ thống bơm lạnh không hồi phục 100%.", parameters: "Các máy \"Zero-boil-off\" đời mới loại bỏ hiện tượng này." },
+    { id: 2015, en: "Gradient Amplifier", vi: "Tủ khuếch đại Gradient", type: "Hardware", description: "Tủ điện công suất cực lớn, bơm dòng tới hàng ngàn Ampe chớp nhoáng vào cuộn gradient.", parameters: "Phát ra nhiệt lớn, cần hệ thống làm mát bằng nước tinh khiết (Chiller)." },
+    { id: 2016, en: "Zipper Artifact", vi: "Xảo ảnh hình kéo khóa (Zipper)", type: "Artifact", description: "Dải nhiễu xuyên ngang ảnh (theo hướng Phase) có hình răng cưa như khóa kéo áo.", parameters: "Do nhiễu sóng RF ngoại lai lọt vào phòng máy (Cửa lồng Faraday bị hở)." },
+    { id: 2017, en: "Herringbone / Corduroy Artifact", vi: "Xảo ảnh vân gỗ / Herringbone", type: "Artifact", description: "Toàn bộ ảnh bị phủ một lớp sọc chéo chằng chịt.", parameters: "Do lỗi phần cứng (đột biến điện trong tủ thu nhận tín hiệu)." },
+    { id: 2018, en: "Moire Fringes", vi: "Xảo ảnh vân sóng Moire", type: "Artifact", description: "Các vòng sóng đen trắng đồng tâm xếp lớp ở rìa FOV trên các ảnh Gradient Echo vùng bụng/chậu.", parameters: "Sự kết hợp giữa Aliasing và từ trường cực kém ở rìa (Inhomogeneity)." },
+    { id: 2019, en: "Dielectric Resonance Artifact", vi: "Xảo ảnh cộng hưởng điện môi", type: "Artifact", description: "Vùng tối đen hoặc sáng bất thường ở trung tâm ổ bụng trên máy 3T do bước sóng RF trùng với kích thước cơ thể người.", parameters: "Dùng Dielectric Pad hoặc công nghệ Multi-Transmit RF để xóa." },
+    { id: 2020, en: "RF Overflow / Clipping Artifact", vi: "Xảo ảnh tràn/cắt xén dữ liệu", type: "Artifact", description: "Nền ảnh xám xịt nhạt nhòa, hoặc nhiễu mờ như bị dính nước.", parameters: "Do Receiver Gain cài quá cao hoặc coil hỏng gây vỡ tín hiệu số hóa." },
+    { id: 2021, en: "Spike Artifact", vi: "Xảo ảnh gai điện (Spike)", type: "Artifact", description: "Nhiễu K-space tạo thành các dải sọc chéo đè lên ảnh với cường độ rất mạnh.", parameters: "Nguyên nhân từ phóng tia lửa điện tĩnh điện (từ thảm, áo len bệnh nhân)." },
+    { id: 2022, en: "Flow Void", vi: "Hiện tượng trống dòng chảy", type: "Artifact", description: "Mạch máu xuất hiện màu đen nhánh hoàn toàn trên chuỗi xung Spin Echo (như T1W/T2W) do máu chảy nhanh đã rời khỏi lát cắt trước khi máy kịp thu Echo.", parameters: "Là dấu hiệu bình thường, giúp xác định mạch máu có thông suốt." },
+    { id: 2023, en: "Entry Slice Phenomenon", vi: "Hiện tượng dòng chảy vào lát cắt", type: "Artifact", description: "Mạch máu sáng rực lên ở lát cắt ĐẦU TIÊN của một bộ ảnh do dòng máu này chứa các proton hoàn toàn chưa bị bão hòa bởi RF.", parameters: "Cơ sở của xung mạch máu TOF (Time of Flight)." },
+    { id: 2024, en: "Intra-voxel Dephasing", vi: "Mất đồng pha nội Voxel", type: "Artifact", description: "Tín hiệu tụt giảm mạnh ở vùng dòng chảy rối (sau chỗ hẹp mạch máu) do các spin hỗn loạn tự triệt tiêu tín hiệu lẫn nhau trong cùng 1 voxel.", parameters: "Làm giả hẹp mạch máu trên ảnh Gradient Echo." },
+    { id: 2025, en: "Metal Artifact Reduction Sequence (MARS)", vi: "Chuỗi xung giảm nhiễu kim loại", type: "Parameter", description: "Tập hợp các kỹ thuật (Tăng rBW cực cao, dùng TSE, Ma trận lớn, View-Angle Tilting) để chụp bệnh nhân có thay khớp nhân tạo.", parameters: "Tên thương mại: O-MAR, SEMAC, MAVRIC." },
+    { id: 2026, en: "View-Angle Tilting (VAT)", vi: "Nghiêng góc nhìn (Chống kim loại)", type: "Parameter", description: "Áp dụng Gradient chọn lát cắt trong quá trình thu thập tín hiệu để đẩy xảo ảnh kim loại ra khỏi mặt phẳng.", parameters: "Giảm mạnh biến dạng hình học quanh khớp giả." },
+    { id: 2027, en: "B1 Inhomogeneity Artifact", vi: "Xảo ảnh không đồng đều B1", type: "Artifact", description: "Một bên bề mặt cơ thể sáng, bên kia tối do sóng RF phát ra từ coil không phủ đều.", parameters: "Sửa bằng bộ lọc chỉnh cường độ bề mặt (SCIC, PURE, CLEAR)." },
+    { id: 2028, en: "Gradient Warp / Distortion", vi: "Biến dạng Gradient (Méo lồi)", type: "Artifact", description: "Cấu trúc cơ thể ở xa trung tâm từ trường (Isocenter) bị phình to hoặc bẻ cong.", parameters: "Luôn bật bộ lọc 2D/3D Distortion Correction của máy để chỉnh." },
+    { id: 2029, en: "Acoustic Noise", vi: "Tiếng ồn âm học", type: "Hardware", description: "Lực Lorentz khổng lồ giật các cuộn gradient, đập vào ống máy tạo ra tiếng gõ búa đinh tai nhức óc (>100 dB).", parameters: "Bắt buộc bệnh nhân phải đeo tai nghe chống ồn bảo vệ thính giác." },
+    { id: 2030, en: "FDA SAR Limit", vi: "Giới hạn SAR an toàn (FDA)", type: "Parameter", description: "Quy định mức tăng nhiệt độ không quá 1°C. SAR Toàn thân giới hạn < 4 W/kg trong 15 phút.", parameters: "Máy sẽ tự động cấm quét nếu thông số Protocol vượt mức này." },
+    { id: 2031, en: "Peripheral Nerve Stimulation (PNS)", vi: "Kích thích thần kinh ngoại vi", type: "Parameter", description: "Từ trường biến thiên quá nhanh (Slew rate cực cao ở EPI/DWI) sinh ra dòng điện cảm ứng trong cơ thể, làm bệnh nhân giật cơ, tê râm ran.", parameters: "Giới hạn luật định là mức dB/dt không gây đau đớn." },
+    { id: 2032, en: "Slew Rate Limit", vi: "Giới hạn dốc chênh từ", type: "Parameter", description: "Con số tối đa của Slew Rate mà máy được phép chạy an toàn (~200 T/m/s).", parameters: "Không phải cứ máy có Slew Rate 200 là chạy liên tục 200 vì vướng PNS." },
+    { id: 2033, en: "Duty Cycle", vi: "Chu kỳ làm việc của Gradient", type: "Parameter", description: "Phần trăm thời gian mà bộ Gradient Amplifier phải làm việc với công suất tối đa trong 1 TR.", parameters: "Nếu 100%, máy sẽ quá nhiệt và tự báo lỗi ngưng quét." }
 ];
