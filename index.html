@@ -3,29 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Từ Điển Nguyên Lý & Cài Đặt MRI</title>
+    <title>Từ Điển MRI - Phan Thường Điện Quang</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Font icons hỗ trợ cho UI chuyên nghiệp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Thuật Ngữ & Cài Đặt Thông Số MRI</h1>
-            <p>Tài liệu tra cứu dành cho Kỹ thuật viên & Bác sĩ Điện quang</p>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm thuật ngữ (Tiếng Việt, Tiếng Anh, hoặc từ khóa)...">
-        </header>
-        
-        <!-- Khối Tabs phân loại -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
-            <button class="tab-btn" data-tab="Parameter">Thông Số Cài Đặt</button>
-        </div>
+    <!-- Header cố định chứa Branding và Công cụ -->
+    <div class="sticky-header">
+        <div class="header-container">
+            <div class="branding">
+                <!-- Khu vực dành cho Circular Logo -->
+                <div class="logo-wrapper">
+                    <i class="fa-solid fa-magnet"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Phan Thường Điện Quang</h1>
+                    <p>Cẩm Nang Nguyên Lý & Cài Đặt Thông Số MRI</p>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Gõ thuật ngữ (Ví dụ: DWI, mỡ, T1)...">
+            </div>
 
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
+                <button class="tab-btn" data-tab="Parameter">Thông Số Cài Đặt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="container main-content">
         <main id="mriList" class="mri-list">
             <!-- Dữ liệu sẽ được render vào đây bởi UI Module -->
         </main>
     </div>
 
-    <!-- Khai báo type="module" bắt buộc đối với ES6 Modules -->
+    <!-- Nút cuộn lên đầu trang -->
+    <button id="backToTop" class="back-to-top" title="Lên đầu trang">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Bản quyền thuộc về Phan Thường Điện Quang. Ứng dụng tra cứu lưu hành nội bộ.</p>
+    </footer>
+
     <script type="module" src="js/main.js"></script>
+    <script>
+        // Xử lý logic nhỏ cho nút Back to Top trực tiếp tại đây để không can thiệp module chính
+        const backToTopBtn = document.getElementById("backToTop");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
 </body>
 </html>
