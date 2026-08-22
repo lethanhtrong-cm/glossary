@@ -23,6 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const formContribute = document.getElementById("contributeForm");
     const btnContributeNew = document.getElementById("btnContributeNew");
 
+    // Elements Công Cụ Theme / Kích thước chữ (Đã đồng bộ ID với HTML)
+    const btnTextInc = document.getElementById("btnTextInc");
+    const btnTextDec = document.getElementById("btnTextDec");
+    const btnThemeLight = document.getElementById("btnThemeLight");
+    const btnThemeSapphire = document.getElementById("btnThemeSapphire");
+    const btnThemeDark = document.getElementById("btnThemeDark");
+
     // Render Alphabet A-Z
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let alphaHTML = `<button class="alpha-btn all-btn active" data-alpha="ALL">Tất cả</button>`;
@@ -35,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentTab = 'Sequence'; 
     let currentKeyword = '';
     let currentAlpha = 'ALL'; 
+    let currentFontSize = 14; // Default font size (14px)
 
     // --- LOGIC 1: ĐIỀU HƯỚNG SIDEBAR ---
     menuItems.forEach(item => {
@@ -101,8 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- LOGIC 3: XỬ LÝ MODAL ĐÓNG GÓP WIKIPEDIA ---
-
-    // Mở modal khi bấm "Tạo bài viết mới" (Sidebar)
     btnContributeNew.addEventListener("click", () => {
         document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
         formContribute.reset();
@@ -110,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "flex";
     });
 
-    // Mở modal khi bấm "[chỉnh sửa]" tại từng bài viết (Dùng Event Delegation)
     mriList.addEventListener("click", (e) => {
         if(e.target.classList.contains("wiki-edit-btn")) {
             const id = parseInt(e.target.getAttribute("data-id"));
@@ -130,20 +135,45 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Đóng Modal
     const closeModal = () => { modal.style.display = "none"; };
     btnCloseModal.addEventListener("click", closeModal);
     btnCancelEdit.addEventListener("click", closeModal);
     window.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
 
-    // Xử lý Submit Form
     formContribute.addEventListener("submit", (e) => {
-        e.preventDefault(); // Ngăn load lại trang
-        
-        // Mô phỏng luồng gửi dữ liệu (Ở đây không lưu thật vào mriData vì chưa có Database)
+        e.preventDefault();
         alert("Cảm ơn bạn! Bản sửa đổi/thêm mới của bạn đã được ghi nhận và gửi cho Ban Quản Trị Điện Quang phê duyệt trước khi xuất bản.");
-        
         closeModal();
         formContribute.reset();
     });
+
+    // --- LOGIC 4: XỬ LÝ CÔNG CỤ HIỂN THỊ (THEME & FONT SIZE) ---
+    if(btnTextInc && btnTextDec) {
+        // Tăng chữ
+        btnTextInc.addEventListener("click", () => {
+            if (currentFontSize < 24) currentFontSize += 2;
+            document.body.style.fontSize = currentFontSize + "px";
+        });
+
+        // Giảm chữ
+        btnTextDec.addEventListener("click", () => {
+            if (currentFontSize > 12) currentFontSize -= 2;
+            document.body.style.fontSize = currentFontSize + "px";
+        });
+    }
+
+    if(btnThemeLight && btnThemeSapphire && btnThemeDark) {
+        // Các Theme
+        btnThemeLight.addEventListener("click", () => {
+            document.body.className = "";
+        });
+
+        btnThemeSapphire.addEventListener("click", () => {
+            document.body.className = "sapphire-mode";
+        });
+
+        btnThemeDark.addEventListener("click", () => {
+            document.body.className = "dark-mode";
+        });
+    }
 });
