@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Font icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Đã gỡ bỏ các font chữ hiện đại để trình duyệt tự dùng font hệ thống chuẩn Wikipedia -->
 </head>
 <body>
     <div class="app-layout">
@@ -58,9 +57,20 @@
                         <button class="tab-btn" data-tab="Physics">Vật Lý</button>
                     </div>
                     
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Tìm kiếm trang...">
+                    <div class="top-bar-right">
+                        <!-- CÔNG CỤ HIỂN THỊ (MỚI) -->
+                        <div class="view-controls">
+                            <button class="view-btn" id="btnTextDec" title="Giảm cỡ chữ">A-</button>
+                            <button class="view-btn" id="btnTextInc" title="Tăng cỡ chữ">A+</button>
+                            <button class="view-btn" id="btnThemeLight" title="Giao diện sáng (Mặc định)"><i class="fa-solid fa-sun"></i></button>
+                            <button class="view-btn" id="btnThemeSapphire" title="Giao diện Sapphire (Chống mỏi mắt)"><i class="fa-solid fa-eye"></i></button>
+                            <button class="view-btn" id="btnThemeDark" title="Giao diện tối"><i class="fa-solid fa-moon"></i></button>
+                        </div>
+
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" id="searchInput" placeholder="Tìm kiếm trang...">
+                        </div>
                     </div>
                 </div>
                 
