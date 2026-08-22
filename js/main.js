@@ -4,12 +4,26 @@ import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+    // UI Elements
     const containerId = "mriList";
     const searchInput = document.getElementById("searchInput");
     const tabBtns = document.querySelectorAll(".tab-btn");
     const alphabetFilter = document.getElementById("alphabetFilter");
+    
+    // Sidebar Elements
+    const menuItems = document.querySelectorAll(".menu-item[data-mod]");
+    const mriHeaderTools = document.getElementById("mriHeaderTools");
+    const mriList = document.getElementById("mriList");
+    const comingSoon = document.getElementById("comingSoon");
 
-    // Khởi tạo các nút Alphabet (A-Z) vào giao diện
+    // Modal Elements (Đóng góp)
+    const modal = document.getElementById("contributeModal");
+    const btnCloseModal = document.getElementById("modalClose");
+    const btnCancelEdit = document.getElementById("btnCancelEdit");
+    const formContribute = document.getElementById("contributeForm");
+    const btnContributeNew = document.getElementById("btnContributeNew");
+
+    // Render Alphabet A-Z
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let alphaHTML = `<button class="alpha-btn all-btn active" data-alpha="ALL">Tất cả</button>`;
     letters.forEach(letter => {
@@ -17,79 +31,119 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    // Biến lưu trạng thái hiện tại (Giữ nguyên logic cũ + thêm trạng thái Alphabet)
-    let currentTab = 'Sequence'; // Mặc định mở tab Chuỗi xung
+    // State Variables
+    let currentTab = 'Sequence'; 
     let currentKeyword = '';
-    let currentAlpha = 'ALL'; // Mặc định hiển thị tất cả chữ cái
+    let currentAlpha = 'ALL'; 
 
-    // Hàm cập nhật hiển thị tích hợp: Tìm kiếm -> Tab -> Alphabet
-    function updateDisplay() {
-        // Bước 1: Lọc dữ liệu theo từ khóa tìm kiếm (kế thừa module search.js)
-        let filteredData = filterMriData(mriData, currentKeyword);
-        
-        // Bước 2: Lọc tiếp dữ liệu theo Tab đang được chọn
-        filteredData = filteredData.filter(item => {
-            if (currentTab === 'Sequence') {
-                return item.type === 'Sequence';
-            } else if (currentTab === 'Physics') {
-                return item.type === 'Physics';
+    // --- LOGIC 1: ĐIỀU HƯỚNG SIDEBAR ---
+    menuItems.forEach(item => {
+        item.addEventListener("click", (e) => {
+            menuItems.forEach(i => i.classList.remove("active"));
+            e.currentTarget.classList.add("active");
+            
+            const moduleName = e.currentTarget.getAttribute("data-mod");
+            if (moduleName === "MRI") {
+                mriHeaderTools.style.display = "block";
+                mriList.style.display = "block";
+                comingSoon.style.display = "none";
             } else {
-                // Các nhóm còn lại đưa vào tab Thông số
-                return item.type !== 'Sequence' && item.type !== 'Physics';
+                mriHeaderTools.style.display = "none";
+                mriList.style.display = "none";
+                comingSoon.style.display = "flex";
             }
         });
+    });
 
-        // Bước 3: Lọc theo bảng chữ cái Alphabet
+    // --- LOGIC 2: LỌC DỮ LIỆU ---
+    function updateDisplay() {
+        let filteredData = filterMriData(mriData, currentKeyword);
+        filteredData = filteredData.filter(item => {
+            if (currentTab === 'Sequence') return item.type === 'Sequence';
+            else if (currentTab === 'Physics') return item.type === 'Physics';
+            else return item.type !== 'Sequence' && item.type !== 'Physics';
+        });
+
         if (currentAlpha !== 'ALL') {
             filteredData = filteredData.filter(item => {
-                // Kiểm tra ký tự đầu tiên của tên tiếng Anh hoặc tiếng Việt
                 const enStart = item.en.charAt(0).toUpperCase();
                 const viStart = item.vi.charAt(0).toUpperCase();
                 return enStart === currentAlpha || viStart === currentAlpha;
             });
         }
-        
-        // Bước 4: Đưa dữ liệu cuối cùng ra DOM
         renderMriList(filteredData, containerId);
     }
 
-    // Khởi tạo hiển thị toàn bộ dữ liệu ban đầu theo cấu hình
-    updateDisplay();
+    updateDisplay(); // Khởi chạy lúc load
 
-    // Lắng nghe sự kiện người dùng gõ vào thanh tìm kiếm (Real-time search)
-    searchInput.addEventListener("input", (event) => {
-        currentKeyword = event.target.value;
+    searchInput.addEventListener("input", (e) => {
+        currentKeyword = e.target.value;
         updateDisplay();
     });
 
-    // Lắng nghe sự kiện người dùng click chuyển Tab
     tabBtns.forEach(btn => {
         btn.addEventListener("click", (e) => {
-            // Xóa class active ở tất cả các tab
             tabBtns.forEach(b => b.classList.remove("active"));
-            
-            // Thêm class active cho tab vừa được click
             e.target.classList.add("active");
-            
-            // Cập nhật trạng thái Tab hiện tại và gọi lại hàm hiển thị
             currentTab = e.target.getAttribute("data-tab");
             updateDisplay();
         });
     });
 
-    // Lắng nghe sự kiện người dùng click chọn chữ cái (Alphabet)
     const alphaBtns = document.querySelectorAll(".alpha-btn");
     alphaBtns.forEach(btn => {
         btn.addEventListener("click", (e) => {
-            // Xóa class active ở tất cả các nút alphabet
             alphaBtns.forEach(b => b.classList.remove("active"));
-            
-            // Thêm class active cho nút vừa click
             e.target.classList.add("active");
-            
-            // Cập nhật trạng thái chữ cái và gọi lại hàm hiển thị
             currentAlpha = e.target.getAttribute("data-alpha");
             updateDisplay();
         });
+    });
+
+    // --- LOGIC 3: XỬ LÝ MODAL ĐÓNG GÓP WIKIPEDIA ---
+
+    // Mở modal khi bấm "Tạo bài viết mới" (Sidebar)
+    btnContributeNew.addEventListener("click", () => {
+        document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
+        formContribute.reset();
+        document.getElementById("editId").value = "";
+        modal.style.display = "flex";
+    });
+
+    // Mở modal khi bấm "[chỉnh sửa]" tại từng bài viết (Dùng Event Delegation)
+    mriList.addEventListener("click", (e) => {
+        if(e.target.classList.contains("wiki-edit-btn")) {
+            const id = parseInt(e.target.getAttribute("data-id"));
+            const itemToEdit = mriData.find(item => item.id === id);
+            
+            if(itemToEdit) {
+                document.getElementById("modalTitle").innerText = `Đang sửa đổi "${itemToEdit.en}"`;
+                document.getElementById("editId").value = itemToEdit.id;
+                document.getElementById("editEn").value = itemToEdit.en;
+                document.getElementById("editVi").value = itemToEdit.vi;
+                document.getElementById("editType").value = itemToEdit.type === 'Artifact' || itemToEdit.type === 'Hardware' ? 'Parameter' : itemToEdit.type; 
+                document.getElementById("editDesc").value = itemToEdit.description;
+                document.getElementById("editParams").value = itemToEdit.parameters;
+                
+                modal.style.display = "flex";
+            }
+        }
+    });
+
+    // Đóng Modal
+    const closeModal = () => { modal.style.display = "none"; };
+    btnCloseModal.addEventListener("click", closeModal);
+    btnCancelEdit.addEventListener("click", closeModal);
+    window.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+
+    // Xử lý Submit Form
+    formContribute.addEventListener("submit", (e) => {
+        e.preventDefault(); // Ngăn load lại trang
+        
+        // Mô phỏng luồng gửi dữ liệu (Ở đây không lưu thật vào mriData vì chưa có Database)
+        alert("Cảm ơn bạn! Bản sửa đổi/thêm mới của bạn đã được ghi nhận và gửi cho Ban Quản Trị Điện Quang phê duyệt trước khi xuất bản.");
+        
+        closeModal();
+        formContribute.reset();
     });
 });
