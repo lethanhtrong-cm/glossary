@@ -109,7 +109,6 @@ body {
     display: flex;
     gap: 15px;
     padding-bottom: 15px;
-    border-bottom: 2px solid var(--border-color);
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -146,6 +145,49 @@ body {
     border-radius: 3px 3px 0 0;
 }
 
+/* --- ALPHABET FILTER --- */
+.alphabet-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 15px 0;
+    border-top: 1px solid var(--border-color); /* Thay thế border từ tabs xuống đây */
+}
+
+.alpha-btn {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.alpha-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(11, 92, 140, 0.1);
+}
+
+.alpha-btn.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(11, 92, 140, 0.2);
+}
+
+.alpha-btn.all-btn {
+    width: auto;
+    padding: 0 12px;
+}
+
 /* --- KHU VỰC NỘI DUNG CHÍNH --- */
 .container {
     max-width: 900px;
@@ -153,7 +195,7 @@ body {
 }
 
 .main-content {
-    padding: 30px var(--safe-zone-padding) 60px;
+    padding: 25px var(--safe-zone-padding) 60px;
 }
 
 .mri-list {
