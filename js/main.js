@@ -21,9 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
         filteredData = filteredData.filter(item => {
             if (currentTab === 'Sequence') {
                 return item.type === 'Sequence';
+            } else if (currentTab === 'Physics') {
+                return item.type === 'Physics';
             } else {
                 // Các nhóm còn lại (Parameter, Artifact, Hardware...) đưa vào tab Thông số
-                return item.type !== 'Sequence';
+                return item.type !== 'Sequence' && item.type !== 'Physics';
             }
         });
         
