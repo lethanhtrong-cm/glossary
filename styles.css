@@ -1,0 +1,117 @@
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #d9534f;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+header p {
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 600px;
+    padding: 14px 20px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.2);
+}
+
+.mri-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mri-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--primary-color);
+    transition: transform 0.2s;
+}
+
+.mri-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.mri-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.en-title {
+    color: var(--secondary-color);
+}
+
+.vi-title {
+    color: var(--primary-color);
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.badge-seq { background-color: #28a745; }
+.badge-param { background-color: #fd7e14; }
+
+.content-row strong {
+    color: #444;
+}
+
+.content-row {
+    margin-bottom: 8px;
+}
+
+.no-result {
+    text-align: center;
+    color: #777;
+    font-size: 1.1rem;
+    font-style: italic;
+    padding: 40px;
+}
