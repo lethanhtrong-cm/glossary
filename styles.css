@@ -155,10 +155,12 @@ body {
     background: var(--wiki-bg);
 }
 
-/* --- TOP HEADER (TABS, TOOLS & SEARCH) --- */
 .wiki-top-header {
     padding: 15px 30px 0 30px;
     background-color: var(--wiki-bg);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .wiki-top-bar {
