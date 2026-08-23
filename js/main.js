@@ -1,7 +1,27 @@
+// Khai báo Firebase SDK qua CDN (Dành cho ES6 Modules)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
 // Module chính đóng vai trò Controller
 import { mriData } from './data.js';
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
+
+// --- CẤU HÌNH FIREBASE ---
+const firebaseConfig = {
+    apiKey: "AIzaSyDqdo_DJIWa5iqxiCgBq-0iGX7f9sr6soo",
+    authDomain: "rt-examination.firebaseapp.com",
+    databaseURL: "https://rt-examination-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "rt-examination",
+    storageBucket: "rt-examination.firebasestorage.app",
+    messagingSenderId: "920482699854",
+    appId: "1:920482699854:web:44f9b0d735bdc001c6c11f",
+    measurementId: "G-8N7RTTREQM"
+};
+
+// Khởi tạo Firebase App và Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 document.addEventListener("DOMContentLoaded", () => {
     // UI Elements
@@ -179,7 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("editVi").value = item.vi;
             document.getElementById("editType").value = item.type === 'Artifact' || item.type === 'Hardware' ? 'Parameter' : item.type; 
             
-            // Render data vào Form Động
             toggleFormFields(item.type);
             document.getElementById("editDesc").value = item.description || item.indications || "";
             document.getElementById("editParams").value = item.parameters || item.basicSequences || "";
@@ -216,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
         formContribute.reset();
         document.getElementById("editId").value = "";
-        toggleFormFields(editTypeSelect.value); // Chạy lại logic để reset Layout Form
+        toggleFormFields(editTypeSelect.value); 
         modal.style.display = "flex";
     });
 
@@ -225,11 +244,55 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCancelEdit.addEventListener("click", closeModal);
     window.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
 
-    formContribute.addEventListener("submit", (e) => {
+    // --- XỬ LÝ SUBMIT LÊN FIRESTORE ---
+    formContribute.addEventListener("submit", async (e) => {
         e.preventDefault();
-        alert("Cảm ơn bạn! Bản sửa đổi đã được ghi nhận chờ duyệt.");
-        closeModal();
-        formContribute.reset();
+        
+        // Cập nhật giao diện nút bấm để báo hiệu đang gửi
+        const submitBtn = formContribute.querySelector(".btn-submit");
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = "Đang gửi dữ liệu...";
+        submitBtn.disabled = true;
+
+        try {
+            // Gom dữ liệu từ Form
+            const type = document.getElementById("editType").value;
+            const citationVal = document.getElementById("editCitation").value.trim();
+            const payload = {
+                contributor: document.getElementById("contributorName").value.trim() || "Ẩn danh",
+                originalId: document.getElementById("editId").value || null, // Có giá trị tức là Chỉnh sửa, rỗng là Tạo mới
+                en: document.getElementById("editEn").value.trim(),
+                vi: document.getElementById("editVi").value.trim(),
+                type: type,
+                citations: citationVal ? [citationVal] : [],
+                status: "pending",
+                createdAt: serverTimestamp() // Tự động đánh dấu thời gian từ server Firebase
+            };
+
+            // Lưu dữ liệu tùy theo cấu trúc Protocol hay Thuật ngữ thường
+            if (type === "Protocol") {
+                payload.indications = document.getElementById("editDesc").value.trim();
+                payload.basicSequences = document.getElementById("editParams").value.trim();
+                payload.advancedSequences = document.getElementById("editAdvanced").value.trim();
+                payload.notes = document.getElementById("editNotes").value.trim();
+            } else {
+                payload.description = document.getElementById("editDesc").value.trim();
+                payload.parameters = document.getElementById("editParams").value.trim();
+            }
+
+            // Đẩy lên bảng pending_approvals
+            await addDoc(collection(db, "pending_approvals"), payload);
+
+            alert("Cảm ơn bạn! Bản sửa đổi của bạn đã được đẩy thành công lên hệ thống chờ duyệt.");
+            closeModal();
+            formContribute.reset();
+        } catch (error) {
+            console.error("Lỗi khi gửi lên Firebase: ", error);
+            alert("Đã xảy ra lỗi khi kết nối với hệ thống. Vui lòng kiểm tra lại thiết lập cấu hình Database.");
+        } finally {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }
     });
 
     // View Controls
