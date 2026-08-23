@@ -10,27 +10,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabBtns = document.querySelectorAll(".tab-btn");
     const alphabetFilter = document.getElementById("alphabetFilter");
     
-    // Sidebar Elements
+    // Sidebar & View
     const menuItems = document.querySelectorAll(".menu-item[data-mod]");
     const mriHeaderTools = document.getElementById("mriHeaderTools");
     const mriList = document.getElementById("mriList");
     const comingSoon = document.getElementById("comingSoon");
 
-    // Modal Elements (Đóng góp)
+    // Modal
     const modal = document.getElementById("contributeModal");
     const btnCloseModal = document.getElementById("modalClose");
     const btnCancelEdit = document.getElementById("btnCancelEdit");
     const formContribute = document.getElementById("contributeForm");
     const btnContributeNew = document.getElementById("btnContributeNew");
 
-    // Elements Công Cụ Theme / Kích thước chữ
+    // View Controls
     const btnTextInc = document.getElementById("btnTextInc");
     const btnTextDec = document.getElementById("btnTextDec");
     const btnThemeLight = document.getElementById("btnThemeLight");
     const btnThemeSapphire = document.getElementById("btnThemeSapphire");
     const btnThemeDark = document.getElementById("btnThemeDark");
 
-    // Render Alphabet A-Z
+    // Render Alphabet
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let alphaHTML = `<button class="alpha-btn all-btn active" data-alpha="ALL">Tất cả</button>`;
     letters.forEach(letter => {
@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    // State Variables
+    // States
     let currentTab = 'Sequence'; 
     let currentKeyword = '';
     let currentAlpha = 'ALL'; 
     let currentFontSize = 14; 
 
-    // --- LOGIC 1: ĐIỀU HƯỚNG SIDEBAR ---
+    // 1. Sidebar Nav
     menuItems.forEach(item => {
         item.addEventListener("click", (e) => {
             menuItems.forEach(i => i.classList.remove("active"));
@@ -63,13 +63,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- LOGIC 2: LỌC DỮ LIỆU ---
+    // 2. Filter & Render
     function updateDisplay() {
         let filteredData = filterMriData(mriData, currentKeyword);
         filteredData = filteredData.filter(item => {
             if (currentTab === 'Sequence') return item.type === 'Sequence';
             else if (currentTab === 'Physics') return item.type === 'Physics';
-            else return item.type !== 'Sequence' && item.type !== 'Physics';
+            else if (currentTab === 'Protocol') return item.type === 'Protocol'; // Tab mới
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol';
         });
 
         if (currentAlpha !== 'ALL') {
@@ -108,50 +109,54 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- LOGIC 3: XỬ LÝ CÁC NÚT TRONG DANH SÁCH (EDIT, COPY, SHARE) ---
+    // 3. Buttons (Edit, Copy, Share)
     mriList.addEventListener("click", (e) => {
         const id = parseInt(e.target.getAttribute("data-id"));
         const item = mriData.find(i => i.id === id);
 
         if (!item) return;
 
-        // Xử lý nút [chỉnh sửa]
+        // Nội dung copy/share thông minh dựa trên type
+        let textToExport = `${item.en} (${item.vi})\n`;
+        if (item.type === 'Protocol') {
+            textToExport += `- Chỉ định: ${item.indications}\n- Xung cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
+        } else {
+            textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
+        }
+
         if(e.target.classList.contains("wiki-edit-btn")) {
             document.getElementById("modalTitle").innerText = `Đang sửa đổi "${item.en}"`;
             document.getElementById("editId").value = item.id;
             document.getElementById("editEn").value = item.en;
             document.getElementById("editVi").value = item.vi;
             document.getElementById("editType").value = item.type === 'Artifact' || item.type === 'Hardware' ? 'Parameter' : item.type; 
-            document.getElementById("editDesc").value = item.description;
-            document.getElementById("editParams").value = item.parameters;
+            document.getElementById("editDesc").value = item.description || item.indications;
+            document.getElementById("editParams").value = item.parameters || item.notes;
             modal.style.display = "flex";
         }
         
-        // Xử lý nút [copy]
         if(e.target.classList.contains("copy-btn")) {
-            const textToCopy = `${item.en} (${item.vi})\n- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("Đã sao chép nội dung thuật ngữ!");
+            navigator.clipboard.writeText(textToExport).then(() => {
+                alert("Đã sao chép nội dung!");
             }).catch(err => {
                 console.error("Lỗi copy:", err);
             });
         }
 
-        // Xử lý nút [chia sẻ]
         if(e.target.classList.contains("share-btn")) {
             if (navigator.share) {
                 navigator.share({
                     title: `Wikiradiology - ${item.en}`,
-                    text: `Tìm hiểu về thuật ngữ "${item.en} (${item.vi})" trên Wikiradiology:\n- Định nghĩa: ${item.description}`,
+                    text: textToExport,
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                alert("Trình duyệt hoặc thiết bị của bạn không hỗ trợ nút Chia sẻ trực tiếp. Vui lòng dùng nút [copy]!");
+                alert("Trình duyệt không hỗ trợ chia sẻ trực tiếp. Vui lòng dùng nút [copy]!");
             }
         }
     });
 
-    // --- LOGIC MODAL ---
+    // Modal Events
     btnContributeNew.addEventListener("click", () => {
         document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
         formContribute.reset();
@@ -166,18 +171,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     formContribute.addEventListener("submit", (e) => {
         e.preventDefault();
-        alert("Cảm ơn bạn! Bản sửa đổi/thêm mới của bạn đã được ghi nhận và gửi cho Ban Quản Trị Điện Quang phê duyệt trước khi xuất bản.");
+        alert("Cảm ơn bạn! Bản sửa đổi đã được ghi nhận chờ duyệt.");
         closeModal();
         formContribute.reset();
     });
 
-    // --- LOGIC 4: XỬ LÝ CÔNG CỤ HIỂN THỊ (THEME & FONT SIZE) ---
+    // View Controls
     if(btnTextInc && btnTextDec) {
         btnTextInc.addEventListener("click", () => {
             if (currentFontSize < 24) currentFontSize += 2;
             document.body.style.fontSize = currentFontSize + "px";
         });
-
         btnTextDec.addEventListener("click", () => {
             if (currentFontSize > 12) currentFontSize -= 2;
             document.body.style.fontSize = currentFontSize + "px";
@@ -185,16 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if(btnThemeLight && btnThemeSapphire && btnThemeDark) {
-        btnThemeLight.addEventListener("click", () => {
-            document.body.className = "";
-        });
-
-        btnThemeSapphire.addEventListener("click", () => {
-            document.body.className = "sapphire-mode";
-        });
-
-        btnThemeDark.addEventListener("click", () => {
-            document.body.className = "dark-mode";
-        });
+        btnThemeLight.addEventListener("click", () => document.body.className = "");
+        btnThemeSapphire.addEventListener("click", () => document.body.className = "sapphire-mode");
+        btnThemeDark.addEventListener("click", () => document.body.className = "dark-mode");
     }
 });
