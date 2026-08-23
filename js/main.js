@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCancelEdit = document.getElementById("btnCancelEdit");
     const formContribute = document.getElementById("contributeForm");
     const btnContributeNew = document.getElementById("btnContributeNew");
+    
+    // Elements cho Dynamic Form
+    const editTypeSelect = document.getElementById("editType");
+    const lblDesc = document.getElementById("lblDesc");
+    const lblParams = document.getElementById("lblParams");
+    const protocolOnlyFields = document.querySelectorAll(".protocol-only-field");
 
     // View Controls
     const btnTextInc = document.getElementById("btnTextInc");
@@ -38,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    // States
     let currentTab = 'Sequence'; 
     let currentKeyword = '';
     let currentAlpha = 'ALL'; 
@@ -109,23 +114,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 3. Xử lý List Events (Edit, Copy, Share, & WIKI INTERNAL LINKS)
+    // --- LOGIC FORM ĐỘNG (DYNAMIC FORM) ---
+    function toggleFormFields(typeValue) {
+        if (typeValue === "Protocol") {
+            lblDesc.innerText = "1. Chỉ định bệnh lý: *";
+            lblParams.innerText = "2. Xung cơ bản tối thiểu:";
+            protocolOnlyFields.forEach(el => el.style.display = "block");
+        } else {
+            lblDesc.innerText = "Nguyên lý / Định nghĩa: *";
+            lblParams.innerText = "Chi tiết / Ứng dụng / Xung cắt:";
+            protocolOnlyFields.forEach(el => el.style.display = "none");
+        }
+    }
+
+    editTypeSelect.addEventListener("change", (e) => {
+        toggleFormFields(e.target.value);
+    });
+
+    // 3. Xử lý List Events
     mriList.addEventListener("click", (e) => {
-        // --- XỬ LÝ LIÊN KẾT CHÉO WIKIPEDIA ---
         if(e.target.classList.contains("wiki-internal-link")) {
             e.preventDefault();
             const targetId = parseInt(e.target.getAttribute("data-id"));
             const targetItem = mriData.find(i => i.id === targetId);
             
             if(targetItem) {
-                // Tự động set Tab phù hợp
                 currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol') ? targetItem.type : 'Parameter';
                 tabBtns.forEach(b => {
                     b.classList.remove("active");
                     if(b.getAttribute("data-tab") === currentTab) b.classList.add("active");
                 });
 
-                // Xóa filter Alphabet, set Search box
                 currentAlpha = 'ALL';
                 document.querySelectorAll(".alpha-btn").forEach(b => {
                     b.classList.remove("active");
@@ -159,8 +178,15 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("editEn").value = item.en;
             document.getElementById("editVi").value = item.vi;
             document.getElementById("editType").value = item.type === 'Artifact' || item.type === 'Hardware' ? 'Parameter' : item.type; 
-            document.getElementById("editDesc").value = item.description || item.indications;
-            document.getElementById("editParams").value = item.parameters || item.notes;
+            
+            // Render data vào Form Động
+            toggleFormFields(item.type);
+            document.getElementById("editDesc").value = item.description || item.indications || "";
+            document.getElementById("editParams").value = item.parameters || item.basicSequences || "";
+            document.getElementById("editAdvanced").value = item.advancedSequences || "";
+            document.getElementById("editNotes").value = item.notes || "";
+            document.getElementById("editCitation").value = (item.citations && item.citations.length > 0) ? item.citations[0] : "";
+            
             modal.style.display = "flex";
         }
         
@@ -190,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
         formContribute.reset();
         document.getElementById("editId").value = "";
+        toggleFormFields(editTypeSelect.value); // Chạy lại logic để reset Layout Form
         modal.style.display = "flex";
     });
 
