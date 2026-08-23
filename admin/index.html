@@ -66,6 +66,21 @@
             </div>
         </div>
 
+        <!-- THẺ THỐNG KÊ TRUY CẬP (DÀNH CHO ADMIN) -->
+        <div class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-family: 'Times New Roman', serif;">Thống kê truy cập (Trang chủ)</h3>
+                <button id="btnResetStats" class="btn-reject"><i class="fa-solid fa-rotate-right"></i> Reset Dữ Liệu</button>
+            </div>
+            <div class="visitor-stats-wrapper" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 1rem;"><i class="fa-solid fa-globe"></i> Tổng: <span id="admin-visitor-global">...</span></span>
+                <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 1rem;"><i class="fa-solid fa-calendar-day"></i> Hôm nay: <span id="admin-visitor-daily">...</span></span>
+                <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 1rem;"><i class="fa-solid fa-calendar-week"></i> Tuần này: <span id="admin-visitor-weekly">...</span></span>
+                <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 1rem;"><i class="fa-regular fa-calendar-days"></i> Tháng này: <span id="admin-visitor-monthly">...</span></span>
+                <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 1rem;"><i class="fa-solid fa-calendar"></i> Năm nay: <span id="admin-visitor-yearly">...</span></span>
+            </div>
+        </div>
+
         <div class="admin-card">
             <h3 style="margin-top: 0; font-family: 'Times New Roman', serif;">Danh sách bài viết đóng góp chờ duyệt</h3>
             <div class="table-responsive">
