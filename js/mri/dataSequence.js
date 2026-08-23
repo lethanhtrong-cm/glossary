@@ -107,11 +107,13 @@ const rawSequenceData = [
     { id: 1067, en: "iPAT2 (2D GRAPPA)", vi: "Chụp song song đa chiều", type: "Sequence", description: "Tăng tốc độ thu thập ở cả hướng mã hóa pha và hướng chia lát cắt (trong 3D).", parameters: "Giảm thời gian xung VIBE từ 25s xuống 10s nín thở cực nhẹ." }
 ];
 
-// 2. Hàm Adapter biến đổi tự động sang chuẩn giao diện
-// Đặt mặc định vào nhóm 'advanced-maps', bạn có thể viết thêm logic phân loại group theo ID sau này
+// Thay thế hàm Adapter ở cuối file dataSequence.js bằng đoạn code sau:
+
 export const sequenceData = rawSequenceData.map(item => ({
-    id: `seq_${item.id}`,
-    group: 'advanced-maps', 
+    ...item, // BẮT BUỘC: Giữ lại toàn bộ key gốc (id, en, vi, type...) để không làm gãy logic Filter/Search hiện tại
+    
+    // Khởi tạo thêm các trường dữ liệu cấu trúc mới để dùng dần cho UI mới:
+    group: 'advanced-maps', // Tạm phân loại mặc định
     genericName: { 
         vi: item.vi, 
         en: item.en 
