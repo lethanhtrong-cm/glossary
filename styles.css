@@ -179,7 +179,7 @@ body {
     border-bottom: none;
     padding: 8px 12px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 16px;
     color: var(--wiki-link);
     margin-bottom: -1px;
 }
