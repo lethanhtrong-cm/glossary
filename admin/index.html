@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị Admin - Wikiradiology</title>
+    <!-- Trỏ ngược ra thư mục gốc để lấy CSS -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .admin-card { background: var(--wiki-card-bg); border: 1px solid var(--wiki-border); border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .login-box { width: 400px; max-width: 90%; margin: 100px auto; padding: 30px; background: var(--wiki-card-bg); border: 1px solid var(--wiki-border); border-radius: 8px; }
+        .table-responsive { overflow-x: auto; }
+        table.admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        table.admin-table th, table.admin-table td { border: 1px solid var(--wiki-border); padding: 10px 12px; text-align: left; }
+        table.admin-table th { background: var(--wiki-sidebar-bg); color: var(--wiki-text); }
+        .btn-approve { background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-approve:hover { background: #218838; }
+        .btn-reject { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 5px; }
+        .btn-reject:hover { background: #c82333; }
+        .admin-header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--wiki-border); padding-bottom: 15px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP ADMIN -->
+    <div id="loginSection" class="login-box">
+        <h2 style="font-family: 'Times New Roman', serif; margin-top: 0; color: var(--wiki-text);">Đăng Nhập Quản Trị</h2>
+        <p style="font-size: 12px; color: var(--wiki-text-muted);">Khu vực dành riêng cho Ban Quản Trị Wikiradiology.</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Admin:</label>
+                <input type="email" id="adminEmail" required placeholder="admin@wikiradiology.com">
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Mật khẩu:</label>
+                <input type="password" id="adminPassword" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-submit" style="width: 100%; margin-top: 20px; padding: 10px;">Đăng Nhập Hệ Thống</button>
+        </form>
+    </div>
+
+    <!-- MÀN HÌNH DASHBOARD QUẢN TRỊ (Ẩn mặc định) -->
+    <div id="dashboardSection" class="admin-container" style="display: none;">
+        <div class="admin-header-bar">
+            <div>
+                <h1 style="font-family: 'Times New Roman', serif; margin: 0; font-size: 1.8em;">Trang Kiểm Duyệt Nội Dung</h1>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--wiki-text-muted);" id="userLogInfo"></p>
+            </div>
+            <div>
+                <a href="../index.html" class="btn-cancel" style="text-decoration: none; padding: 8px 12px; margin-right: 10px;">Quay lại Trang Chủ</a>
+                <button id="btnLogout" class="btn-reject" style="padding: 8px 12px;">Đăng Xuất</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3 style="margin-top: 0; font-family: 'Times New Roman', serif;">Danh sách bài viết đóng góp chờ duyệt</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Tác giả / Đơn vị</th>
+                            <th>Phân loại</th>
+                            <th>Tên thuật ngữ (Anh / Việt)</th>
+                            <th>Nội dung chính / Chỉ định</th>
+                            <th>Nguồn tham khảo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--wiki-text-muted);">Đang tải dữ liệu từ cơ sở dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nạp file JS chính của thư mục admin -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
