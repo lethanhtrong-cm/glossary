@@ -1,10 +1,13 @@
-import { collection, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { db } from './config.js'; // Đường dẫn tương đối ES6 chuẩn
+import { collection, getDocs, doc, updateDoc, query, where, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { db } from './config.js'; 
 
 export async function loadPendingApprovals() {
     const pendingTableBody = document.getElementById("pendingTableBody");
     pendingTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Đang tải dữ liệu...</td></tr>`;
     
+    // Tải số liệu thống kê (Song song)
+    loadAdminStats();
+
     try {
         const q = query(collection(db, "pending_approvals"), where("status", "==", "pending"));
         const querySnapshot = await getDocs(q);
@@ -42,7 +45,55 @@ export async function loadPendingApprovals() {
     }
 }
 
-// Gắn hàm vào window để gọi từ chuỗi HTML nội tuyến (inline onclick)
+// HÀM TẢI THỐNG KÊ ADMIN
+function loadAdminStats() {
+    const pageId = "main_dictionary";
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
+    
+    const dateKey = `day_${year}_${month}_${date}`;
+    const monthKey = `month_${year}_${month}`;
+    const yearKey = `year_${year}`;
+    
+    const startDate = new Date(now.getFullYear(), 0, 1);
+    const days = Math.floor((now - startDate) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil((now.getDay() + 1 + days) / 7);
+    const weekKey = `week_${year}_W${String(weekNumber).padStart(2, '0')}`;
+
+    getDoc(doc(db, "statistics", pageId)).then((docSnap) => {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('admin-visitor-global').innerText = (data.totalVisits || 0).toLocaleString('vi-VN');
+            document.getElementById('admin-visitor-daily').innerText = (data[dateKey] || 0).toLocaleString('vi-VN');
+            document.getElementById('admin-visitor-weekly').innerText = (data[weekKey] || 0).toLocaleString('vi-VN');
+            document.getElementById('admin-visitor-monthly').innerText = (data[monthKey] || 0).toLocaleString('vi-VN');
+            document.getElementById('admin-visitor-yearly').innerText = (data[yearKey] || 0).toLocaleString('vi-VN');
+        }
+    }).catch(e => console.error("Lỗi tải thống kê Admin", e));
+}
+
+// SỰ KIỆN NÚT RESET THỐNG KÊ
+document.addEventListener("DOMContentLoaded", () => {
+    const btnResetStats = document.getElementById("btnResetStats");
+    if(btnResetStats) {
+        btnResetStats.addEventListener("click", async () => {
+            if(!confirm("CẢNH BÁO: Hành động này sẽ đưa TOÀN BỘ thống kê truy cập (Tổng, ngày, tháng, năm...) về số 0. Bạn có chắc chắn không?")) return;
+            try {
+                // Ghi đè file thống kê bằng một JSON trống hoặc chứa các số 0
+                await setDoc(doc(db, "statistics", "main_dictionary"), { totalVisits: 0 });
+                alert("Đã reset thống kê thành công!");
+                loadAdminStats(); // Tải lại số liệu
+            } catch (error) {
+                console.error(error);
+                alert("Có lỗi xảy ra khi Reset thống kê.");
+            }
+        });
+    }
+});
+
+
 window.approveItem = async function(docId) {
     if(!confirm("Bạn có chắc chắn muốn duyệt và xuất bản bài viết này?")) return;
     try {
