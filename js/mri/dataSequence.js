@@ -1,6 +1,8 @@
-// Dữ liệu thuộc nhóm Chuỗi Xung (Sequence)
-export const sequenceData = [
-    // --- 33 THUẬT NGỮ CŨ (BẢO TOÀN LOGIC) ---
+// dataSequence.js
+
+// 1. Mảng dữ liệu thô (phẳng, tối ưu dung lượng)
+const rawSequenceData = [
+    // --- 33 THUẬT NGỮ CŨ (BẢO TOÀN LOGIC) ---[cite: 1]
     { id: 1, en: "Spin Echo (SE)", vi: "Chuỗi xung Spin Echo (Xung dội spin)", type: "Sequence", description: "Sử dụng một xung kích thích 90 độ, theo sau là xung tái hội tụ 180 độ để tạo ra tín hiệu dội (echo). Giúp triệt tiêu sự mất đồng pha do từ trường không đồng nhất (T2* effect), mang lại hình ảnh có độ phân giải giải phẫu cao nhất.", parameters: "T1W: TR ngắn (400-600ms), TE ngắn (10-20ms). T2W: TR dài (>2000ms), TE dài (>80ms)." },
     { id: 4, en: "Diffusion Weighted Imaging (DWI)", vi: "Chuỗi xung khuếch tán", type: "Sequence", description: "Dựa trên chuyển động Brown của các phân tử nước trong mô. Đo lường sự hạn chế khuếch tán, cực kỳ nhạy trong phát hiện nhồi máu não cấp (đột quỵ) hoặc đánh giá mật độ tế bào khối u.", parameters: "Giá trị b (b-value): Thường dùng b=0 và b=1000 s/mm2. Bản đồ ADC được tính toán tự động." },
     { id: 6, en: "Gradient Echo (GRE)", vi: "Chuỗi xung Gradient Echo", type: "Sequence", description: "Sử dụng góc lật nhỏ hơn 90 độ và dùng từ trường chênh từ để tạo tín hiệu dội thay vì xung 180 độ. Tốc độ chụp nhanh nhưng nhạy với độ không đồng nhất từ trường (T2*).", parameters: "Rất nhạy trong việc phát hiện xuất huyết vi thể hoặc vôi hóa. Cài đặt góc lật (FA) từ 5-30 độ." },
@@ -35,7 +37,7 @@ export const sequenceData = [
     { id: 87, en: "SPACE / CUBE / VISTA", vi: "Chuỗi xung TSE 3D tối ưu góc lật", type: "Sequence", description: "Chuỗi xung 3D TSE sử dụng góc lật thay đổi liên tục trong chuỗi Echo Train dài.", parameters: "Tạo ảnh T2W/FLAIR 3D đẳng hướng toàn sọ rất sắc nét." },
     { id: 88, en: "PROPELLER / BLADE / MultiVane", vi: "Thu thập dữ liệu dạng cánh quạt", type: "Sequence", description: "Điền k-space bằng các dải dữ liệu xoay xung quanh tâm giống cánh quạt.", parameters: "Chống xảo ảnh chuyển động cực kỳ hiệu quả." },
 
-    // --- 67 THUẬT NGỮ CHUỖI XUNG MỚI (ĐẠT 100 ITEM) ---
+    // --- 67 THUẬT NGỮ CHUỖI XUNG MỚI (ĐẠT 100 ITEM) ---[cite: 1]
     { id: 1001, en: "Echo Planar Imaging (EPI)", vi: "Hình ảnh mặt phẳng dội", type: "Sequence", description: "Thu nhận toàn bộ dữ liệu K-space sau một xung kích thích duy nhất thông qua sự đảo chiều liên tục của gradient.", parameters: "Tốc độ siêu nhanh, là nền tảng bắt buộc cho DWI và fMRI." },
     { id: 1002, en: "Spin Echo EPI (SE-EPI)", vi: "Chuỗi xung EPI dội spin", type: "Sequence", description: "Kết hợp xung 180 độ của Spin Echo trước khi thu nhận EPI để giảm bớt xảo ảnh nhạy từ so với EPI thuần.", parameters: "Chuyên dùng trong DWI não để tránh méo hình nặng ở vùng nền sọ." },
     { id: 1003, en: "Gradient Echo EPI (GRE-EPI)", vi: "Chuỗi xung EPI Gradient Echo", type: "Sequence", description: "Sử dụng GRE để bắt đầu thu nhận EPI, tốc độ nhanh nhất nhưng nhạy từ tính nhất.", parameters: "Ứng dụng tuyệt đối trong fMRI và perfusion DSC." },
@@ -104,3 +106,39 @@ export const sequenceData = [
     { id: 1066, en: "Silent Scan / Quiet Suite", vi: "Chụp MRI chống ồn", type: "Sequence", description: "Sử dụng UTE/ZTE và tối ưu hóa đường dốc gradient (Slew rate mượt mà) để loại bỏ tiếng ồn máy MRI.", parameters: "Tuyệt vời cho trẻ em, giảm ồn từ >100dB xuống sát tiếng ồn môi trường." },
     { id: 1067, en: "iPAT2 (2D GRAPPA)", vi: "Chụp song song đa chiều", type: "Sequence", description: "Tăng tốc độ thu thập ở cả hướng mã hóa pha và hướng chia lát cắt (trong 3D).", parameters: "Giảm thời gian xung VIBE từ 25s xuống 10s nín thở cực nhẹ." }
 ];
+
+// 2. Hàm Adapter biến đổi tự động sang chuẩn giao diện
+// Đặt mặc định vào nhóm 'advanced-maps', bạn có thể viết thêm logic phân loại group theo ID sau này
+export const sequenceData = rawSequenceData.map(item => ({
+    id: `seq_${item.id}`,
+    group: 'advanced-maps', 
+    genericName: { 
+        vi: item.vi, 
+        en: item.en 
+    },
+    vendors: {
+        Siemens: 'Đang cập nhật...', 
+        GE: 'Đang cập nhật...', 
+        Philips: 'Đang cập nhật...', 
+        Canon: 'Đang cập nhật...', 
+        Fujifilm: 'Đang cập nhật...' 
+    },
+    imageUrl: '', 
+    physics: {
+        vi: item.description,
+        en: 'Translating...'
+    },
+    applications: [
+        { 
+            priority: 1, 
+            use: { 
+                vi: item.parameters, 
+                en: 'Translating...' 
+            } 
+        }
+    ],
+    tips: { 
+        vi: '', 
+        en: '' 
+    }
+}));
