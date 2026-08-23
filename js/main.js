@@ -1,6 +1,6 @@
 // Khai báo Firebase SDK qua CDN (Dành cho ES6 Modules)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // Module chính đóng vai trò Controller
 import { mriData } from './data.js';
@@ -19,11 +19,68 @@ const firebaseConfig = {
     measurementId: "G-8N7RTTREQM"
 };
 
-// Khởi tạo Firebase App và Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
+export function initPageStatistics(db, pageId) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
+    
+    const dateKey = `day_${year}_${month}_${date}`;
+    const monthKey = `month_${year}_${month}`;
+    const yearKey = `year_${year}`;
+    
+    const startDate = new Date(now.getFullYear(), 0, 1);
+    const days = Math.floor((now - startDate) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil((now.getDay() + 1 + days) / 7);
+    const weekKey = `week_${year}_W${String(weekNumber).padStart(2, '0')}`;
+
+    const sessionFlag = `visited_${pageId}`;
+
+    // Tăng view nếu chưa có session
+    if (!sessionStorage.getItem(sessionFlag)) {
+        sessionStorage.setItem(sessionFlag, 'true');
+        setTimeout(() => {
+            const updates = {
+                totalVisits: increment(1),
+                [dateKey]: increment(1),
+                [weekKey]: increment(1),
+                [monthKey]: increment(1),
+                [yearKey]: increment(1)
+            };
+            setDoc(doc(db, "statistics", pageId), updates, { merge: true }).catch(() => {});
+        }, 3000);
+    }
+
+    // Lấy dữ liệu hiển thị
+    getDoc(doc(db, "statistics", pageId))
+        .then((docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const vTotal = document.getElementById('global-visitor-count');
+                const vDaily = document.getElementById('visitor-daily');
+                const vWeekly = document.getElementById('visitor-weekly');
+                const vMonthly = document.getElementById('visitor-monthly');
+                const vYearly = document.getElementById('visitor-yearly');
+
+                if (vTotal) vTotal.innerText = (data.totalVisits || 0).toLocaleString('vi-VN');
+                if (vDaily) vDaily.innerText = (data[dateKey] || 0).toLocaleString('vi-VN');
+                if (vWeekly) vWeekly.innerText = (data[weekKey] || 0).toLocaleString('vi-VN');
+                if (vMonthly) vMonthly.innerText = (data[monthKey] || 0).toLocaleString('vi-VN');
+                if (vYearly) vYearly.innerText = (data[yearKey] || 0).toLocaleString('vi-VN');
+            }
+        })
+        .catch((error) => console.error(`Lỗi thống kê:`, error));
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
+    // Gọi hàm đếm truy cập cho trang chủ
+    initPageStatistics(db, "main_dictionary");
+
     // UI Elements
     const containerId = "mriList";
     const searchInput = document.getElementById("searchInput");
@@ -248,28 +305,25 @@ document.addEventListener("DOMContentLoaded", () => {
     formContribute.addEventListener("submit", async (e) => {
         e.preventDefault();
         
-        // Cập nhật giao diện nút bấm để báo hiệu đang gửi
         const submitBtn = formContribute.querySelector(".btn-submit");
         const originalText = submitBtn.innerText;
         submitBtn.innerText = "Đang gửi dữ liệu...";
         submitBtn.disabled = true;
 
         try {
-            // Gom dữ liệu từ Form
             const type = document.getElementById("editType").value;
             const citationVal = document.getElementById("editCitation").value.trim();
             const payload = {
                 contributor: document.getElementById("contributorName").value.trim() || "Ẩn danh",
-                originalId: document.getElementById("editId").value || null, // Có giá trị tức là Chỉnh sửa, rỗng là Tạo mới
+                originalId: document.getElementById("editId").value || null, 
                 en: document.getElementById("editEn").value.trim(),
                 vi: document.getElementById("editVi").value.trim(),
                 type: type,
                 citations: citationVal ? [citationVal] : [],
                 status: "pending",
-                createdAt: serverTimestamp() // Tự động đánh dấu thời gian từ server Firebase
+                createdAt: serverTimestamp() 
             };
 
-            // Lưu dữ liệu tùy theo cấu trúc Protocol hay Thuật ngữ thường
             if (type === "Protocol") {
                 payload.indications = document.getElementById("editDesc").value.trim();
                 payload.basicSequences = document.getElementById("editParams").value.trim();
@@ -280,7 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 payload.parameters = document.getElementById("editParams").value.trim();
             }
 
-            // Đẩy lên bảng pending_approvals
             await addDoc(collection(db, "pending_approvals"), payload);
 
             alert("Cảm ơn bạn! Bản sửa đổi của bạn đã được đẩy thành công lên hệ thống chờ duyệt.");
