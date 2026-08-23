@@ -45,18 +45,29 @@
                 </li>
             </ul>
 
-            <!-- KHU VỰC THỐNG KÊ TRUY CẬP -->
-            <div class="sidebar-nav-title" style="margin-top: 30px;">Thống kê</div>
+            <!-- KHU VỰC THỐNG KÊ TRUY CẬP (Đã được thiết kế lại) -->
+            <div class="sidebar-nav-title" style="margin-top: 30px;">Thống kê truy cập</div>
             <div style="padding: 0 15px; margin-bottom: 20px;">
-                <div class="visitor-stats-wrapper" style="display: flex; gap: 8px; flex-direction: column;">
-                    <span class="visitor-counter-badge" style="display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.8rem;" title="Tổng lượt truy cập"><i class="fa-solid fa-globe"></i> Tổng: <span id="global-visitor-count">...</span></span>
-                    <div style="display: flex; gap: 8px;">
-                        <span class="visitor-counter-badge" style="flex: 1; display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.75rem;" title="Hôm nay"><i class="fa-solid fa-calendar-day"></i> Ngày: <span id="visitor-daily">...</span></span>
-                        <span class="visitor-counter-badge" style="flex: 1; display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.75rem;" title="Tuần này"><i class="fa-solid fa-calendar-week"></i> Tuần: <span id="visitor-weekly">...</span></span>
+                <div style="background: var(--wiki-card-bg, #fff); border: 1px solid var(--wiki-border, #e2e8f0); border-radius: 6px; padding: 12px; font-size: 0.85rem; color: var(--wiki-text-muted, #64748b); display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--wiki-border, #e2e8f0); padding-bottom: 8px;">
+                        <span><i class="fa-solid fa-globe" style="width: 18px; text-align: center; margin-right: 6px;"></i>Tổng lượt:</span>
+                        <strong style="color: var(--wiki-text, #1e293b); font-size: 0.95rem;" id="global-visitor-count">...</strong>
                     </div>
-                    <div style="display: flex; gap: 8px;">
-                        <span class="visitor-counter-badge" style="flex: 1; display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.75rem;" title="Tháng này"><i class="fa-regular fa-calendar-days"></i> Tháng: <span id="visitor-monthly">...</span></span>
-                        <span class="visitor-counter-badge" style="flex: 1; display: flex; align-items: center; gap: 6px; color: #059669; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.75rem;" title="Năm nay"><i class="fa-solid fa-calendar"></i> Năm: <span id="visitor-yearly">...</span></span>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-solid fa-calendar-day" style="width: 18px; text-align: center; margin-right: 6px;"></i>Hôm nay:</span>
+                        <strong style="color: var(--wiki-text, #1e293b);" id="visitor-daily">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-solid fa-calendar-week" style="width: 18px; text-align: center; margin-right: 6px;"></i>Tuần này:</span>
+                        <strong style="color: var(--wiki-text, #1e293b);" id="visitor-weekly">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-regular fa-calendar-days" style="width: 18px; text-align: center; margin-right: 6px;"></i>Tháng này:</span>
+                        <strong style="color: var(--wiki-text, #1e293b);" id="visitor-monthly">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-solid fa-calendar" style="width: 18px; text-align: center; margin-right: 6px;"></i>Năm nay:</span>
+                        <strong style="color: var(--wiki-text, #1e293b);" id="visitor-yearly">...</strong>
                     </div>
                 </div>
             </div>
