@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wikiradiology - KTV 3 Mien</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Font icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="app-layout">
-        <!-- MENU BÊN TRÁI (SIDEBAR WIKIPEDIA STYLE) -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="wiki-logo">
@@ -46,7 +45,7 @@
             </ul>
         </aside>
 
-        <!-- KHU VỰC NỘI DUNG CHÍNH BÊN PHẢI -->
+        <!-- KHU VỰC NỘI DUNG CHÍNH -->
         <div class="main-content-wrapper">
             <!-- Header công cụ -->
             <div class="wiki-top-header" id="mriHeaderTools">
@@ -55,10 +54,11 @@
                         <button class="tab-btn active" data-tab="Sequence">Chuỗi Xung</button>
                         <button class="tab-btn" data-tab="Parameter">Thông Số</button>
                         <button class="tab-btn" data-tab="Physics">Vật Lý</button>
+                        <!-- NÚT TAB MỚI -->
+                        <button class="tab-btn" data-tab="Protocol">Protocol Chụp</button>
                     </div>
                     
                     <div class="top-bar-right">
-                        <!-- CÔNG CỤ HIỂN THỊ (SIZE CHỮ & THEME) -->
                         <div class="view-controls">
                             <button class="view-btn" id="btnTextDec" title="Giảm cỡ chữ">A-</button>
                             <button class="view-btn" id="btnTextInc" title="Tăng cỡ chữ">A+</button>
@@ -77,7 +77,7 @@
                 <div class="wiki-page-header">
                     <h1 id="firstHeading" class="firstHeading">Từ Điển Cộng Hưởng Từ (MRI)</h1>
                     <div class="alphabet-filter" id="alphabetFilter">
-                        <!-- Nút A-Z render bởi JS -->
+                        <!-- Nút A-Z -->
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             <!-- Danh sách -->
             <div class="container main-content">
                 <main id="mriList" class="wiki-body-content">
-                    <!-- Dữ liệu render bởi UI Module -->
+                    <!-- Dữ liệu render -->
                 </main>
 
                 <!-- Màn hình chờ -->
@@ -98,14 +98,15 @@
 
             <!-- Footer -->
             <footer class="wiki-footer">
-                <p>Nội dung được phát hành theo Giấy phép Creative Commons Ghi công–Chia sẻ tương tự; có thể áp dụng điều khoản bổ sung.</p>
+                <p>Nội dung được phát hành theo Giấy phép Creative Commons Ghi công–Chia sẻ tương tự.</p>
                 <p>&copy; 2026 Hệ thống từ điển mở Wikiradiology - KTV 3 Miền.</p>
             </footer>
         </div>
     </div>
 
-    <!-- MODAL ĐÓNG GÓP / CHỈNH SỬA -->
+    <!-- MODAL ĐÓNG GÓP -->
     <div id="contributeModal" class="modal-overlay">
+        <!-- ... code modal giữ nguyên (đã rút gọn cho bạn tự dán đoạn form vào nếu lỡ mất, nhưng theo nguyên tắc bảo toàn tôi sẽ output full modal) ... -->
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Đóng góp bản sửa đổi</h2>
