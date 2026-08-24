@@ -4,6 +4,7 @@ import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc,
 
 // Module chính đóng vai trò Controller
 import { mriData } from './data.js';
+import { ctData } from './ct/dataCT.js'; // Import CSDL của CT
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
 
@@ -40,7 +41,6 @@ export function initPageStatistics(db, pageId) {
 
     const sessionFlag = `visited_${pageId}`;
 
-    // Tăng view nếu chưa có session
     if (!sessionStorage.getItem(sessionFlag)) {
         sessionStorage.setItem(sessionFlag, 'true');
         setTimeout(() => {
@@ -55,7 +55,6 @@ export function initPageStatistics(db, pageId) {
         }, 3000);
     }
 
-    // Lấy dữ liệu hiển thị
     getDoc(doc(db, "statistics", pageId))
         .then((docSnap) => {
             if (docSnap.exists()) {
@@ -78,14 +77,13 @@ export function initPageStatistics(db, pageId) {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Gọi hàm đếm truy cập cho trang chủ
     initPageStatistics(db, "main_dictionary");
 
-    // UI Elements
     const containerId = "mriList";
     const searchInput = document.getElementById("searchInput");
     const tabBtns = document.querySelectorAll(".tab-btn");
     const alphabetFilter = document.getElementById("alphabetFilter");
+    const tabSequence = document.querySelector('.tab-btn[data-tab="Sequence"]');
     
     // Sidebar & View
     const menuItems = document.querySelectorAll(".menu-item[data-mod]");
@@ -113,6 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnThemeSapphire = document.getElementById("btnThemeSapphire");
     const btnThemeDark = document.getElementById("btnThemeDark");
 
+    // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI
+    let currentModule = 'MRI'; 
+    let currentData = mriData; // Mặc định hiển thị kho dữ liệu MRI
+    let currentTab = 'Sequence'; 
+    let currentKeyword = '';
+    let currentAlpha = 'ALL'; 
+    let currentFontSize = 14; 
+
     // Render Alphabet
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let alphaHTML = `<button class="alpha-btn all-btn active" data-alpha="ALL">Tất cả</button>`;
@@ -121,22 +127,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    let currentTab = 'Sequence'; 
-    let currentKeyword = '';
-    let currentAlpha = 'ALL'; 
-    let currentFontSize = 14; 
-
-    // 1. Sidebar Nav
+    // 1. Sidebar Nav (Hoán đổi linh hoạt giữa các Modalities)
     menuItems.forEach(item => {
         item.addEventListener("click", (e) => {
             menuItems.forEach(i => i.classList.remove("active"));
             e.currentTarget.classList.add("active");
             
             const moduleName = e.currentTarget.getAttribute("data-mod");
+            currentModule = moduleName;
+
             if (moduleName === "MRI") {
+                currentData = mriData;
+                document.getElementById("firstHeading").innerText = "Từ Điển Cộng Hưởng Từ (MRI)";
+                tabSequence.style.display = "inline-block"; // Hiện tab Chuỗi Xung
+                
                 mriHeaderTools.style.display = "block";
                 mriList.style.display = "block";
                 comingSoon.style.display = "none";
+                updateDisplay();
+            } else if (moduleName === "CT") {
+                currentData = ctData;
+                document.getElementById("firstHeading").innerText = "Từ Điển Cắt Lớp Vi Tính (CT)";
+                tabSequence.style.display = "none"; // CT không có Chuỗi Xung
+                
+                // Nếu người dùng đang ở tab Chuỗi Xung, tự đẩy sang tab Thông Số
+                if (currentTab === 'Sequence') {
+                    currentTab = 'Parameter';
+                    tabBtns.forEach(b => b.classList.remove("active"));
+                    document.querySelector('.tab-btn[data-tab="Parameter"]').classList.add("active");
+                }
+                
+                mriHeaderTools.style.display = "block";
+                mriList.style.display = "block";
+                comingSoon.style.display = "none";
+                updateDisplay();
             } else {
                 mriHeaderTools.style.display = "none";
                 mriList.style.display = "none";
@@ -147,12 +171,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Filter & Render
     function updateDisplay() {
-        let filteredData = filterMriData(mriData, currentKeyword);
+        // Tìm kiếm trên Kho dữ liệu HIỆN TẠI (currentData)
+        let filteredData = filterMriData(currentData, currentKeyword);
+        
         filteredData = filteredData.filter(item => {
             if (currentTab === 'Sequence') return item.type === 'Sequence';
             else if (currentTab === 'Physics') return item.type === 'Physics';
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol';
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol'; // Bao trọn Parameter, Artifact...
         });
 
         if (currentAlpha !== 'ALL') {
@@ -213,7 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(e.target.classList.contains("wiki-internal-link")) {
             e.preventDefault();
             const targetId = parseInt(e.target.getAttribute("data-id"));
-            const targetItem = mriData.find(i => i.id === targetId);
+            // Nhảy link nội bộ trong kho dữ liệu hiện tại
+            const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
                 currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol') ? targetItem.type : 'Parameter';
@@ -238,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const id = parseInt(e.target.getAttribute("data-id"));
-        const item = mriData.find(i => i.id === id);
+        const item = currentData.find(i => i.id === id);
 
         if (!item) return;
 
