@@ -48,6 +48,7 @@ export function renderMriList(data, containerId) {
         let badgeText = '';
         let headerTheme = '';
 
+        // Cập nhật điều kiện Badge để nhận diện Angiography
         if (item.type === 'Sequence') {
             badgeText = 'Chuỗi xung';
             headerTheme = 'theme-yellow';
@@ -57,6 +58,9 @@ export function renderMriList(data, containerId) {
         } else if (item.type === 'Protocol') {
             badgeText = 'Hướng dẫn Protocol';
             headerTheme = 'theme-blue'; 
+        } else if (item.type === 'Angiography') {
+            badgeText = 'CT Angiography';
+            headerTheme = 'theme-blue'; // Có thể dùng theme-red nếu muốn nổi bật hơn
         } else {
             badgeText = item.type === 'Artifact' ? 'Xảo ảnh' : (item.type === 'Hardware' ? 'Phần cứng' : 'Thông số cài đặt');
             headerTheme = 'theme-blue';
@@ -65,7 +69,8 @@ export function renderMriList(data, containerId) {
         // TẠO NỘI DUNG (BODY) CÓ TÍCH HỢP AUTO-LINK VÀ TRÍCH DẪN
         let bodyHtml = '';
         
-        if (item.type === 'Protocol') {
+        // Gộp Angiography vào chung form hiển thị với Protocol
+        if (item.type === 'Protocol' || item.type === 'Angiography') {
             bodyHtml = `
                 <div class="wiki-content-row">
                     <strong>1. Chỉ định bệnh lý:</strong> ${formatWikiText(item.indications, item.id)}
