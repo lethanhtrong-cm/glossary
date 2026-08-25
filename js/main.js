@@ -6,6 +6,7 @@ import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc,
 import { mriData } from './data.js';
 import { ctParamData } from './ct/dataCT_param.js'; 
 import { ctProtocolData } from './ct/dataCT_protocol.js'; 
+import { ctAngioData } from './ct/dataCT_angio.js'; // Nhúng thêm file Angio
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
 
@@ -24,8 +25,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Gộp 2 mảng dữ liệu CT lại
-const ctData = [...ctParamData, ...ctProtocolData];
+// Gộp 3 mảng dữ liệu CT lại
+const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData];
 
 // --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
 export function initPageStatistics(db, pageId) {
