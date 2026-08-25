@@ -4,7 +4,8 @@ import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc,
 
 // Module chính đóng vai trò Controller
 import { mriData } from './data.js';
-import { ctData } from './ct/dataCT.js'; // Import CSDL của CT
+import { ctParamData } from './ct/dataCT_param.js'; 
+import { ctProtocolData } from './ct/dataCT_protocol.js'; 
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
 
@@ -22,6 +23,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// Gộp 2 mảng dữ liệu CT lại
+const ctData = [...ctParamData, ...ctProtocolData];
 
 // --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
 export function initPageStatistics(db, pageId) {
@@ -83,7 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("searchInput");
     const tabBtns = document.querySelectorAll(".tab-btn");
     const alphabetFilter = document.getElementById("alphabetFilter");
+    
+    // Nút Tab cần ẩn/hiện theo hệ
     const tabSequence = document.querySelector('.tab-btn[data-tab="Sequence"]');
+    const tabPhysics = document.querySelector('.tab-btn[data-tab="Physics"]');
     
     // Sidebar & View
     const menuItems = document.querySelectorAll(".menu-item[data-mod]");
@@ -113,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI
     let currentModule = 'MRI'; 
-    let currentData = mriData; // Mặc định hiển thị kho dữ liệu MRI
+    let currentData = mriData; 
     let currentTab = 'Sequence'; 
     let currentKeyword = '';
     let currentAlpha = 'ALL'; 
@@ -139,7 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (moduleName === "MRI") {
                 currentData = mriData;
                 document.getElementById("firstHeading").innerText = "Từ Điển Cộng Hưởng Từ (MRI)";
-                tabSequence.style.display = "inline-block"; // Hiện tab Chuỗi Xung
+                
+                // Trả lại các Tab MRI
+                tabSequence.style.display = "inline-block"; 
+                tabPhysics.style.display = "inline-block"; 
                 
                 mriHeaderTools.style.display = "block";
                 mriList.style.display = "block";
@@ -148,10 +158,13 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (moduleName === "CT") {
                 currentData = ctData;
                 document.getElementById("firstHeading").innerText = "Từ Điển Cắt Lớp Vi Tính (CT)";
-                tabSequence.style.display = "none"; // CT không có Chuỗi Xung
                 
-                // Nếu người dùng đang ở tab Chuỗi Xung, tự đẩy sang tab Thông Số
-                if (currentTab === 'Sequence') {
+                // Ẩn 2 Tab dư thừa của CT
+                tabSequence.style.display = "none"; 
+                tabPhysics.style.display = "none"; 
+                
+                // Ép người dùng sang Tab "Parameter" nếu đang đứng ở 2 tab kia
+                if (currentTab === 'Sequence' || currentTab === 'Physics') {
                     currentTab = 'Parameter';
                     tabBtns.forEach(b => b.classList.remove("active"));
                     document.querySelector('.tab-btn[data-tab="Parameter"]').classList.add("active");
@@ -171,14 +184,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Filter & Render
     function updateDisplay() {
-        // Tìm kiếm trên Kho dữ liệu HIỆN TẠI (currentData)
         let filteredData = filterMriData(currentData, currentKeyword);
         
         filteredData = filteredData.filter(item => {
             if (currentTab === 'Sequence') return item.type === 'Sequence';
             else if (currentTab === 'Physics') return item.type === 'Physics';
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol'; // Bao trọn Parameter, Artifact...
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol'; 
         });
 
         if (currentAlpha !== 'ALL') {
@@ -217,15 +229,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- LOGIC FORM ĐỘNG (DYNAMIC FORM) ---
+    // --- LOGIC FORM ĐỘNG ---
     function toggleFormFields(typeValue) {
         if (typeValue === "Protocol") {
             lblDesc.innerText = "1. Chỉ định bệnh lý: *";
-            lblParams.innerText = "2. Xung cơ bản tối thiểu:";
+            lblParams.innerText = "2. Xung cơ bản / Cài đặt:";
             protocolOnlyFields.forEach(el => el.style.display = "block");
         } else {
             lblDesc.innerText = "Nguyên lý / Định nghĩa: *";
-            lblParams.innerText = "Chi tiết / Ứng dụng / Xung cắt:";
+            lblParams.innerText = "Chi tiết / Ứng dụng lâm sàng:";
             protocolOnlyFields.forEach(el => el.style.display = "none");
         }
     }
@@ -239,7 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if(e.target.classList.contains("wiki-internal-link")) {
             e.preventDefault();
             const targetId = parseInt(e.target.getAttribute("data-id"));
-            // Nhảy link nội bộ trong kho dữ liệu hiện tại
             const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
@@ -271,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let textToExport = `${item.en} (${item.vi})\n`;
         if (item.type === 'Protocol') {
-            textToExport += `- Chỉ định: ${item.indications}\n- Xung cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
+            textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Xung cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
         } else {
             textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
         }
