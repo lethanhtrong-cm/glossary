@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- CSS TỐI ƯU HÓA MOBILE (GHI ĐÈ STYLES.CSS CŨ) -->
     <style>
         html, body {
-            overflow-x: hidden; /* Chống cuộn ngang toàn trang */
+            overflow-x: hidden; 
             width: 100%;
             margin: 0;
             padding: 0;
@@ -23,8 +22,6 @@
                 flex-direction: column !important;
                 width: 100% !important;
             }
-            
-            /* Cấu trúc Sidebar Mobile */
             .sidebar {
                 width: 100% !important;
                 height: auto !important;
@@ -34,8 +31,6 @@
                 padding: 15px !important;
                 box-sizing: border-box;
             }
-            
-            /* Khu vực Nội dung chính KHÔNG ĐƯỢC CHỨA MARGIN-LEFT */
             .main-content-wrapper {
                 margin-left: 0 !important;
                 width: 100% !important;
@@ -43,8 +38,6 @@
                 padding: 15px 10px !important;
                 box-sizing: border-box !important;
             }
-
-            /* Menu ngang cuộn được */
             .sidebar-menu {
                 display: flex;
                 flex-wrap: nowrap;
@@ -58,8 +51,6 @@
                 margin-bottom: 0 !important;
                 white-space: nowrap;
             }
-            
-            /* Các block công cụ Header */
             .wiki-top-bar {
                 flex-direction: column !important;
                 align-items: flex-start !important;
@@ -71,8 +62,6 @@
                 align-items: flex-start !important;
                 gap: 10px !important;
             }
-            
-            /* Căn chuẩn ô Tìm kiếm */
             .search-box {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -82,8 +71,6 @@
                 width: 100% !important;
                 box-sizing: border-box !important;
             }
-            
-            /* Các nút Tabs và Lọc A-Z cuộn ngang mượt mà */
             .tabs, .alphabet-filter {
                 width: 100% !important;
                 overflow-x: auto !important;
@@ -97,23 +84,15 @@
             .tab-btn, .alpha-btn {
                 flex: 0 0 auto !important;
             }
-
-            /* Fix Form đóng góp 1 cột dọc */
             .responsive-flex {
                 flex-direction: column !important;
                 gap: 10px !important;
             }
         }
-
-        /* Làm mịn thanh cuộn ngang trên tất cả thiết bị */
-        .sidebar-menu::-webkit-scrollbar, 
-        .tabs::-webkit-scrollbar, 
-        .alphabet-filter::-webkit-scrollbar {
+        .sidebar-menu::-webkit-scrollbar, .tabs::-webkit-scrollbar, .alphabet-filter::-webkit-scrollbar {
             height: 4px;
         }
-        .sidebar-menu::-webkit-scrollbar-thumb, 
-        .tabs::-webkit-scrollbar-thumb, 
-        .alphabet-filter::-webkit-scrollbar-thumb {
+        .sidebar-menu::-webkit-scrollbar-thumb, .tabs::-webkit-scrollbar-thumb, .alphabet-filter::-webkit-scrollbar-thumb {
             background-color: var(--wiki-border, #cbd5e1);
             border-radius: 4px;
         }
@@ -194,6 +173,8 @@
                         <button class="tab-btn" data-tab="Parameter">Thông Số</button>
                         <button class="tab-btn" data-tab="Physics">Vật Lý</button>
                         <button class="tab-btn" data-tab="Protocol">Protocol Chụp</button>
+                        <!-- Tab mới CT Angiography, ẩn mặc định -->
+                        <button class="tab-btn" data-tab="Angiography" style="display: none;">CT Angiography</button>
                     </div>
                     
                     <div class="top-bar-right">
@@ -270,7 +251,8 @@
                                 <option value="Sequence">Chuỗi xung</option>
                                 <option value="Parameter">Thông số cài đặt</option>
                                 <option value="Physics">Nguyên lý Vật lý</option>
-                                <option value="Protocol">Protocol Chụp</option>
+                                <option value="Protocol">Protocol Chụp (Thường)</option>
+                                <option value="Angiography">CT Angiography</option>
                                 <option value="Artifact">Xảo ảnh</option>
                                 <option value="Hardware">Phần cứng</option>
                             </select>
