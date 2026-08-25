@@ -88,9 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabBtns = document.querySelectorAll(".tab-btn");
     const alphabetFilter = document.getElementById("alphabetFilter");
     
-    // Nút Tab cần ẩn/hiện theo hệ
+    // Nút Tab thao tác
     const tabSequence = document.querySelector('.tab-btn[data-tab="Sequence"]');
     const tabPhysics = document.querySelector('.tab-btn[data-tab="Physics"]');
+    const tabProtocol = document.querySelector('.tab-btn[data-tab="Protocol"]');
+    const tabAngio = document.querySelector('.tab-btn[data-tab="Angiography"]');
     
     // Sidebar & View
     const menuItems = document.querySelectorAll(".menu-item[data-mod]");
@@ -105,13 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const formContribute = document.getElementById("contributeForm");
     const btnContributeNew = document.getElementById("btnContributeNew");
     
-    // Elements cho Dynamic Form
     const editTypeSelect = document.getElementById("editType");
     const lblDesc = document.getElementById("lblDesc");
     const lblParams = document.getElementById("lblParams");
     const protocolOnlyFields = document.querySelectorAll(".protocol-only-field");
 
-    // View Controls
     const btnTextInc = document.getElementById("btnTextInc");
     const btnTextDec = document.getElementById("btnTextDec");
     const btnThemeLight = document.getElementById("btnThemeLight");
@@ -150,6 +150,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Trả lại các Tab MRI
                 tabSequence.style.display = "inline-block"; 
                 tabPhysics.style.display = "inline-block"; 
+                tabAngio.style.display = "none";
+                tabProtocol.innerText = "Protocol Chụp"; 
+                
+                if (currentTab === 'Angiography') {
+                    currentTab = 'Sequence';
+                    tabBtns.forEach(b => b.classList.remove("active"));
+                    tabSequence.classList.add("active");
+                }
                 
                 mriHeaderTools.style.display = "block";
                 mriList.style.display = "block";
@@ -159,9 +167,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentData = ctData;
                 document.getElementById("firstHeading").innerText = "Từ Điển Cắt Lớp Vi Tính (CT)";
                 
-                // Ẩn 2 Tab dư thừa của CT
+                // Ẩn 2 Tab dư thừa của CT, hiển thị tab Angiography và đổi tên tab Protocol
                 tabSequence.style.display = "none"; 
                 tabPhysics.style.display = "none"; 
+                tabAngio.style.display = "inline-block";
+                tabProtocol.innerText = "Protocol thường"; 
                 
                 // Ép người dùng sang Tab "Parameter" nếu đang đứng ở 2 tab kia
                 if (currentTab === 'Sequence' || currentTab === 'Physics') {
@@ -190,7 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentTab === 'Sequence') return item.type === 'Sequence';
             else if (currentTab === 'Physics') return item.type === 'Physics';
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol'; 
+            else if (currentTab === 'Angiography') return item.type === 'Angiography'; 
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography'; 
         });
 
         if (currentAlpha !== 'ALL') {
@@ -231,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- LOGIC FORM ĐỘNG ---
     function toggleFormFields(typeValue) {
-        if (typeValue === "Protocol") {
+        if (typeValue === "Protocol" || typeValue === "Angiography") {
             lblDesc.innerText = "1. Chỉ định bệnh lý: *";
             lblParams.innerText = "2. Xung cơ bản / Cài đặt:";
             protocolOnlyFields.forEach(el => el.style.display = "block");
@@ -254,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
-                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol') ? targetItem.type : 'Parameter';
+                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography') ? targetItem.type : 'Parameter';
                 tabBtns.forEach(b => {
                     b.classList.remove("active");
                     if(b.getAttribute("data-tab") === currentTab) b.classList.add("active");
@@ -281,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!item) return;
 
         let textToExport = `${item.en} (${item.vi})\n`;
-        if (item.type === 'Protocol') {
+        if (item.type === 'Protocol' || item.type === 'Angiography') {
             textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Xung cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
         } else {
             textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
@@ -362,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 createdAt: serverTimestamp() 
             };
 
-            if (type === "Protocol") {
+            if (type === "Protocol" || type === "Angiography") {
                 payload.indications = document.getElementById("editDesc").value.trim();
                 payload.basicSequences = document.getElementById("editParams").value.trim();
                 payload.advancedSequences = document.getElementById("editAdvanced").value.trim();
