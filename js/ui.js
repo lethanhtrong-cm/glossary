@@ -1,34 +1,26 @@
 // Module xử lý DOM và hiển thị giao diện theo chuẩn Wikipedia
 import { mriData } from './data.js';
 
-// Hàm chuẩn hóa chuỗi regex
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Xây dựng từ điển để tạo liên kết chéo (Sắp xếp từ dài đến ngắn để tránh đè chữ)
 const dictionaryMap = mriData
     .filter(item => item.en)
     .map(item => ({ id: item.id, term: item.en }))
     .sort((a, b) => b.term.length - a.term.length);
 
-// Thuật toán tự động tạo Hyperlink và superscript trích dẫn
 function formatWikiText(text, currentId) {
     if (!text) return "";
     let formattedText = text;
 
-    // 1. Tự động bọc Hyperlink cho các từ khóa chuyên ngành
     dictionaryMap.forEach(linkObj => {
-        if (linkObj.id === currentId) return; // Không tự link chính mình
-        // Regex: Tìm từ chính xác (phân biệt ranh giới từ), không thay thế nếu đang ở trong thẻ HTML
+        if (linkObj.id === currentId) return; 
         const regex = new RegExp(`(?![^<]*>)\\b(${escapeRegExp(linkObj.term)})\\b`, 'gi');
         formattedText = formattedText.replace(regex, `<a href="#" class="wiki-internal-link" data-id="${linkObj.id}">$1</a>`);
     });
 
-    // 2. Định dạng số trích dẫn dạng [1], [2] thành thẻ <sup>
     formattedText = formattedText.replace(/\[(\d+)\]/g, `<sup class="reference" title="Xem tài liệu tham khảo số $1">[$1]</sup>`);
-    
-    // Thay thế xuống dòng thành thẻ <br>
     return formattedText.replace(/\n/g, '<br/>');
 }
 
@@ -48,7 +40,6 @@ export function renderMriList(data, containerId) {
         let badgeText = '';
         let headerTheme = '';
 
-        // Cập nhật điều kiện Badge để nhận diện Angiography
         if (item.type === 'Sequence') {
             badgeText = 'Chuỗi xung';
             headerTheme = 'theme-yellow';
@@ -60,26 +51,28 @@ export function renderMriList(data, containerId) {
             headerTheme = 'theme-blue'; 
         } else if (item.type === 'Angiography') {
             badgeText = 'CT Angiography';
-            headerTheme = 'theme-blue'; // Có thể dùng theme-red nếu muốn nổi bật hơn
+            headerTheme = 'theme-blue'; 
+        } else if (item.type === 'Position') {
+            badgeText = 'Chiều thế chụp';
+            headerTheme = 'theme-blue'; 
         } else {
             badgeText = item.type === 'Artifact' ? 'Xảo ảnh' : (item.type === 'Hardware' ? 'Phần cứng' : 'Thông số cài đặt');
             headerTheme = 'theme-blue';
         }
 
-        // TẠO NỘI DUNG (BODY) CÓ TÍCH HỢP AUTO-LINK VÀ TRÍCH DẪN
         let bodyHtml = '';
         
-        // Gộp Angiography vào chung form hiển thị với Protocol
-        if (item.type === 'Protocol' || item.type === 'Angiography') {
+        // Gộp Position vào nhóm hiển thị quy trình
+        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position') {
             bodyHtml = `
                 <div class="wiki-content-row">
                     <strong>1. Chỉ định bệnh lý:</strong> ${formatWikiText(item.indications, item.id)}
                 </div>
                 <div class="wiki-content-row">
-                    <strong>2. Xung cơ bản tối thiểu:</strong><br/> ${formatWikiText(item.basicSequences, item.id)}
+                    <strong>${item.type === 'Position' ? '2. Tư thế bệnh nhân / Chuẩn bị:' : '2. Xung cơ bản tối thiểu:'}</strong><br/> ${formatWikiText(item.basicSequences, item.id)}
                 </div>
                 <div class="wiki-content-row">
-                    <strong>3. Xung nâng cao bổ sung:</strong><br/> ${formatWikiText(item.advancedSequences, item.id)}
+                    <strong>${item.type === 'Position' ? '3. Tia trung tâm / SID:' : '3. Xung nâng cao bổ sung:'}</strong><br/> ${formatWikiText(item.advancedSequences, item.id)}
                 </div>
                 <div class="wiki-content-row">
                     <strong>4. Lưu ý quan trọng:</strong> ${formatWikiText(item.notes, item.id)}
@@ -96,7 +89,6 @@ export function renderMriList(data, containerId) {
             `;
         }
 
-        // PHẦN TRÍCH DẪN (REFERENCES) NẾU CÓ
         let citationsHtml = '';
         if (item.citations && item.citations.length > 0) {
             let listItems = item.citations.map((cite, index) => `<li>${cite}</li>`).join('');
