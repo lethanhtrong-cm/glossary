@@ -117,11 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnThemeSapphire = document.getElementById("btnThemeSapphire");
     const btnThemeDark = document.getElementById("btnThemeDark");
 
-    // --- XỬ LÝ GIAO DIỆN MOBILE (HAMBURGER & THỐNG KÊ TRUY CẬP) ---
+    // --- XỬ LÝ GIAO DIỆN MOBILE & DỜI KHỐI XUỐNG BOTTOM ---
     const hamburgerBtn = document.getElementById("hamburgerBtn");
     const mainSidebar = document.getElementById("mainSidebar");
     const sidebarOverlay = document.getElementById("sidebarOverlay");
     const statisticsSection = document.getElementById("statisticsSection");
+    const ratingSection = document.getElementById("ratingSection");
     const mainContentWrapper = document.querySelector(".main-content-wrapper");
     const wikiFooter = document.querySelector(".wiki-footer");
 
@@ -137,26 +138,95 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Logic di chuyển khối thống kê khi đổi kích thước màn hình
+    // Logic di chuyển khối thống kê & Rating khi đổi kích thước màn hình
     function handleMobileLayout() {
         if (window.innerWidth <= 768) {
-            // Khi dùng điện thoại -> Nhét thống kê vào ngay trên Footer
+            // Nhét khối Thống kê và Rating vào ngay trên Footer
             if(statisticsSection && wikiFooter && statisticsSection.parentNode !== mainContentWrapper) {
                 mainContentWrapper.insertBefore(statisticsSection, wikiFooter);
-                statisticsSection.style.padding = "0 15px"; // Căn lề cho đẹp
+                statisticsSection.style.padding = "0 15px"; 
+            }
+            if(ratingSection && wikiFooter && ratingSection.parentNode !== mainContentWrapper) {
+                mainContentWrapper.insertBefore(ratingSection, wikiFooter);
+                ratingSection.style.padding = "0 15px";
             }
         } else {
-            // Khi dùng Máy tính -> Trả thống kê về thanh menu bên trái
+            // Trả Thống kê và Rating về thanh menu bên trái
             if(statisticsSection && mainSidebar && statisticsSection.parentNode !== mainSidebar) {
                 mainSidebar.appendChild(statisticsSection);
                 statisticsSection.style.padding = "0";
             }
+            if(ratingSection && mainSidebar && ratingSection.parentNode !== mainSidebar) {
+                mainSidebar.appendChild(ratingSection);
+                ratingSection.style.padding = "0";
+            }
         }
     }
     window.addEventListener("resize", handleMobileLayout);
-    handleMobileLayout(); // Chạy ngay lần đầu tiên mở trang
+    handleMobileLayout();
 
-    // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI
+    // --- LOGIC HỆ THỐNG RATING (5 SAO) ---
+    const stars = document.querySelectorAll("#starRating i");
+    const ratingMessage = document.getElementById("ratingMessage");
+    const hasRated = localStorage.getItem("wiki_rated");
+
+    if (hasRated) {
+        const ratedValue = parseInt(hasRated);
+        stars.forEach(s => {
+            if (parseInt(s.getAttribute("data-value")) <= ratedValue) {
+                s.classList.add("selected");
+            }
+        });
+        ratingMessage.innerText = `Bạn đã đánh giá ${ratedValue} sao.`;
+        ratingMessage.style.display = "block";
+    } else {
+        stars.forEach(star => {
+            star.addEventListener("mouseover", function() {
+                const val = parseInt(this.getAttribute("data-value"));
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute("data-value")) <= val) s.classList.add("hovered");
+                    else s.classList.remove("hovered");
+                });
+            });
+            
+            star.addEventListener("mouseout", function() {
+                stars.forEach(s => s.classList.remove("hovered"));
+            });
+
+            star.addEventListener("click", async function() {
+                const val = parseInt(this.getAttribute("data-value"));
+                
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute("data-value")) <= val) s.classList.add("selected");
+                    else s.classList.remove("selected");
+                });
+                
+                localStorage.setItem("wiki_rated", val);
+                ratingMessage.innerText = "Đang lưu đánh giá...";
+                ratingMessage.style.color = "var(--wiki-text-muted)";
+                ratingMessage.style.display = "block";
+                
+                try {
+                    await addDoc(collection(db, "ratings"), {
+                        score: val,
+                        createdAt: serverTimestamp(),
+                        userAgent: navigator.userAgent
+                    });
+                    ratingMessage.innerText = `Cảm ơn bạn đã đánh giá ${val} sao!`;
+                    ratingMessage.style.color = "var(--theme-green-text, #059669)";
+                } catch (err) {
+                    console.error("Lỗi gửi đánh giá: ", err);
+                    ratingMessage.innerText = `Lỗi hệ thống. Vẫn ghi nhận ${val} sao ở thiết bị này.`;
+                }
+
+                // Vô hiệu hóa hover/click sau khi đã vote xong (bằng cách clone và thay thế node)
+                const clone = document.getElementById("starRating").cloneNode(true);
+                document.getElementById("starRating").replaceWith(clone);
+            });
+        });
+    }
+
+    // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI CỦA TỪ ĐIỂN
     let currentModule = 'MRI'; 
     let currentData = mriData; 
     let currentTab = 'Sequence'; 
