@@ -102,6 +102,19 @@ export const protocolData = [
             "Griffin N, Charles-Edwards G, Grant LA. Magnetic resonance cholangiopancreatography: the ABC of MRCP. Insights Imaging. 2012;3(1):11-21."
         ]
     },
+    {
+        id: 40071,
+        en: "Female Pelvis MRI (Gynaecology)",
+        vi: "[🫀 BỤNG CHẬU] Khung chậu nữ (Phụ khoa)",
+        type: "Protocol",
+        indications: "Lạc nội mạc tử cung (Endometriosis); Đánh giá U xơ tử cung (Fibroids); Ung thư cổ tử cung/nội mạc tử cung; Khảo sát buồng trứng; Dị dạng tử cung bẩm sinh.",
+        basicSequences: "- T2W Sagittal: (FOV: 240, Slice: 4mm) Đánh giá tổng quan giải phẫu tử cung, ranh giới nội mạc và cơ.\n- T2W Axial & Coronal (Oblique): (Cắt vuông góc và song song với trục buồng tử cung) Siêu nhạy để đánh giá lớp chuyển tiếp (junctional zone).\n- T1W Axial toàn chậu: Đánh giá hạch bạch huyết và cấu trúc xương.\n- T1W FatSat Axial: (Trước tiêm) Quan trọng để phân biệt nang mỡ (teratoma) và nang máu (lạc nội mạc tử cung).\n- DWI / ADC Axial (b=1000): Phát hiện u ác tính và hạch di căn.",
+        advancedSequences: "- 3D T1W GRE FatSat ĐỘNG HỌC (+Gd): Cực kỳ cần thiết trong ung thư nội mạc tử cung để đánh giá mức độ xâm lấn cơ (Myometrial invasion).",
+        notes: "Bệnh nhân KHÔNG được nhịn tiểu quá căng (sẽ đẩy lùi tử cung và gây nhiễu bóng ma) cũng KHÔNG nên tiểu cạn kiệt (mất cửa sổ âm vang). Khuyến cáo tiêm chống co thắt ruột (Buscopan) trước chụp.",
+        citations: [
+            "American College of Radiology. ACR Appropriateness Criteria® Staging of Malignant Tumors of the Female Pelvis. 2021."
+        ]
+    },
 
     // ==========================================
     // NHÓM 4: CƠ XƯƠNG KHỚP (MSK)
@@ -208,6 +221,49 @@ export const protocolData = [
         notes: "Luôn phải chụp bao gồm ÍT NHẤT một khớp lân cận tổn thương (khớp trên hoặc dưới) để đánh giá xâm lấn khớp. Yêu cầu ghép cuộn dây (Coil combination) nếu chụp toàn bộ đùi/chày dài.",
         citations: [
             "Fayad LM, et al. MR imaging of musculoskeletal tumors: a basic protocol. Magn Reson Imaging Clin N Am. 2011."
+        ]
+    },
+
+    // ==========================================
+    // NHÓM 5: CHUYÊN KHOA KHÁC (OTHERS)
+    // ==========================================
+    {
+        id: 4016,
+        en: "Cardiac MRI (CMR) - Viability",
+        vi: "[🫀 TIM MẠCH] MRI Tim - Đánh giá sống còn cơ tim",
+        type: "Protocol",
+        indications: "Đánh giá sẹo nhồi máu cơ tim cũ/mới; Bệnh cơ tim phì đại (HCM); Bệnh cơ tim giãn (DCM); Viêm cơ tim; Lập kế hoạch trước can thiệp mạch vành.",
+        basicSequences: "- HASTE/SSFP Scout: (Axial, Coronal, Sagittal) Định vị lồng ngực.\n- Cine SSFP (Trục 2 buồng, 3 buồng, 4 buồng, trục ngắn Short-axis từ đáy đến mỏm): Đánh giá phân số tống máu (EF), rối loạn vận động vùng.\n- T2W STIR / T2 Mapping (Short-axis): Tìm vùng cơ tim bị phù nề cấp tính (Viêm cơ tim, nhồi máu cấp).\n- T1 Mapping (Native & Post-contrast): Tính thể tích ngoại bào (ECV).",
+        advancedSequences: "- LGE (Late Gadolinium Enhancement): Chụp 10-15 phút sau tiêm Gd. TI scout để xóa nền cơ tim lành. Đánh giá sẹo xuyên thành/dưới nội tâm mạc.\n- Perfussion (First-pass) lúc nghỉ hoặc gắng sức (Adenosine).",
+        notes: "Mắc điện tâm đồ (ECG Gating) là sinh tử. Phải cạo sạch lông ngực và lau sạch da bằng cồn để tín hiệu R-wave đạt đỉnh tối đa. Hướng dẫn bệnh nhân nín thở 10-15s nhiều lần.",
+        citations: [
+            "Kramer CM, et al. Standardized cardiovascular magnetic resonance imaging (CMR) protocols: 2020 update. J Cardiovasc Magn Reson. 2020."
+        ]
+    },
+    {
+        id: 4017,
+        en: "Breast MRI",
+        vi: "[🚺 TUYẾN VÚ] MRI Tuyến vú động học",
+        type: "Protocol",
+        indications: "Tầm soát ung thư vú ở nhóm nguy cơ cao (đột biến BRCA); Đánh giá mức độ xâm lấn của khối u đã biết; Đánh giá đáp ứng hóa trị tân bổ trợ; Khảo sát túi ngực vỡ.",
+        basicSequences: "- T2W Axial & Sagittal: (FOV: 300-340, Slice: 3mm) Đánh giá nang, sợi tuyến.\n- STIR / T2W FatSat Axial: (Đánh giá phù nề, bạch huyết).\n- DWI / ADC Axial (b=0, 800-1000): Phát hiện u đặc hạn chế khuếch tán.\n- T1W Non-FatSat (Silicone-specific) nếu bệnh nhân có túi ngực: Đánh giá vỡ túi ngực trong/ngoài màng bao.",
+        advancedSequences: "- 3D T1W FatSat DCE ĐỘNG HỌC (VIBE/THRIVE): 1 pha trước tiêm và 5-6 pha sau tiêm liên tục không ngắt quãng (mỗi pha 60-90s). Dựng đồ thị TIC (Time-Intensity Curve) để phân loại Wash-out.",
+        notes: "Chụp tư thế nằm sấp với cuộn dây Dedicated Breast Coil (7-16 kênh). Lưu ý nhét vú lọt thỏm vào lỗ cuộn dây, không để bị gập nếp. Chụp vào ngày 7-14 của chu kỳ kinh nguyệt để giảm ngấm thuốc nền sinh lý.",
+        citations: [
+            "American College of Radiology (ACR). Breast Imaging Reporting and Data System (BI-RADS) Magnetic Resonance Imaging. 2013."
+        ]
+    },
+    {
+        id: 4018,
+        en: "Brachial Plexus MRI",
+        vi: "[🧠 THẦN KINH] Đám rối thần kinh cánh tay",
+        type: "Protocol",
+        indications: "Chấn thương nhổ rễ thần kinh (Tai nạn xe máy); Hội chứng lối ra lồng ngực (TOS); Khối u thần kinh (Schwannoma, Neurofibroma); Viêm đám rối sau xạ trị.",
+        basicSequences: "- Coronal T1W: (Bao trùm từ cột sống cổ đến nách) Đánh giá mỡ xung quanh các rễ thần kinh.\n- Coronal STIR / T2W FatSat: (TR: 4000, TE: 60, Slice: 3mm) Nhạy bén phát hiện rễ thần kinh bị phù nề, đứt rách (tăng tín hiệu sáng).\n- Sagittal T1W & STIR (Trục rễ thần kinh): Cắt vuông góc với đường đi của rễ thần kinh để xem tiết diện.\n- Axial T2W (C-spine): Đánh giá thoát vị đĩa đệm cổ hoặc giả nang màng cứng (meningocele) tại lỗ liên hợp.",
+        advancedSequences: "- 3D SPACE / VISTA STIR (Isotropic 1mm): Dựng hình MIP 3D toàn bộ mạng lưới đám rối cánh tay để bác sĩ ngoại khoa dễ hình dung.",
+        notes: "Rất dễ bị nhiễu do nhịp thở và nhịp đập động mạch dưới đòn. Kê đệm hai bên vai bệnh nhân để cố định chặt chống rung. Chụp từ C4 đến T2.",
+        citations: [
+            "Martinoli C, et al. Brachial plexus and nerves about the shoulder. Semin Musculoskelet Radiol. 2010."
         ]
     }
 ];
