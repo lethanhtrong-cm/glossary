@@ -169,7 +169,7 @@ export const sequenceData = [
         vi: "Cộng hưởng từ phổ", 
         type: "Sequence", 
         description: "Nguyên lý vật lý: Kỹ thuật phân tích tín hiệu không dựa trên hình ảnh mà dựa trên 'tần số hóa học' (Chemical Shift). Dưới cùng một từ trường, các chất chuyển hóa (Choline, Creatine, NAA, Lactate) cộng hưởng ở các tần số hơi khác nhau (ppm). Máy tính chuyển đổi dữ liệu thô thành một phổ đồ thị các đỉnh sóng để định lượng nồng độ sinh hóa mô.\n\n- Tên gọi theo hãng: Siemens (MRS) | GE (PROBE) | Philips (MRS) | Canon (MRS) | Fujifilm (MRS).", 
-        parameters: "- Ứng dụng lâm sàng:\n1. U não: Đỉnh Choline tăng vọt, NAA giảm sâu cảnh báo u ác tính.\n2. Áp xe não: Đỉnh Lipid/Lactate, Amino Acid nổi bật.\n3. Bệnh não gan, bệnh chuyển hóa bẩm sinh ở trẻ em.\n\n- Thông số / Tips:\n+ Single Voxel (độ chính xác cao, vùng nhỏ) hoặc Multi Voxel (lập bản đồ chuyển hóa). Phải xóa nước (Water suppression) và Shimming cực kỳ cẩn thận.",
+        parameters: "- Ứng dụng lâm sàng:\n1. U脑: Đỉnh Choline tăng vọt, NAA giảm sâu cảnh báo u ác tính.\n2. Áp xe não: Đỉnh Lipid/Lactate, Amino Acid nổi bật.\n3. Bệnh não gan, bệnh chuyển hóa bẩm sinh ở trẻ em.\n\n- Thông số / Tips:\n+ Single Voxel (độ chính xác cao, vùng nhỏ) hoặc Multi Voxel (lập bản đồ chuyển hóa). Phải xóa nước (Water suppression) và Shimming cực kỳ cẩn thận.",
         citations: []
     },
     { 
@@ -223,7 +223,7 @@ export const sequenceData = [
         vi: "Tưới máu nhạy từ", 
         type: "Sequence", 
         description: "Nguyên lý vật lý: Quét liên tục não bộ bằng xung T2* EPI (hoặc T2 EPI) với tốc độ cao (1-2s/volume). Khi bolus Gadolinium đậm đặc đi qua vi mao mạch não, tính thuận từ mạnh của nó sẽ phá vỡ từ trường cục bộ, làm tín hiệu T2* sụt giảm đột ngột (đen lại). Sự rớt tín hiệu này được mô hình hóa để tính ra lượng máu tưới.\n\n- Tên gọi theo hãng: Siemens (DSC Perfusion) | GE (BrainStat) | Philips (DSC Perfusion) | Canon (DSC) | Fujifilm (DSC).", 
-        parameters: "- Ứng dụng lâm sàng:\n1. Đột quỵ cấp: Dùng kết hợp với DWI để xác định tỷ lệ Mismatch (vùng não thiếu máu đang hấp hối nhưng vẫn cứu được - Penumbra).\n2. U não: Đánh giá CBV (thể tích máu não) tăng sinh trong u ác tính cấp độ cao (Glioblastoma).\n\n- Thông số / Tips:\n+ Tính toán các thông số: CBV, CBF, MTT (thời gian di chuyển trung bình), TTP. Cần tiêm thuốc bằng bơm tiêm điện với tốc độ cực gắt (4-5 mL/s).",
+        parameters: "- Ứng dụng lâm sàng:\n1. Đột quỵ cấp: Dùng kết hợp với DWI để xác định tỷ lệ Mismatch (vùng não thiếu máu đang hấp hối nhưng vẫn cứu được - Penumbra).\n2. U não: Đánh giá CBV (thể tích máu脑) tăng sinh trong u ác tính cấp độ cao (Glioblastoma).\n\n- Thông số / Tips:\n+ Tính toán các thông số: CBV, CBF, MTT (thời gian di chuyển trung bình), TTP. Cần tiêm thuốc bằng bơm tiêm điện với tốc độ cực gắt (4-5 mL/s).",
         citations: []
     },
     { 
