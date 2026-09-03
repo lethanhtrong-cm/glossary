@@ -6,8 +6,8 @@ import { mriData } from './data.js';
 import { ctParamData } from './ct/dataCT_param.js'; 
 import { ctProtocolData } from './ct/dataCT_protocol.js'; 
 import { ctAngioData } from './ct/dataCT_angio.js'; 
-import { xrayParamData } from './xray/dataXR_param.js'; // Nhúng X-Quang Thông số
-import { xrayPositionData } from './xray/dataXR_position.js'; // Nhúng X-Quang Chiều thế
+import { xrayParamData } from './xray/dataXR_param.js'; 
+import { xrayPositionData } from './xray/dataXR_position.js'; 
 
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mriList = document.getElementById("mriList");
     const comingSoon = document.getElementById("comingSoon");
 
-    // Modal
+    // Modal & Form
     const modal = document.getElementById("contributeModal");
     const btnCloseModal = document.getElementById("modalClose");
     const btnCancelEdit = document.getElementById("btnCancelEdit");
@@ -116,6 +116,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnThemeLight = document.getElementById("btnThemeLight");
     const btnThemeSapphire = document.getElementById("btnThemeSapphire");
     const btnThemeDark = document.getElementById("btnThemeDark");
+
+    // --- XỬ LÝ GIAO DIỆN MOBILE (HAMBURGER & THỐNG KÊ TRUY CẬP) ---
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const mainSidebar = document.getElementById("mainSidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+    const statisticsSection = document.getElementById("statisticsSection");
+    const mainContentWrapper = document.querySelector(".main-content-wrapper");
+    const wikiFooter = document.querySelector(".wiki-footer");
+
+    // Bật/tắt ngăn kéo Hamburger
+    if(hamburgerBtn && mainSidebar && sidebarOverlay) {
+        hamburgerBtn.addEventListener("click", () => {
+            mainSidebar.classList.add("open");
+            sidebarOverlay.classList.add("active");
+        });
+        sidebarOverlay.addEventListener("click", () => {
+            mainSidebar.classList.remove("open");
+            sidebarOverlay.classList.remove("active");
+        });
+    }
+
+    // Logic di chuyển khối thống kê khi đổi kích thước màn hình
+    function handleMobileLayout() {
+        if (window.innerWidth <= 768) {
+            // Khi dùng điện thoại -> Nhét thống kê vào ngay trên Footer
+            if(statisticsSection && wikiFooter && statisticsSection.parentNode !== mainContentWrapper) {
+                mainContentWrapper.insertBefore(statisticsSection, wikiFooter);
+                statisticsSection.style.padding = "0 15px"; // Căn lề cho đẹp
+            }
+        } else {
+            // Khi dùng Máy tính -> Trả thống kê về thanh menu bên trái
+            if(statisticsSection && mainSidebar && statisticsSection.parentNode !== mainSidebar) {
+                mainSidebar.appendChild(statisticsSection);
+                statisticsSection.style.padding = "0";
+            }
+        }
+    }
+    window.addEventListener("resize", handleMobileLayout);
+    handleMobileLayout(); // Chạy ngay lần đầu tiên mở trang
 
     // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI
     let currentModule = 'MRI'; 
@@ -137,6 +176,12 @@ document.addEventListener("DOMContentLoaded", () => {
         item.addEventListener("click", (e) => {
             menuItems.forEach(i => i.classList.remove("active"));
             e.currentTarget.classList.add("active");
+            
+            // Tự động đóng Menu Hamburger nếu đang mở trên điện thoại
+            if (window.innerWidth <= 768 && mainSidebar.classList.contains("open")) {
+                mainSidebar.classList.remove("open");
+                sidebarOverlay.classList.remove("active");
+            }
             
             const moduleName = e.currentTarget.getAttribute("data-mod");
             currentModule = moduleName;
@@ -193,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabPhysics.style.display = "none"; 
                 tabProtocol.style.display = "none";
                 tabAngio.style.display = "none";
-                tabPosition.style.display = "inline-block"; // Hiện tab Chiều thế
+                tabPosition.style.display = "inline-block"; 
                 
                 if (currentTab !== 'Parameter' && currentTab !== 'Position') {
                     currentTab = 'Position';
@@ -365,6 +410,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("editId").value = "";
         toggleFormFields(editTypeSelect.value); 
         modal.style.display = "flex";
+        // Tự động đóng menu Hamburger khi nhấn "Tạo bài mới" trên mobile
+        if (window.innerWidth <= 768 && mainSidebar.classList.contains("open")) {
+            mainSidebar.classList.remove("open");
+            sidebarOverlay.classList.remove("active");
+        }
     });
 
     const closeModal = () => { modal.style.display = "none"; };
