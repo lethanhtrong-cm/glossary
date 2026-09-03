@@ -1,5 +1,6 @@
 // CƠ SỞ DỮ LIỆU X-QUANG - PHẦN CHIỀU THẾ CHỤP (POSITION/PROJECTION)
 export const xrayPositionData = [
+    // --- CÁC CHIỀU THẾ CƠ BẢN ĐÃ CÓ ---
     {
         id: 8201,
         en: "Chest PA (Posteroanterior)",
@@ -64,6 +65,74 @@ export const xrayPositionData = [
         basicSequences: "1. Thẳng (AP): Nằm ngửa, gập cong hai gối chống lên bàn để làm phẳng đường cong sinh lý thắt lưng, giúp các khe khớp mở rộng. Tia CR thẳng đứng vào ngang rốn (L3).\n2. Nghiêng (Lateral): Nằm nghiêng, co gối để giữ thăng bằng. Lót xốp dưới thắt lưng để trục cột sống song song với mặt bàn. Tia CR thẳng đứng vào L3.",
         advancedSequences: "- Khoảng cách (SID): 100 cm. BẮT BUỘC dùng lưới chống mờ (Grid).\n- Cài đặt kVp cao (75 - 85 kVp), mAs cao.",
         notes: "Tiêu chuẩn phim: Lấy được từ D12 đến hết khối xương cùng (Sacrum). Chụp nghiêng cần chỉnh để bờ sau các thân đốt sống không bị chồng lấp (chụp nghiêng khu trú L5-S1 tia CR góc xuống 5-8 độ nếu hông to).",
+        citations: []
+    },
+
+    // --- CÁC CHIỀU THẾ BỔ SUNG (CỘT SỐNG NGỰC & CÁC KHỚP) ---
+    {
+        id: 8207,
+        en: "Thoracic Spine AP / Lateral",
+        vi: "[🦴 CỘT SỐNG] Cột sống ngực Thẳng / Nghiêng",
+        type: "Position",
+        indications: "Đau lưng đoạn ngực, chấn thương xẹp đốt sống, vẹo cột sống (Scoliosis), di căn xương.",
+        basicSequences: "1. Thẳng (AP): Bệnh nhân nằm ngửa, gập gối để áp sát lưng xuống bàn. Tia CR thẳng đứng, điểm vào giữa xương ức (ngang T7).\n2. Nghiêng (Lateral): Bệnh nhân nằm nghiêng, hai tay đưa cao vươn ra trước mặt để không lấp vào cột sống. Tia CR thẳng đứng, điểm vào nửa sau lồng ngực ngang T7.",
+        advancedSequences: "- Khoảng cách (SID): 100 cm. Có dùng Grid.\n- Hô hấp (Đặc biệt): Ở tư thế nghiêng, yêu cầu bệnh nhân HÍT THỞ NÔNG LÝ TƯỞNG (Breathing technique) trong lúc phát tia (thời gian phát tia dài 2-3 giây) để làm mờ xương sườn và bóng phổi, giúp đốt sống ngực hiện ra sắc nét.",
+        notes: "Tiêu chuẩn phim: Lấy đủ từ C7 đến L1. Ở phim nghiêng, các đốt sống ngực trên (T1-T3) thường bị hai vai che lấp hoàn toàn, nếu cần thiết phải chụp thêm tư thế Swimmer.",
+        citations: []
+    },
+    {
+        id: 8208,
+        en: "Shoulder AP / Y-View",
+        vi: "[🦴 KHỚP] Khớp vai Thẳng / Chữ Y",
+        type: "Position",
+        indications: "Trật khớp vai, gãy xương chỏm xương cánh tay, vôi hóa gân chóp xoay, viêm khớp.",
+        basicSequences: "1. Thẳng (AP): Bệnh nhân đứng hoặc nằm. Áp lưng bên cần chụp sát phim. Xoay ngoài cánh tay (để thấy củ lớn) hoặc xoay trong (để thấy củ bé). Tia CR thẳng đứng, điểm vào mỏm quạ (Coracoid process).\n2. Y-View (Chữ Y bả vai): Chẩn đoán trật khớp vai. Bệnh nhân đứng xoay người 45-60 độ, mặt áp giá chụp (bên vai đau chạm phim). Tia CR vuông góc, bắn qua khớp vai tổn thương.",
+        advancedSequences: "- Khoảng cách (SID): 100 cm. Lưới (Grid) có hoặc không tùy độ dày vai bệnh nhân.",
+        notes: "Tiêu chuẩn phim Y-View: Thân xương bả vai, mỏm cùng vai và mỏm quạ tạo thành hình chữ 'Y'. Nếu chỏm xương cánh tay nằm dưới mỏm quạ -> Trật ra trước. Nếu nằm dưới mỏm cùng vai -> Trật ra sau.",
+        citations: []
+    },
+    {
+        id: 8209,
+        en: "Pelvis AP",
+        vi: "[🦴 KHỚP] Khung chậu Thẳng",
+        type: "Position",
+        indications: "Chấn thương vỡ khung chậu, gãy cổ xương đùi, thoái hóa khớp háng, trật khớp háng bẩm sinh.",
+        basicSequences: "- Tư thế bệnh nhân: Nằm ngửa cân xứng. HAI MŨI CHÂN XOAY VÀO TRONG 15-20 độ. (Rất quan trọng: Động tác xoay mũi chân này giúp bộc lộ cổ xương đùi trải dài tối đa trên phim, không bị ngắn lại do góc nghiêng sinh lý).\n- Hô hấp: Nín thở khi chụp.",
+        advancedSequences: "- Tia trung tâm (CR): Hướng thẳng đứng.\n- Điểm vào: Nằm trên đường giữa bụng, ở điểm giữa gai chậu trước trên (ASIS) và bờ trên khớp mu.\n- Khoảng cách (SID): 100 cm. Bắt buộc dùng Grid.",
+        notes: "Tiêu chuẩn phim: Khung chậu phải đối xứng (2 lỗ bịt to bằng nhau, gai ngồi cân xứng). Thấy rõ hai khớp háng và 1/3 trên hai xương đùi. Cổ xương đùi không bị lấp bởi mấu chuyển lớn.",
+        citations: []
+    },
+    {
+        id: 8210,
+        en: "Knee AP / Lateral",
+        vi: "[🦴 KHỚP] Khớp gối Thẳng / Nghiêng",
+        type: "Position",
+        indications: "Chấn thương gãy xương, đứt dây chằng (gây bóc tách xương), thoái hóa khớp gối (Gai xương, hẹp khe khớp), tràn dịch khớp.",
+        basicSequences: "1. Thẳng (AP): Bệnh nhân nằm ngửa, chân duỗi thẳng. Tia CR có thể phải bẻ góc 3-5 độ LÊN ĐẦU (nếu hông to) hoặc VUÔNG GÓC (nếu đùi gầy) để tia đi trúng song song với mâm chày. Điểm vào cách cực dưới xương bánh chè 1cm.\n2. Nghiêng (Lateral): Bệnh nhân nằm nghiêng về bên cần chụp. Gập gối 20-30 độ (Giúp các dây chằng chéo thư giãn, lộ rõ bánh chè). Tia CR bẻ góc LÊN ĐẦU 5-7 độ để làm chồng khít 2 lồi cầu đùi.",
+        advancedSequences: "- Khoảng cách (SID): 100 cm. Thường KHÔNG dùng lưới (hoặc dùng lưới tùy máy DR).",
+        notes: "Tiêu chuẩn phim nghiêng: Xương bánh chè nhìn nghiêng rõ nét. Khe khớp chè-đùi mở rộng. Lồi cầu trong và lồi cầu ngoài xương đùi chồng khít lên nhau hoàn toàn.",
+        citations: []
+    },
+    {
+        id: 8211,
+        en: "Ankle AP / Mortise / Lateral",
+        vi: "[🦴 KHỚP] Khớp cổ chân Thẳng / Gọng Kìm / Nghiêng",
+        type: "Position",
+        indications: "Lật sơ mi (trật mắt cá), gãy mắt cá trong/ngoài, vỡ xương sên, thoái hóa khớp.",
+        basicSequences: "1. Thẳng (AP): Nằm ngửa, gập mu chân vuông góc. Mũi chân hướng thẳng lên trần nhà.\n2. Mortise view (Thẳng Gọng kìm): Nằm ngửa, XOAY TOÀN BỘ CẲNG CHÂN VÀ BÀN CHÂN VÀO TRONG 15-20 độ. Tư thế này làm song song trục 2 mắt cá, giúp khe khớp cổ chân mở rộng toàn bộ.\n3. Nghiêng (Lateral): Nằm nghiêng về phía chân đau, áp sát mắt cá ngoài xuống phim.",
+        advancedSequences: "- Tia trung tâm (CR): Vuông góc mặt phim, điểm vào giữa đường nối 2 mắt cá chân.\n- Khoảng cách (SID): 100 cm. Không dùng Grid.",
+        notes: "Tiêu chuẩn phim Mortise: Toàn bộ khe khớp chày-sên và mác-sên (hình chữ U đảo ngược / gọng kìm) phải trong suốt, không bị chồng lấp xương. Đây là tư thế quan trọng nhất để bắt bệnh đứt dây chằng chày-mác.",
+        citations: []
+    },
+    {
+        id: 8212,
+        en: "Wrist PA / Lateral",
+        vi: "[🦴 KHỚP] Khớp cổ tay Thẳng / Nghiêng",
+        type: "Position",
+        indications: "Ngã chống tay, gãy xương quay (Colles' fracture), gãy xương thuyền (Scaphoid), trật khớp bán nguyệt.",
+        basicSequences: "1. Thẳng (PA): Bệnh nhân ngồi cạnh bàn. Úp sấp cẳng tay và bàn tay xuống mâm phim. Nắm nhẹ các ngón tay lại (giúp cổ tay sát phim hơn).\n2. Nghiêng (Lateral): Xoay bàn tay dựng đứng lên (mặt ngón út áp phim). Đảm bảo cẳng tay và bàn tay trên một đường thẳng, xương quay và xương trụ chồng khít.",
+        advancedSequences: "- Tia trung tâm (CR): Vuông góc mặt phim.\n- Điểm vào: Giữa nếp lấp cổ tay (điểm giữa xương quay và xương trụ).\n- Khoảng cách (SID): 100 cm. Không dùng Grid.",
+        notes: "Tiêu chuẩn phim nghiêng: Rất quan trọng để chẩn đoán trật khớp. Trục của xương quay, xương bán nguyệt (Lunate), xương cả (Capitate) và xương bàn ngón 3 phải nằm trên một đường thẳng.",
         citations: []
     }
 ];
