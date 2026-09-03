@@ -1,12 +1,14 @@
-// Khai báo Firebase SDK qua CDN (Dành cho ES6 Modules)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-// Module chính đóng vai trò Controller
+// Module chính
 import { mriData } from './data.js';
 import { ctParamData } from './ct/dataCT_param.js'; 
 import { ctProtocolData } from './ct/dataCT_protocol.js'; 
-import { ctAngioData } from './ct/dataCT_angio.js'; // Nhúng thêm file Angio
+import { ctAngioData } from './ct/dataCT_angio.js'; 
+import { xrayParamData } from './xray/dataXR_param.js'; // Nhúng X-Quang Thông số
+import { xrayPositionData } from './xray/dataXR_position.js'; // Nhúng X-Quang Chiều thế
+
 import { filterMriData } from './search.js';
 import { renderMriList } from './ui.js';
 
@@ -25,8 +27,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Gộp 3 mảng dữ liệu CT lại
+// Gộp mảng dữ liệu
 const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData];
+const xrayData = [...xrayParamData, ...xrayPositionData];
 
 // --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
 export function initPageStatistics(db, pageId) {
@@ -34,18 +37,15 @@ export function initPageStatistics(db, pageId) {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const date = String(now.getDate()).padStart(2, '0');
-    
     const dateKey = `day_${year}_${month}_${date}`;
     const monthKey = `month_${year}_${month}`;
     const yearKey = `year_${year}`;
-    
     const startDate = new Date(now.getFullYear(), 0, 1);
     const days = Math.floor((now - startDate) / (24 * 60 * 60 * 1000));
     const weekNumber = Math.ceil((now.getDay() + 1 + days) / 7);
     const weekKey = `week_${year}_W${String(weekNumber).padStart(2, '0')}`;
 
     const sessionFlag = `visited_${pageId}`;
-
     if (!sessionStorage.getItem(sessionFlag)) {
         sessionStorage.setItem(sessionFlag, 'true');
         setTimeout(() => {
@@ -60,26 +60,23 @@ export function initPageStatistics(db, pageId) {
         }, 3000);
     }
 
-    getDoc(doc(db, "statistics", pageId))
-        .then((docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                const vTotal = document.getElementById('global-visitor-count');
-                const vDaily = document.getElementById('visitor-daily');
-                const vWeekly = document.getElementById('visitor-weekly');
-                const vMonthly = document.getElementById('visitor-monthly');
-                const vYearly = document.getElementById('visitor-yearly');
+    getDoc(doc(db, "statistics", pageId)).then((docSnap) => {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const vTotal = document.getElementById('global-visitor-count');
+            const vDaily = document.getElementById('visitor-daily');
+            const vWeekly = document.getElementById('visitor-weekly');
+            const vMonthly = document.getElementById('visitor-monthly');
+            const vYearly = document.getElementById('visitor-yearly');
 
-                if (vTotal) vTotal.innerText = (data.totalVisits || 0).toLocaleString('vi-VN');
-                if (vDaily) vDaily.innerText = (data[dateKey] || 0).toLocaleString('vi-VN');
-                if (vWeekly) vWeekly.innerText = (data[weekKey] || 0).toLocaleString('vi-VN');
-                if (vMonthly) vMonthly.innerText = (data[monthKey] || 0).toLocaleString('vi-VN');
-                if (vYearly) vYearly.innerText = (data[yearKey] || 0).toLocaleString('vi-VN');
-            }
-        })
-        .catch((error) => console.error(`Lỗi thống kê:`, error));
+            if (vTotal) vTotal.innerText = (data.totalVisits || 0).toLocaleString('vi-VN');
+            if (vDaily) vDaily.innerText = (data[dateKey] || 0).toLocaleString('vi-VN');
+            if (vWeekly) vWeekly.innerText = (data[weekKey] || 0).toLocaleString('vi-VN');
+            if (vMonthly) vMonthly.innerText = (data[monthKey] || 0).toLocaleString('vi-VN');
+            if (vYearly) vYearly.innerText = (data[yearKey] || 0).toLocaleString('vi-VN');
+        }
+    }).catch((error) => console.error(`Lỗi thống kê:`, error));
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     initPageStatistics(db, "main_dictionary");
@@ -94,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabPhysics = document.querySelector('.tab-btn[data-tab="Physics"]');
     const tabProtocol = document.querySelector('.tab-btn[data-tab="Protocol"]');
     const tabAngio = document.querySelector('.tab-btn[data-tab="Angiography"]');
+    const tabPosition = document.querySelector('.tab-btn[data-tab="Position"]');
     
     // Sidebar & View
     const menuItems = document.querySelectorAll(".menu-item[data-mod]");
@@ -127,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentAlpha = 'ALL'; 
     let currentFontSize = 14; 
 
-    // Render Alphabet
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let alphaHTML = `<button class="alpha-btn all-btn active" data-alpha="ALL">Tất cả</button>`;
     letters.forEach(letter => {
@@ -135,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    // 1. Sidebar Nav (Hoán đổi linh hoạt giữa các Modalities)
+    // 1. Sidebar Nav (Hoán đổi linh hoạt giữa MRI, CT, X-Quang)
     menuItems.forEach(item => {
         item.addEventListener("click", (e) => {
             menuItems.forEach(i => i.classList.remove("active"));
@@ -148,13 +145,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentData = mriData;
                 document.getElementById("firstHeading").innerText = "Từ Điển Cộng Hưởng Từ (MRI)";
                 
-                // Trả lại các Tab MRI
                 tabSequence.style.display = "inline-block"; 
                 tabPhysics.style.display = "inline-block"; 
+                tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "none";
+                tabPosition.style.display = "none";
                 tabProtocol.innerText = "Protocol Chụp"; 
                 
-                if (currentTab === 'Angiography') {
+                if (currentTab === 'Angiography' || currentTab === 'Position') {
                     currentTab = 'Sequence';
                     tabBtns.forEach(b => b.classList.remove("active"));
                     tabSequence.classList.add("active");
@@ -164,18 +162,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 mriList.style.display = "block";
                 comingSoon.style.display = "none";
                 updateDisplay();
+                
             } else if (moduleName === "CT") {
                 currentData = ctData;
                 document.getElementById("firstHeading").innerText = "Từ Điển Cắt Lớp Vi Tính (CT)";
                 
-                // Ẩn 2 Tab dư thừa của CT, hiển thị tab Angiography và đổi tên tab Protocol
                 tabSequence.style.display = "none"; 
                 tabPhysics.style.display = "none"; 
+                tabPosition.style.display = "none";
+                tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "inline-block";
                 tabProtocol.innerText = "Protocol thường"; 
                 
-                // Ép người dùng sang Tab "Parameter" nếu đang đứng ở 2 tab kia
-                if (currentTab === 'Sequence' || currentTab === 'Physics') {
+                if (currentTab === 'Sequence' || currentTab === 'Physics' || currentTab === 'Position') {
                     currentTab = 'Parameter';
                     tabBtns.forEach(b => b.classList.remove("active"));
                     document.querySelector('.tab-btn[data-tab="Parameter"]').classList.add("active");
@@ -185,6 +184,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 mriList.style.display = "block";
                 comingSoon.style.display = "none";
                 updateDisplay();
+                
+            } else if (moduleName === "XRAY") {
+                currentData = xrayData;
+                document.getElementById("firstHeading").innerText = "Từ Điển X-Quang (X-Ray)";
+                
+                tabSequence.style.display = "none"; 
+                tabPhysics.style.display = "none"; 
+                tabProtocol.style.display = "none";
+                tabAngio.style.display = "none";
+                tabPosition.style.display = "inline-block"; // Hiện tab Chiều thế
+                
+                if (currentTab !== 'Parameter' && currentTab !== 'Position') {
+                    currentTab = 'Position';
+                    tabBtns.forEach(b => b.classList.remove("active"));
+                    tabPosition.classList.add("active");
+                }
+                
+                mriHeaderTools.style.display = "block";
+                mriList.style.display = "block";
+                comingSoon.style.display = "none";
+                updateDisplay();
+                
             } else {
                 mriHeaderTools.style.display = "none";
                 mriList.style.display = "none";
@@ -202,7 +223,8 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (currentTab === 'Physics') return item.type === 'Physics';
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
             else if (currentTab === 'Angiography') return item.type === 'Angiography'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography'; 
+            else if (currentTab === 'Position') return item.type === 'Position'; 
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography' && item.type !== 'Position'; 
         });
 
         if (currentAlpha !== 'ALL') {
@@ -243,9 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- LOGIC FORM ĐỘNG ---
     function toggleFormFields(typeValue) {
-        if (typeValue === "Protocol" || typeValue === "Angiography") {
+        if (typeValue === "Protocol" || typeValue === "Angiography" || typeValue === "Position") {
             lblDesc.innerText = "1. Chỉ định bệnh lý: *";
-            lblParams.innerText = "2. Xung cơ bản / Cài đặt:";
+            lblParams.innerText = typeValue === "Position" ? "2. Tư thế bệnh nhân / Chuẩn bị:" : "2. Xung cơ bản / Cài đặt:";
             protocolOnlyFields.forEach(el => el.style.display = "block");
         } else {
             lblDesc.innerText = "Nguyên lý / Định nghĩa: *";
@@ -266,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
-                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography') ? targetItem.type : 'Parameter';
+                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography' || targetItem.type === 'Position') ? targetItem.type : 'Parameter';
                 tabBtns.forEach(b => {
                     b.classList.remove("active");
                     if(b.getAttribute("data-tab") === currentTab) b.classList.add("active");
@@ -293,8 +315,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!item) return;
 
         let textToExport = `${item.en} (${item.vi})\n`;
-        if (item.type === 'Protocol' || item.type === 'Angiography') {
-            textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Xung cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
+        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position') {
+            textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Tư thế cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
         } else {
             textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
         }
@@ -337,7 +359,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Modal Events
     btnContributeNew.addEventListener("click", () => {
         document.getElementById("modalTitle").innerText = "Tạo bài viết / Thuật ngữ mới";
         formContribute.reset();
@@ -351,7 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCancelEdit.addEventListener("click", closeModal);
     window.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
 
-    // --- XỬ LÝ SUBMIT LÊN FIRESTORE ---
     formContribute.addEventListener("submit", async (e) => {
         e.preventDefault();
         
@@ -374,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 createdAt: serverTimestamp() 
             };
 
-            if (type === "Protocol" || type === "Angiography") {
+            if (type === "Protocol" || type === "Angiography" || type === "Position") {
                 payload.indications = document.getElementById("editDesc").value.trim();
                 payload.basicSequences = document.getElementById("editParams").value.trim();
                 payload.advancedSequences = document.getElementById("editAdvanced").value.trim();
@@ -398,7 +418,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // View Controls
     if(btnTextInc && btnTextDec) {
         btnTextInc.addEventListener("click", () => {
             if (currentFontSize < 24) currentFontSize += 2;
