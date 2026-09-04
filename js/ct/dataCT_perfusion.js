@@ -1,0 +1,18 @@
+// CƠ SỞ DỮ LIỆU CT - PHẦN CT TƯỚI MÁU (CT PERFUSION)
+export const ctPerfusionData = [
+    {
+        id: 5401,
+        en: "CT Perfusion (CTP) in Acute Stroke",
+        vi: "[🧠 TƯỚI MÁU] CT Tưới máu não (CTP)",
+        type: "Perfusion",
+        indications: "Đánh giá bệnh nhân nhồi máu não cấp, đặc biệt hữu ích trong cửa sổ thời gian mở rộng (6 - 24 giờ) hoặc đột quỵ không rõ thời gian khởi phát (Wake-up stroke). Xác định vùng mô não đã chết và vùng mô não còn khả năng cứu sống để đưa ra quyết định can thiệp lấy huyết khối.",
+        basicSequences: "- Kỹ thuật quét: Quét lặp đi lặp lại (Dynamic/Cine mode) tại cùng một vùng sọ não trong khoảng 45-60 giây để theo dõi dòng chảy của thuốc cản quang qua nhu mô não.\n- Độ phủ (Coverage): Lý tưởng là bao phủ toàn bộ não (16cm). Các máy ít dãy (64 lát) có thể áp dụng kỹ thuật bàn chạy tới lui (Toggle/Shuttle) để tăng độ phủ lên 8-10cm.\n- Cài đặt: 80 kVp (giúp tăng cường độ sáng của I-ốt và giảm liều tia X), mAs thấp.\n- Phương pháp bơm thuốc: Lượng thuốc 40-50 ml (ưu tiên loại nồng độ cao 350-370 mgI/ml). Tốc độ bơm cực nhanh (4 - 5 ml/s). Ngay sau đó bơm đuổi 30-40 ml nước muối sinh lý (Saline chaser) cùng tốc độ. Thời gian trễ (Delay time) thường là 4-5 giây.",
+        advancedSequences: "PHÂN ĐỊNH LÕI NHỒI MÁU (CORE) VÀ VÙNG TRANH TỐI TRANH SÁNG (PENUMBRA):\n1. Lõi nhồi máu (Infarct Core): Là vùng mô não đã chết (nhồi máu thực sự). Đặc trưng bởi Thể tích máu não (CBV) giảm nặng (<30% so với bên đối diện), Lưu lượng máu não (CBF) giảm nặng, Tmax và MTT kéo dài.\n2. Vùng tranh tối tranh sáng (Penumbra): Mô não đang thiếu máu nhưng vẫn có thể phục hồi nếu được tái thông mạch kịp thời. Đặc trưng bởi Tmax kéo dài (thường > 6 giây), CBF giảm nhẹ, nhưng CBV BÌNH THƯỜNG hoặc TĂNG (do cơ chế tự điều hòa giãn mạch bù trừ).\n3. Mismatch (Sự sai biệt): Penumbra = Thể tích vùng Tmax >6s TRỪ ĐI Thể tích Core. Nếu tỷ lệ Mismatch > 1.8 và thể tích lõi < 70ml -> Bệnh nhân có lợi ích khi can thiệp.",
+        notes: "- Tiêu chuẩn hình ảnh: KTV hoặc phần mềm AI (như RAPID, syngo.via) phải chọn đúng Động mạch đầu vào (AIF - thường là ĐM não giữa hoặc não trước) và Tĩnh mạch đầu ra (VOF - thường là Xoang tĩnh mạch dọc trên). \n- Biểu đồ đường cong Thời gian - Tỷ trọng (TDC) phải mượt mà, đạt đỉnh nhọn và cao.\n- Xảo ảnh chuyển động (Motion artifact) do bệnh nhân lắc đầu là nguyên nhân hàng đầu làm hỏng biểu đồ đo đạc, cần cố định đầu bệnh nhân thật chặt.",
+        citations: [
+            "DEFUSE 3 Trial Protocols", 
+            "DAWN Trial Guidelines for Acute Stroke",
+            "AHA/ASA Guidelines for the Early Management of Patients With Acute Ischemic Stroke"
+        ]
+    }
+];
