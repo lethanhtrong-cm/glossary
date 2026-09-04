@@ -9,7 +9,11 @@ export const ctLowDoseData = [
         basicSequences: "- Tư thế: Nằm ngửa, hai tay đưa lên cao. Hít vào sâu và nín thở.\n- Thông số chuẩn (Cho BMI bình thường): 100 - 120 kVp, 20 - 40 mAs.\n- Mức liều (Dose): Trung bình yêu cầu CTDIvol <= 3.0 mGy (với bệnh nhân tiêu chuẩn ~70kg). Liều hiệu dụng (Effective Dose) thường ở mức 1.0 - 1.5 mSv (Bình thường là ~7 mSv).",
         advancedSequences: "- Bệnh nhân gầy (BMI < 20): Giảm xuống 80-100 kVp, < 20 mAs.\n- Bệnh nhân béo phì (BMI > 30): Giữ 120 kVp, tăng mAs lên tối đa 60 mAs để giảm nhiễu hạt.\n- Tái tạo ảnh (Reconstruction): Bắt buộc sử dụng thuật toán tái tạo lặp (Iterative Reconstruction - IR) ở mức trung bình/cao (ví dụ: SAFIRE 3, ASiR 50%, AIDR 3D) để lọc nhiễu.",
         notes: "- Độ dày lát cắt: Thu nhận <= 1mm, tái tạo xem nhu mô 1-1.5mm, tái tạo xem MIP 3-5mm.\n- Tuyệt đối không tiêm thuốc cản quang.\n- Tránh chụp lặp lại nhiều lần nếu bệnh nhân lỡ nhúc nhích, trừ khi hình ảnh mất hoàn toàn giá trị chẩn đoán.",
-        citations: ["ACR-STR Practice Parameter for the Performance and Reporting of Low-Dose CT Lung Cancer Screening", "Fleischner Society Guidelines"]
+        citations: [
+            "ACR-STR Practice Parameter for the Performance and Reporting of Low-Dose CT Lung Cancer Screening", 
+            "Fleischner Society Guidelines",
+            "<a href='https://aapm.org/pubs/CTProtocols/documents/LungCancerScreeningCT.pdf' target='_blank' style='color: #0645ad; text-decoration: underline;'>AAPM - Lung Cancer Screening CT Protocols (PDF)</a>"
+        ]
     },
     {
         id: 5302,
