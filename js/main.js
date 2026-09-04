@@ -6,6 +6,7 @@ import { mriData } from './data.js';
 import { ctParamData } from './ct/dataCT_param.js'; 
 import { ctProtocolData } from './ct/dataCT_protocol.js'; 
 import { ctAngioData } from './ct/dataCT_angio.js'; 
+import { ctLowDoseData } from './ct/dataCT_lowdose.js'; 
 import { xrayParamData } from './xray/dataXR_param.js'; 
 import { xrayPositionData } from './xray/dataXR_position.js'; 
 
@@ -28,7 +29,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Gộp mảng dữ liệu
-const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData];
+const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData, ...ctLowDoseData];
 const xrayData = [...xrayParamData, ...xrayPositionData];
 
 // --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
@@ -91,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabPhysics = document.querySelector('.tab-btn[data-tab="Physics"]');
     const tabProtocol = document.querySelector('.tab-btn[data-tab="Protocol"]');
     const tabAngio = document.querySelector('.tab-btn[data-tab="Angiography"]');
+    const tabLowDose = document.querySelector('.tab-btn[data-tab="LowDose"]');
     const tabPosition = document.querySelector('.tab-btn[data-tab="Position"]');
     
     // Sidebar & View
@@ -126,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainContentWrapper = document.querySelector(".main-content-wrapper");
     const wikiFooter = document.querySelector(".wiki-footer");
 
-    // Bật/tắt ngăn kéo Hamburger
     if(hamburgerBtn && mainSidebar && sidebarOverlay) {
         hamburgerBtn.addEventListener("click", () => {
             mainSidebar.classList.add("open");
@@ -138,10 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Logic di chuyển khối thống kê & Rating khi đổi kích thước màn hình
     function handleMobileLayout() {
         if (window.innerWidth <= 768) {
-            // Nhét khối Thống kê và Rating vào ngay trên Footer
             if(statisticsSection && wikiFooter && statisticsSection.parentNode !== mainContentWrapper) {
                 mainContentWrapper.insertBefore(statisticsSection, wikiFooter);
                 statisticsSection.style.padding = "0 15px"; 
@@ -151,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 ratingSection.style.padding = "0 15px";
             }
         } else {
-            // Trả Thống kê và Rating về thanh menu bên trái
             if(statisticsSection && mainSidebar && statisticsSection.parentNode !== mainSidebar) {
                 mainSidebar.appendChild(statisticsSection);
                 statisticsSection.style.padding = "0";
@@ -219,14 +217,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     ratingMessage.innerText = `Lỗi hệ thống. Vẫn ghi nhận ${val} sao ở thiết bị này.`;
                 }
 
-                // Vô hiệu hóa hover/click sau khi đã vote xong (bằng cách clone và thay thế node)
                 const clone = document.getElementById("starRating").cloneNode(true);
                 document.getElementById("starRating").replaceWith(clone);
             });
         });
     }
 
-    // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI CỦA TỪ ĐIỂN
+    // BIẾN QUẢN LÝ TRẠNG THÁI HIỆN TẠI
     let currentModule = 'MRI'; 
     let currentData = mriData; 
     let currentTab = 'Sequence'; 
@@ -241,13 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     alphabetFilter.innerHTML = alphaHTML;
 
-    // 1. Sidebar Nav (Hoán đổi linh hoạt giữa MRI, CT, X-Quang)
+    // 1. Sidebar Nav
     menuItems.forEach(item => {
         item.addEventListener("click", (e) => {
             menuItems.forEach(i => i.classList.remove("active"));
             e.currentTarget.classList.add("active");
             
-            // Tự động đóng Menu Hamburger nếu đang mở trên điện thoại
             if (window.innerWidth <= 768 && mainSidebar.classList.contains("open")) {
                 mainSidebar.classList.remove("open");
                 sidebarOverlay.classList.remove("active");
@@ -264,10 +260,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabPhysics.style.display = "inline-block"; 
                 tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "none";
+                tabLowDose.style.display = "none";
                 tabPosition.style.display = "none";
                 tabProtocol.innerText = "Protocol Chụp"; 
                 
-                if (currentTab === 'Angiography' || currentTab === 'Position') {
+                if (currentTab === 'Angiography' || currentTab === 'Position' || currentTab === 'LowDose') {
                     currentTab = 'Sequence';
                     tabBtns.forEach(b => b.classList.remove("active"));
                     tabSequence.classList.add("active");
@@ -287,6 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabPosition.style.display = "none";
                 tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "inline-block";
+                tabLowDose.style.display = "inline-block";
                 tabProtocol.innerText = "Protocol thường"; 
                 
                 if (currentTab === 'Sequence' || currentTab === 'Physics' || currentTab === 'Position') {
@@ -308,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabPhysics.style.display = "none"; 
                 tabProtocol.style.display = "none";
                 tabAngio.style.display = "none";
+                tabLowDose.style.display = "none";
                 tabPosition.style.display = "inline-block"; 
                 
                 if (currentTab !== 'Parameter' && currentTab !== 'Position') {
@@ -338,8 +337,9 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (currentTab === 'Physics') return item.type === 'Physics';
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
             else if (currentTab === 'Angiography') return item.type === 'Angiography'; 
+            else if (currentTab === 'LowDose') return item.type === 'LowDose'; 
             else if (currentTab === 'Position') return item.type === 'Position'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography' && item.type !== 'Position'; 
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography' && item.type !== 'Position' && item.type !== 'LowDose'; 
         });
 
         if (currentAlpha !== 'ALL') {
@@ -380,7 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- LOGIC FORM ĐỘNG ---
     function toggleFormFields(typeValue) {
-        if (typeValue === "Protocol" || typeValue === "Angiography" || typeValue === "Position") {
+        if (typeValue === "Protocol" || typeValue === "Angiography" || typeValue === "Position" || typeValue === "LowDose") {
             lblDesc.innerText = "1. Chỉ định bệnh lý: *";
             lblParams.innerText = typeValue === "Position" ? "2. Tư thế bệnh nhân / Chuẩn bị:" : "2. Xung cơ bản / Cài đặt:";
             protocolOnlyFields.forEach(el => el.style.display = "block");
@@ -403,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
-                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography' || targetItem.type === 'Position') ? targetItem.type : 'Parameter';
+                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography' || targetItem.type === 'Position' || targetItem.type === 'LowDose') ? targetItem.type : 'Parameter';
                 tabBtns.forEach(b => {
                     b.classList.remove("active");
                     if(b.getAttribute("data-tab") === currentTab) b.classList.add("active");
@@ -430,7 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!item) return;
 
         let textToExport = `${item.en} (${item.vi})\n`;
-        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position') {
+        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position' || item.type === 'LowDose') {
             textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Tư thế cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
         } else {
             textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
@@ -480,7 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("editId").value = "";
         toggleFormFields(editTypeSelect.value); 
         modal.style.display = "flex";
-        // Tự động đóng menu Hamburger khi nhấn "Tạo bài mới" trên mobile
         if (window.innerWidth <= 768 && mainSidebar.classList.contains("open")) {
             mainSidebar.classList.remove("open");
             sidebarOverlay.classList.remove("active");
@@ -514,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 createdAt: serverTimestamp() 
             };
 
-            if (type === "Protocol" || type === "Angiography" || type === "Position") {
+            if (type === "Protocol" || type === "Angiography" || type === "Position" || type === "LowDose") {
                 payload.indications = document.getElementById("editDesc").value.trim();
                 payload.basicSequences = document.getElementById("editParams").value.trim();
                 payload.advancedSequences = document.getElementById("editAdvanced").value.trim();
