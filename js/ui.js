@@ -55,6 +55,9 @@ export function renderMriList(data, containerId) {
         } else if (item.type === 'Position') {
             badgeText = 'Chiều thế chụp';
             headerTheme = 'theme-blue'; 
+        } else if (item.type === 'LowDose') {
+            badgeText = 'CT Liều Thấp';
+            headerTheme = 'theme-green'; 
         } else {
             badgeText = item.type === 'Artifact' ? 'Xảo ảnh' : (item.type === 'Hardware' ? 'Phần cứng' : 'Thông số cài đặt');
             headerTheme = 'theme-blue';
@@ -62,14 +65,14 @@ export function renderMriList(data, containerId) {
 
         let bodyHtml = '';
         
-        // Gộp Position vào nhóm hiển thị quy trình
-        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position') {
+        // Gộp LowDose, Position, Angiography, và Protocol vào nhóm hiển thị quy trình 4 bước
+        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position' || item.type === 'LowDose') {
             bodyHtml = `
                 <div class="wiki-content-row">
                     <strong>1. Chỉ định bệnh lý:</strong> ${formatWikiText(item.indications, item.id)}
                 </div>
                 <div class="wiki-content-row">
-                    <strong>${item.type === 'Position' ? '2. Tư thế bệnh nhân / Chuẩn bị:' : '2. Xung cơ bản tối thiểu:'}</strong><br/> ${formatWikiText(item.basicSequences, item.id)}
+                    <strong>${item.type === 'Position' ? '2. Tư thế bệnh nhân / Chuẩn bị:' : '2. Xung cơ bản tối thiểu / Cài đặt:'}</strong><br/> ${formatWikiText(item.basicSequences, item.id)}
                 </div>
                 <div class="wiki-content-row">
                     <strong>${item.type === 'Position' ? '3. Tia trung tâm / SID:' : '3. Xung nâng cao bổ sung:'}</strong><br/> ${formatWikiText(item.advancedSequences, item.id)}
