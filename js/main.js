@@ -7,6 +7,7 @@ import { ctParamData } from './ct/dataCT_param.js';
 import { ctProtocolData } from './ct/dataCT_protocol.js'; 
 import { ctAngioData } from './ct/dataCT_angio.js'; 
 import { ctLowDoseData } from './ct/dataCT_lowdose.js'; 
+import { ctPerfusionData } from './ct/dataCT_perfusion.js'; 
 import { xrayParamData } from './xray/dataXR_param.js'; 
 import { xrayPositionData } from './xray/dataXR_position.js'; 
 
@@ -29,7 +30,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Gộp mảng dữ liệu
-const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData, ...ctLowDoseData];
+const ctData = [...ctParamData, ...ctProtocolData, ...ctAngioData, ...ctLowDoseData, ...ctPerfusionData];
 const xrayData = [...xrayParamData, ...xrayPositionData];
 
 // --- HÀM THỐNG KÊ LƯỢT TRUY CẬP ---
@@ -93,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabProtocol = document.querySelector('.tab-btn[data-tab="Protocol"]');
     const tabAngio = document.querySelector('.tab-btn[data-tab="Angiography"]');
     const tabLowDose = document.querySelector('.tab-btn[data-tab="LowDose"]');
+    const tabPerfusion = document.querySelector('.tab-btn[data-tab="Perfusion"]');
     const tabPosition = document.querySelector('.tab-btn[data-tab="Position"]');
     
     // Sidebar & View
@@ -261,10 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "none";
                 tabLowDose.style.display = "none";
+                tabPerfusion.style.display = "none";
                 tabPosition.style.display = "none";
                 tabProtocol.innerText = "Protocol Chụp"; 
                 
-                if (currentTab === 'Angiography' || currentTab === 'Position' || currentTab === 'LowDose') {
+                if (currentTab === 'Angiography' || currentTab === 'Position' || currentTab === 'LowDose' || currentTab === 'Perfusion') {
                     currentTab = 'Sequence';
                     tabBtns.forEach(b => b.classList.remove("active"));
                     tabSequence.classList.add("active");
@@ -285,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabProtocol.style.display = "inline-block";
                 tabAngio.style.display = "inline-block";
                 tabLowDose.style.display = "inline-block";
+                tabPerfusion.style.display = "inline-block";
                 tabProtocol.innerText = "Protocol thường"; 
                 
                 if (currentTab === 'Sequence' || currentTab === 'Physics' || currentTab === 'Position') {
@@ -307,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tabProtocol.style.display = "none";
                 tabAngio.style.display = "none";
                 tabLowDose.style.display = "none";
+                tabPerfusion.style.display = "none";
                 tabPosition.style.display = "inline-block"; 
                 
                 if (currentTab !== 'Parameter' && currentTab !== 'Position') {
@@ -338,8 +343,9 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (currentTab === 'Protocol') return item.type === 'Protocol'; 
             else if (currentTab === 'Angiography') return item.type === 'Angiography'; 
             else if (currentTab === 'LowDose') return item.type === 'LowDose'; 
+            else if (currentTab === 'Perfusion') return item.type === 'Perfusion'; 
             else if (currentTab === 'Position') return item.type === 'Position'; 
-            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography' && item.type !== 'Position' && item.type !== 'LowDose'; 
+            else return item.type !== 'Sequence' && item.type !== 'Physics' && item.type !== 'Protocol' && item.type !== 'Angiography' && item.type !== 'Position' && item.type !== 'LowDose' && item.type !== 'Perfusion'; 
         });
 
         if (currentAlpha !== 'ALL') {
@@ -380,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- LOGIC FORM ĐỘNG ---
     function toggleFormFields(typeValue) {
-        if (typeValue === "Protocol" || typeValue === "Angiography" || typeValue === "Position" || typeValue === "LowDose") {
+        if (typeValue === "Protocol" || typeValue === "Angiography" || typeValue === "Position" || typeValue === "LowDose" || typeValue === "Perfusion") {
             lblDesc.innerText = "1. Chỉ định bệnh lý: *";
             lblParams.innerText = typeValue === "Position" ? "2. Tư thế bệnh nhân / Chuẩn bị:" : "2. Xung cơ bản / Cài đặt:";
             protocolOnlyFields.forEach(el => el.style.display = "block");
@@ -403,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetItem = currentData.find(i => i.id === targetId);
             
             if(targetItem) {
-                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography' || targetItem.type === 'Position' || targetItem.type === 'LowDose') ? targetItem.type : 'Parameter';
+                currentTab = (targetItem.type === 'Sequence' || targetItem.type === 'Physics' || targetItem.type === 'Protocol' || targetItem.type === 'Angiography' || targetItem.type === 'Position' || targetItem.type === 'LowDose' || targetItem.type === 'Perfusion') ? targetItem.type : 'Parameter';
                 tabBtns.forEach(b => {
                     b.classList.remove("active");
                     if(b.getAttribute("data-tab") === currentTab) b.classList.add("active");
@@ -430,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!item) return;
 
         let textToExport = `${item.en} (${item.vi})\n`;
-        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position' || item.type === 'LowDose') {
+        if (item.type === 'Protocol' || item.type === 'Angiography' || item.type === 'Position' || item.type === 'LowDose' || item.type === 'Perfusion') {
             textToExport += `- Chỉ định: ${item.indications}\n- Cài đặt/Tư thế cơ bản: \n${item.basicSequences}\n- Nâng cao: \n${item.advancedSequences}\n- Lưu ý: ${item.notes}`;
         } else {
             textToExport += `- Định nghĩa: ${item.description}\n- Ứng dụng: ${item.parameters}`;
@@ -513,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 createdAt: serverTimestamp() 
             };
 
-            if (type === "Protocol" || type === "Angiography" || type === "Position" || type === "LowDose") {
+            if (type === "Protocol" || type === "Angiography" || type === "Position" || type === "LowDose" || type === "Perfusion") {
                 payload.indications = document.getElementById("editDesc").value.trim();
                 payload.basicSequences = document.getElementById("editParams").value.trim();
                 payload.advancedSequences = document.getElementById("editAdvanced").value.trim();
